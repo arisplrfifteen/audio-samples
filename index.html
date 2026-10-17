@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -114,33 +115,37 @@
 
     <div class="max-w-4xl w-full mx-auto px-4 py-8 flex-1 flex flex-col gap-8">
         
-        <!-- 1. HEADER (Pure Typography, No Logo/Images) -->
+        <!-- 1. HEADER -->
         <header class="border-b border-zinc-800 pb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
                 <h1 class="text-3xl md:text-5xl font-black tracking-widest uppercase text-white">SAMPLE REMIXER FL STUDIO</h1>
                 <p class="text-xs text-zinc-500 tracking-widest uppercase mt-2 font-mono">Yang Kalian Cari-Cari</p>
             </div>
             
-            <!-- Animated SVG Logo Replica based on badge design -->
+            <!-- Animated SVG Logo Replica (Interactive trigger for Admin) -->
             <div class="self-start sm:self-auto flex items-center">
-                <div class="animated-logo-badge shine-effect relative w-28 sm:w-36 rounded-xl border-2 border-white bg-black overflow-hidden flex flex-col transition-all duration-300 hover:scale-105 cursor-pointer">
-                    <!-- Top Blue Header -->
+                <div id="admin-logo-badge" title="Klik 3x cepat untuk login admin" class="animated-logo-badge shine-effect relative w-28 sm:w-36 rounded-xl border-2 border-white bg-black overflow-hidden flex flex-col transition-all duration-300 hover:scale-105 cursor-pointer">
                     <div class="bg-blue-500 text-white text-center py-1.5 px-2">
                         <div class="text-[12px] sm:text-[14px] font-black leading-none tracking-tight">Hello</div>
                         <div class="text-[7px] sm:text-[9px] font-medium leading-tight opacity-90">my name is</div>
                     </div>
-                    <!-- White Name Section -->
                     <div class="bg-white text-black py-2 px-1 text-center font-black tracking-tighter text-[9px] sm:text-[11px] italic uppercase leading-none font-sans">
                         ARISPLRFIFTEEN
                     </div>
-                    <!-- Bottom Blue Strip -->
                     <div class="bg-blue-500 h-1.5 w-full"></div>
                 </div>
             </div>
         </header>
 
-        <!-- 2. SEARCH & FILTER BAR -->
+        <!-- 2. UPLOAD & SEARCH BAR -->
         <section class="space-y-3">
+            <!-- Hidden Admin Upload Box -->
+            <div id="upload-container" class="hidden border border-dashed border-blue-500 hover:border-white p-4 text-center cursor-pointer transition-colors bg-blue-950/20">
+                <input type="file" id="audio-file-input" accept="audio/*" multiple class="hidden">
+                <p class="text-xs font-mono uppercase tracking-wider text-blue-400 font-bold">[MODE ADMIN] + TAMBAHKAN FILE SAMPLE AUDIO (WAV / MP3)</p>
+                <p class="text-[10px] font-mono text-zinc-500 mt-1">Klik di sini atau tarik file audio ke area ini</p>
+            </div>
+
             <div class="relative">
                 <input type="text" id="search-input" placeholder="CARI SAMPLE" 
                     class="w-full bg-black border border-zinc-800 text-white placeholder-zinc-600 text-xs px-4 py-3.5 font-mono tracking-wider uppercase focus:outline-none focus:border-white transition-colors">
@@ -149,7 +154,6 @@
                 </button>
             </div>
 
-            <!-- Category Filter Buttons (Only SEMUA) -->
             <div class="flex flex-wrap gap-2 text-xs font-mono">
                 <button class="cat-filter border border-white bg-white text-black px-3 py-1 uppercase tracking-wider transition-all" data-cat="ALL">SEMUA</button>
             </div>
@@ -160,7 +164,7 @@
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
                 <div class="flex items-center gap-3">
                     <h2 class="text-xs font-mono tracking-widest text-zinc-500 uppercase">PILIH SAMPLE</h2>
-                    <span id="sample-count-badge" class="text-xs font-mono text-zinc-500">SAMPLES</span>
+                    <span id="sample-count-badge" class="text-xs font-mono text-zinc-500">0 SAMPLES</span>
                 </div>
                 <!-- Selection & Batch Action Controls -->
                 <div class="flex items-center gap-2 flex-wrap">
@@ -180,8 +184,8 @@
                 <!-- Dynamic Sample Pads rendered via JS -->
             </div>
 
-            <div id="no-samples-msg" class="hidden py-8 text-center text-xs font-mono text-zinc-600 uppercase tracking-widest">
-                TIDAK ADA SAMPLE
+            <div id="no-samples-msg" class="py-12 text-center text-xs font-mono text-zinc-600 uppercase tracking-widest">
+                BELUM ADA SAMPLE. SILAKAN UNGGAH DENGAN MODE ADMIN.
             </div>
         </section>
 
@@ -191,9 +195,9 @@
             <div class="border-b border-zinc-800 pb-4">
                 <div class="flex justify-between items-center text-[10px] font-mono text-zinc-500 tracking-widest uppercase mb-1">
                     <span>SEDANG DIPILIH / DIPUTAR</span>
-                    <span id="sample-type-tag" class="border border-zinc-800 px-2 py-0.5 text-white">KICK</span>
+                    <span id="sample-type-tag" class="border border-zinc-800 px-2 py-0.5 text-white">AUDIO</span>
                 </div>
-                <h3 id="current-title" class="text-xl sm:text-2xl font-black tracking-wider uppercase truncate mt-1">Deep Sub Kick 01</h3>
+                <h3 id="current-title" class="text-xl sm:text-2xl font-black tracking-wider uppercase truncate mt-1">BELUM ADA SAMPLE</h3>
             </div>
 
             <!-- Waveform Progress / Seekbar & Time Display -->
@@ -207,7 +211,6 @@
 
             <!-- Main Playback & Audio Controls -->
             <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
-                
                 <!-- Play Button -->
                 <div class="flex items-center gap-3 w-full sm:w-auto">
                     <button id="play-btn" class="w-full sm:w-auto bg-white text-black hover:bg-zinc-200 border border-white px-8 py-3 text-xs font-mono font-bold tracking-widest uppercase transition-colors" title="Putar / Jeda">
@@ -221,15 +224,34 @@
                         <span>&#8595;</span> UNDUH WAV
                     </button>
                 </div>
-
             </div>
         </main>
 
         <!-- 5. FOOTER -->
-        <footer class="border-t border-zinc-900 pt-6 text-center">
+        <footer class="border-t border-zinc-900 pt-6 text-center flex flex-col items-center gap-3">
             <p class="text-xs text-zinc-600 font-mono tracking-widest uppercase">arisplrfifteen © SAMPLE REMIXER</p>
+            <button id="mobile-admin-btn" class="text-[10px] text-zinc-600 hover:text-white font-mono uppercase tracking-widest border border-zinc-800 px-3 py-1 rounded transition-colors">
+                [ LOGIN ADMIN ]
+            </button>
         </footer>
 
+    </div>
+
+    <!-- Admin Password Custom Modal for Mobile & PC -->
+    <div id="admin-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-zinc-950 border border-white p-6 max-w-sm w-full space-y-4 shadow-2xl rounded-lg">
+            <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
+                <h3 class="text-sm font-mono font-bold tracking-wider uppercase text-white">LOGIN ADMIN</h3>
+                <button id="close-modal-btn" class="text-zinc-500 hover:text-white font-mono text-sm">[X]</button>
+            </div>
+            <p class="text-xs text-zinc-400 font-mono">Masukkan kata sandi untuk membuka akses unggah file audio:</p>
+            <input type="password" id="admin-pass-input" placeholder="KATA SANDI" class="w-full bg-black border border-zinc-700 text-white px-3 py-2 text-xs font-mono tracking-widest focus:outline-none focus:border-white">
+            <div class="flex justify-end gap-2 pt-2">
+                <button id="submit-pass-btn" class="bg-white text-black font-mono font-bold text-xs px-4 py-2 uppercase hover:bg-zinc-200 transition-colors w-full">
+                    MASUK
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- Toast Notification -->
@@ -237,7 +259,7 @@
         Notifikasi
     </div>
 
-    <!-- Web Audio Synthesizer & Player Logic -->
+    <!-- Web Audio Player Logic -->
     <script>
         let audioCtx = null;
         function getAudioContext() {
@@ -250,47 +272,11 @@
             return audioCtx;
         }
 
-        // Generate expanded array of ~99 sound samples dynamically
-        const categories = [
-            { cat: 'KICK', count: 18, prefix: 'Kick' },
-            { cat: 'SNARE', count: 18, prefix: 'Snare' },
-            { cat: 'CLAP', count: 15, prefix: 'Clap' },
-            { cat: 'HAT', count: 16, prefix: 'Hi-Hat' },
-            { cat: 'PERC', count: 16, prefix: 'Percussion' },
-            { cat: 'FX', count: 16, prefix: 'FX Synth' }
-        ];
-
-        const sampleDescriptions = {
-            KICK: ['Deep Sub Boom', 'Punchy Studio Kick', '808 Decay Sub', 'Tight Acoustic Kick', 'Distorted Hard Kick', 'Soft Jazz Kick'],
-            SNARE: ['Crisp Snap Snare', 'Studio Layered Snare', 'Tight Crack Snare', 'Rimshot Style Snare', 'Noise Decay Snare', 'High Pitch Snap'],
-            CLAP: ['Hand Clap Multi', 'Electro Digital Clap', 'Tight Single Clap', 'Stereo Spread Clap', 'Vintage Analog Clap'],
-            HAT: ['Closed Metal Hat', 'Open Crisp Hat', 'Sizzle Cymbal', 'Pedal Tap Hat', 'Short Tick Hat'],
-            PERC: ['Sub Tom Boom', 'High Wood Block', 'Metallic Rim Strike', 'Conga Tap', 'Shaker Shake', 'Agogo Bell'],
-            FX: ['Frequency Down Sweep', 'Filtered Noise Riser', 'Cyber Laser Beam', 'Zap Pulse Wave', 'Space Drop FX', 'Sub Impact Stabs']
-        };
-
-        const builtInSamples = [];
-        let idCounter = 1;
-
-        categories.forEach(({ cat, count, prefix }) => {
-            const descs = sampleDescriptions[cat];
-            for (let i = 1; i <= count; i++) {
-                const num = String(i).padStart(2, '0');
-                const desc = descs[(i - 1) % descs.length];
-                builtInSamples.push({
-                    id: `${cat.toLowerCase()}_${i}`,
-                    name: `${prefix} ${num}`,
-                    category: cat,
-                    desc: `${desc} #${num}`
-                });
-            }
-        });
-
-        let samples = [...builtInSamples];
-        let currentSample = samples[0];
-        let currentCategory = 'ALL';
+        // Default samples list
+        let samples = [];
+        let currentSample = null;
         let isPlaying = false;
-        let selectedSampleIds = new Set(); // Multi-selection tracking
+        let selectedSampleIds = new Set();
         
         // Playback variables
         let audioSourceNode = null;
@@ -299,6 +285,11 @@
         let playbackStartTime = 0;
         let pausedAtTime = 0;
         let animFrameReq = null;
+
+        // Admin Passcode Config - UPDATED PASSWORD
+        const ADMIN_PASS = "Arii12345@#$_";
+        let logoClickCount = 0;
+        let logoClickTimer = null;
 
         // DOM Elements
         const sampleGrid = document.getElementById('sample-grid');
@@ -318,18 +309,136 @@
         const deselectAllBtn = document.getElementById('deselect-all-btn');
         const downloadSelectedBtn = document.getElementById('download-selected-btn');
         const selectedCountEl = document.getElementById('selected-count');
+        const uploadContainer = document.getElementById('upload-container');
+        const audioFileInput = document.getElementById('audio-file-input');
+        const adminLogoBadge = document.getElementById('admin-logo-badge');
+        const adminModal = document.getElementById('admin-modal');
+        const adminPassInput = document.getElementById('admin-pass-input');
+        const submitPassBtn = document.getElementById('submit-pass-btn');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const mobileAdminBtn = document.getElementById('mobile-admin-btn');
 
         // Init App
         window.addEventListener('DOMContentLoaded', () => {
             renderSamplePads();
-            selectSample(samples[0].id);
             updateSelectedCount();
         });
+
+        // --- CUSTOM ADMIN MODAL LOGIN SYSTEM (MOBILE & PC) ---
+        function openAdminModal() {
+            adminModal.classList.remove('hidden');
+            adminPassInput.value = '';
+            setTimeout(() => adminPassInput.focus(), 100);
+        }
+
+        function closeAdminModal() {
+            adminModal.classList.add('hidden');
+        }
+
+        function verifyAdminPassword() {
+            const pass = adminPassInput.value;
+            if (pass === ADMIN_PASS) {
+                uploadContainer.classList.remove('hidden');
+                closeAdminModal();
+                showToast("MODE ADMIN AKTIF - AKSES UPLOAD DIBUKA");
+            } else {
+                showToast("KATA SANDI SALAH!");
+            }
+        }
+
+        submitPassBtn.addEventListener('click', verifyAdminPassword);
+        adminPassInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') verifyAdminPassword();
+        });
+        closeModalBtn.addEventListener('click', closeAdminModal);
+        mobileAdminBtn.addEventListener('click', openAdminModal);
+
+        // Trigger 1: Keyboard shortcut (Ctrl + Shift + U)
+        window.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.shiftKey && (e.key === 'U' || e.key === 'u')) {
+                e.preventDefault();
+                openAdminModal();
+            }
+        });
+
+        // Trigger 2: Tap logo 3 times quickly
+        const handleLogoTap = (e) => {
+            e.preventDefault();
+            logoClickCount++;
+            clearTimeout(logoClickTimer);
+            if (logoClickCount >= 3) {
+                logoClickCount = 0;
+                openAdminModal();
+            } else {
+                logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 1200);
+            }
+        };
+
+        adminLogoBadge.addEventListener('click', handleLogoTap);
+
+        // Upload Trigger Handling
+        uploadContainer.addEventListener('click', () => audioFileInput.click());
+        
+        uploadContainer.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadContainer.classList.add('border-white', 'bg-blue-900/40');
+        });
+
+        uploadContainer.addEventListener('dragleave', () => {
+            uploadContainer.classList.remove('border-white', 'bg-blue-900/40');
+        });
+
+        uploadContainer.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadContainer.classList.remove('border-white', 'bg-blue-900/40');
+            if (e.dataTransfer.files.length) {
+                handleUploadedFiles(e.dataTransfer.files);
+            }
+        });
+
+        audioFileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                handleUploadedFiles(e.target.files);
+            }
+        });
+
+        // Process uploaded audio files
+        function handleUploadedFiles(files) {
+            const ctx = getAudioContext();
+            let count = 0;
+
+            Array.from(files).forEach((file) => {
+                if (!file.type.startsWith('audio/') && !file.name.match(/\.(mp3|wav|ogg|m4a|flac)$/i)) return;
+
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    const arrayBuffer = evt.target.result;
+                    ctx.decodeAudioData(arrayBuffer, (buffer) => {
+                        const newSample = {
+                            id: 'custom_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+                            name: file.name.replace(/\.[^/.]+$/, ""),
+                            category: 'AUDIO',
+                            desc: `${(file.size / (1024 * 1024)).toFixed(2)} MB • Audio File`,
+                            buffer: buffer
+                        };
+                        samples.push(newSample);
+                        count++;
+
+                        if (!currentSample) {
+                            selectSample(newSample.id);
+                        }
+                        renderSamplePads();
+                    });
+                };
+                reader.readAsArrayBuffer(file);
+            });
+
+            showToast("BERHASIL MENAMBAHKAN SAMPLE AUDIO");
+        }
 
         // Render Sample Selector Pads
         function renderSamplePads() {
             sampleGrid.innerHTML = '';
-            
             const filtered = getFilteredSamples();
 
             sampleCountBadge.textContent = `${filtered.length} SAMPLES`;
@@ -369,12 +478,8 @@
                     </div>
                 `;
 
-                // Toggle play/select current track when clicking pad body
-                card.querySelector('.pad-click-area').onclick = () => {
-                    selectSample(s.id);
-                };
+                card.querySelector('.pad-click-area').onclick = () => selectSample(s.id);
 
-                // Checkbox toggle logic
                 const checkbox = card.querySelector('.sample-checkbox');
                 checkbox.onchange = (e) => {
                     if (e.target.checked) {
@@ -391,10 +496,8 @@
 
         function getFilteredSamples() {
             return samples.filter(s => {
-                const matchesCat = currentCategory === 'ALL' || s.category === currentCategory;
                 const q = searchInput.value.toLowerCase().trim();
-                const matchesSearch = !q || s.name.toLowerCase().includes(q) || s.category.toLowerCase().includes(q);
-                return matchesCat && matchesSearch;
+                return !q || s.name.toLowerCase().includes(q) || s.category.toLowerCase().includes(q);
             });
         }
 
@@ -402,7 +505,6 @@
             selectedCountEl.textContent = selectedSampleIds.size;
         }
 
-        // Select All Visible Samples
         selectAllBtn.addEventListener('click', () => {
             const filtered = getFilteredSamples();
             filtered.forEach(s => selectedSampleIds.add(s.id));
@@ -411,7 +513,6 @@
             showToast(`${filtered.length} SAMPLE DIPILIH`);
         });
 
-        // Deselect All Samples
         deselectAllBtn.addEventListener('click', () => {
             selectedSampleIds.clear();
             renderSamplePads();
@@ -419,7 +520,6 @@
             showToast("BATAL PILIH SEMUA SAMPLE");
         });
 
-        // Batch Download Selected Samples One By One
         downloadSelectedBtn.addEventListener('click', () => {
             if (selectedSampleIds.size === 0) {
                 showToast("PILIH MINIMAL 1 SAMPLE UNTUK DIUNDUH");
@@ -429,27 +529,25 @@
             const itemsToDownload = samples.filter(s => selectedSampleIds.has(s.id));
             showToast(`MENGUNDUH ${itemsToDownload.length} FILE WAV...`);
 
-            // Download each selected sample with a short delay to ensure browser handles multiple downloads
             itemsToDownload.forEach((s, index) => {
                 setTimeout(() => {
-                    const buffer = generateSyntheticBuffer(s.id, 0.8);
-                    const wavBlob = audioBufferToWav(buffer);
+                    if (!s.buffer) return;
+                    const wavBlob = audioBufferToWav(s.buffer);
                     const url = URL.createObjectURL(wavBlob);
                     const a = document.createElement('a');
                     a.style.display = 'none';
                     a.href = url;
-                    a.download = `${s.name.toLowerCase().replace(/\s+/g, '-')}-arisplrfifteen.wav`;
+                    a.download = `${s.name.toLowerCase().replace(/\s+/g, '-')}.wav`;
                     document.body.appendChild(a);
                     a.click();
                     setTimeout(() => {
                         document.body.removeChild(a);
                         window.URL.revokeObjectURL(url);
                     }, 200);
-                }, index * 300); // 300ms delay between downloads
+                }, index * 300);
             });
         });
 
-        // Select Current Active Sample
         function selectSample(id) {
             stopAudio();
             currentSample = samples.find(s => s.id === id);
@@ -457,8 +555,7 @@
 
             currentTitleEl.textContent = currentSample.name;
             sampleTypeTag.textContent = currentSample.category;
-
-            activeAudioBuffer = generateSyntheticBuffer(currentSample, 0.6);
+            activeAudioBuffer = currentSample.buffer;
 
             totalDurationEl.textContent = formatTime(activeAudioBuffer.duration);
             currentTimeEl.textContent = "00:00.00";
@@ -580,23 +677,8 @@
             renderSamplePads();
         });
 
-        // Setup Category Filters dynamically
-        document.addEventListener('click', (e) => {
-            if (e.target && e.target.classList.contains('cat-filter')) {
-                document.querySelectorAll('.cat-filter').forEach(b => {
-                    b.classList.remove('border-white', 'bg-white', 'text-black');
-                    b.classList.add('border-zinc-800', 'text-zinc-400');
-                });
-                e.target.classList.remove('border-zinc-800', 'text-zinc-400');
-                e.target.classList.add('border-white', 'bg-white', 'text-black');
-
-                currentCategory = e.target.getAttribute('data-cat');
-                renderSamplePads();
-            }
-        });
-
         downloadBtn.addEventListener('click', () => {
-            if (!activeAudioBuffer) {
+            if (!activeAudioBuffer || !currentSample) {
                 showToast("TIDAK ADA AUDIO UNTUK DIUNDUH");
                 return;
             }
@@ -606,7 +688,7 @@
             const a = document.createElement('a');
             a.style.display = 'none';
             a.href = url;
-            a.download = `${currentSample.name.toLowerCase().replace(/\s+/g, '-')}-arisplrfifteen.wav`;
+            a.download = `${currentSample.name.toLowerCase().replace(/\s+/g, '-')}.wav`;
             document.body.appendChild(a);
             a.click();
             setTimeout(() => {
@@ -692,72 +774,10 @@
             }, 2000);
         }
 
-        function generateSyntheticBuffer(sampleObjOrId, duration = 0.5) {
-            const ctx = getAudioContext();
-            const sample = typeof sampleObjOrId === 'object' ? sampleObjOrId : samples.find(s => s.id === sampleObjOrId) || samples[0];
-            const sampleRate = ctx.sampleRate;
-            const bufferLen = Math.floor(sampleRate * duration);
-            const buffer = ctx.createBuffer(1, bufferLen, sampleRate);
-            const data = buffer.getChannelData(0);
-
-            const cat = sample.category || 'KICK';
-            const idNum = parseInt((sample.id || '1').replace(/\D/g, '')) || 1;
-
-            if (cat === 'KICK') {
-                const baseFreq = 120 + (idNum * 5) % 40;
-                for (let i = 0; i < bufferLen; i++) {
-                    const t = i / sampleRate;
-                    const env = Math.exp(-t * 10);
-                    const freq = baseFreq * Math.exp(-t * 30);
-                    data[i] = Math.sin(2 * Math.PI * freq * t) * env;
-                }
-            } else if (cat === 'SNARE') {
-                for (let i = 0; i < bufferLen; i++) {
-                    const t = i / sampleRate;
-                    const toneEnv = Math.exp(-t * 25);
-                    const noiseEnv = Math.exp(-t * 15);
-                    const tone = Math.sin(2 * Math.PI * (180 + (idNum % 5) * 10) * t) * toneEnv;
-                    const noise = (Math.random() * 2 - 1) * noiseEnv;
-                    data[i] = tone * 0.5 + noise * 0.5;
-                }
-            } else if (cat === 'CLAP') {
-                for (let i = 0; i < bufferLen; i++) {
-                    const t = i / sampleRate;
-                    let env = Math.exp(-t * 20);
-                    if (t < 0.03) {
-                        env *= (Math.sin(t * 500) > 0 ? 1 : 0.3);
-                    }
-                    data[i] = (Math.random() * 2 - 1) * env;
-                }
-            } else if (cat === 'HAT') {
-                for (let i = 0; i < bufferLen; i++) {
-                    const t = i / sampleRate;
-                    const env = Math.exp(-t * 35);
-                    data[i] = (Math.random() * 2 - 1) * env * 0.6;
-                }
-            } else if (cat === 'PERC') {
-                const freq = 300 + (idNum * 25) % 300;
-                for (let i = 0; i < bufferLen; i++) {
-                    const t = i / sampleRate;
-                    const env = Math.exp(-t * 18);
-                    data[i] = Math.sin(2 * Math.PI * freq * t) * env;
-                }
-            } else { // FX
-                const startFreq = 800 - (idNum % 5) * 80;
-                for (let i = 0; i < bufferLen; i++) {
-                    const t = i / sampleRate;
-                    const env = Math.exp(-t * 4);
-                    const freq = Math.max(50, startFreq * (1 - t / duration));
-                    data[i] = Math.sin(2 * Math.PI * freq * t) * env;
-                }
-            }
-
-            return buffer;
-        }
-
         function escapeHtml(str) {
             return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
         }
     </script>
 </body>
 </html>
+```
