@@ -127,7 +127,6 @@
                     <span id="sample-type-tag" class="border border-zinc-800 px-2 py-0.5 text-white">KICK</span>
                 </div>
                 <h3 id="current-title" class="text-xl sm:text-2xl font-black tracking-wider uppercase truncate mt-1">Deep Sub Kick 01</h3>
-                <p id="current-meta" class="text-xs font-mono text-zinc-500 mt-1 uppercase">Audio Synthesizer • Sample B&W Kit</p>
             </div>
 
             <!-- Waveform Progress / Seekbar & Time Display -->
@@ -361,7 +360,6 @@
             if (!currentSample) return;
 
             currentTitleEl.textContent = currentSample.name;
-            currentMetaEl.textContent = `${currentSample.category} • ${currentSample.desc}`;
             sampleTypeTag.textContent = currentSample.category;
 
             activeAudioBuffer = generateSyntheticBuffer(id, 0.8);
@@ -525,7 +523,7 @@
                 window.URL.revokeObjectURL(url);
             }, 100);
 
-            showToast("MENGUNDUH FILE WAV...");
+            showToast("MENGUNDUH FILE...");
         });
 
         // Helper: Format Time in MM:SS.ms
