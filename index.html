@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>arisplrfifteen</title>
+    <!-- Tailwind CSS for typography & responsive utility layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* High Contrast Monochrome Scrollbar */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000000;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ffffff;
+        }
+
+        /* Pure B&W Custom Range Sliders */
+        input[type=range] {
+            -webkit-appearance: none;
+            background: transparent;
+        }
+        @keyframes logoFloat {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-6px) rotate(1.5deg);
+            }
+        }
+        @keyframes logoPulseGlow {
+            0%, 100% {
+                box-shadow: 0 0 10px rgba(59, 130, 246, 0.3), 0 0 20px rgba(255, 255, 255, 0.1);
+            }
+            50% {
+                box-shadow: 0 0 22px rgba(59, 130, 246, 0.6), 0 0 35px rgba(255, 255, 255, 0.25);
+            }
+        }
+        @keyframes shineSweep {
+            0% {
+                transform: translateX(-150%) rotate(25deg);
+            }
+            30%, 100% {
+                transform: translateX(250%) rotate(25deg);
+            }
+        }
+        .animated-logo-badge {
+            animation: logoFloat 4s ease-in-out infinite, logoPulseGlow 3s ease-in-out infinite;
+        }
+        .shine-effect::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 50%;
+            height: 200%;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.15) 30%,
+                rgba(255, 255, 255, 0.85) 50%,
+                rgba(255, 255, 255, 0.15) 70%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(25deg);
+            animation: shineSweep 3.5s infinite ease-in-out;
+            pointer-events: none;
+        }
+        input[type=range]:focus {
+            outline: none;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 3px;
+            cursor: pointer;
+            background: #27272a;
+            border: none;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            height: 14px;
+            width: 14px;
+            background: #ffffff;
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -5.5px;
+            border-radius: 0;
+            transition: transform 0.1s ease;
+        }
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+        input[type=range]::-moz-range-track {
+            width: 100%;
+            height: 3px;
+            cursor: pointer;
+            background: #27272a;
+            border: none;
+        }
+        input[type=range]::-moz-range-thumb {
+            height: 14px;
+            width: 14px;
+            background: #ffffff;
+            cursor: pointer;
+            border: none;
+            border-radius: 0;
+        }
+    </style>
+</head>
+<body class="bg-black text-white font-sans min-h-screen flex flex-col justify-between selection:bg-white selection:text-black">
+
+    <div class="max-w-4xl w-full mx-auto px-4 py-8 flex-1 flex flex-col gap-8">
+        
+        <!-- 1. HEADER (Pure Typography, No Logo/Images) -->
+        <header class="border-b border-zinc-800 pb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-3xl md:text-5xl font-black tracking-widest uppercase text-white">arisplrfifteen</h1>
+                <p class="text-xs text-zinc-500 tracking-widest uppercase mt-2 font-mono">Monochrome Audio Synthesizer & Player</p>
+            </div>
+            
+            <!-- Animated SVG Logo Replica based on badge design -->
+            <div class="self-start sm:self-auto flex items-center">
+                <div class="animated-logo-badge shine-effect relative w-28 sm:w-36 rounded-xl border-2 border-white bg-black overflow-hidden flex flex-col transition-all duration-300 hover:scale-105 cursor-pointer">
+                    <!-- Top Blue Header -->
+                    <div class="bg-blue-500 text-white text-center py-1.5 px-2">
+                        <div class="text-[12px] sm:text-[14px] font-black leading-none tracking-tight">Hello</div>
+                        <div class="text-[7px] sm:text-[9px] font-medium leading-tight opacity-90">my name is</div>
+                    </div>
+                    <!-- White Name Section -->
+                    <div class="bg-white text-black py-2 px-1 text-center font-black tracking-tighter text-[9px] sm:text-[11px] italic uppercase leading-none font-sans">
+                        ARISPLRFIFTEEN
+                    </div>
+                    <!-- Bottom Blue Strip -->
+                    <div class="bg-blue-500 h-1.5 w-full"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- 2. SEARCH & FILTER BAR -->
+        <section class="space-y-3">
+            <div class="relative">
+                <input type="text" id="search-input" placeholder="CARI SAMPLE (KICK, SNARE, CLAP, ATAU FX...)" 
+                    class="w-full bg-black border border-zinc-800 text-white placeholder-zinc-600 text-xs px-4 py-3.5 font-mono tracking-wider uppercase focus:outline-none focus:border-white transition-colors">
+                <button id="clear-search" class="hidden absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white text-xs font-mono uppercase">
+                    [ BATAL ]
+                </button>
+            </div>
+
+            <!-- Category Filter Buttons (Only SEMUA) -->
+            <div class="flex flex-wrap gap-2 text-xs font-mono">
+                <button class="cat-filter border border-white bg-white text-black px-3 py-1 uppercase tracking-wider transition-all" data-cat="ALL">SEMUA</button>
+            </div>
+        </section>
+
+        <!-- 3. SAMPLE SOUND KIT PADS (Grid Selector) -->
+        <section class="border border-zinc-800 p-6 bg-zinc-950/40">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+                <div class="flex items-center gap-3">
+                    <h2 class="text-xs font-mono tracking-widest text-zinc-500 uppercase">PILIHAN SAMPLE / SOUND KIT PADS</h2>
+                    <span id="sample-count-badge" class="text-xs font-mono text-zinc-500">99 SAMPLES</span>
+                </div>
+                <!-- Selection & Batch Action Controls -->
+                <div class="flex items-center gap-2 flex-wrap">
+                    <button id="select-all-btn" class="border border-zinc-800 hover:border-white text-zinc-400 hover:text-white px-3 py-1 text-[10px] font-mono uppercase transition-all">
+                        PILIH SEMUA
+                    </button>
+                    <button id="deselect-all-btn" class="border border-zinc-800 hover:border-white text-zinc-400 hover:text-white px-3 py-1 text-[10px] font-mono uppercase transition-all">
+                        BATAL PILIH
+                    </button>
+                    <button id="download-selected-btn" class="bg-white text-black border border-white hover:bg-zinc-200 px-3 py-1 text-[10px] font-mono font-bold uppercase transition-all">
+                        &#8595; UNDUH TERPILIH (<span id="selected-count">0</span>)
+                    </button>
+                </div>
+            </div>
+
+            <div id="sample-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <!-- Dynamic Sample Pads rendered via JS -->
+            </div>
+
+            <div id="no-samples-msg" class="hidden py-8 text-center text-xs font-mono text-zinc-600 uppercase tracking-widest">
+                TIDAK ADA SAMPLE YANG COCOK DENGAN PENCARIAN
+            </div>
+        </section>
+
+        <!-- 4. MAIN AUDIO PLAYER & CONTROLS -->
+        <main class="border border-white p-6 sm:p-8 bg-black flex flex-col justify-between gap-6 shadow-2xl">
+            <!-- Selected Track Information -->
+            <div class="border-b border-zinc-800 pb-4">
+                <div class="flex justify-between items-center text-[10px] font-mono text-zinc-500 tracking-widest uppercase mb-1">
+                    <span>SEDANG DIPILIH / DIPUTAR</span>
+                    <span id="sample-type-tag" class="border border-zinc-800 px-2 py-0.5 text-white">KICK</span>
+                </div>
+                <h3 id="current-title" class="text-xl sm:text-2xl font-black tracking-wider uppercase truncate mt-1">Deep Sub Kick 01</h3>
+            </div>
+
+            <!-- Waveform Progress / Seekbar & Time Display -->
+            <div class="space-y-2">
+                <div class="flex justify-between text-xs font-mono text-zinc-400">
+                    <span id="current-time">00:00.00</span>
+                    <span id="total-duration">00:00.00</span>
+                </div>
+                <input type="range" id="seek-bar" value="0" max="100" class="w-full">
+            </div>
+
+            <!-- Main Playback & Audio Controls -->
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+                
+                <!-- Play Button -->
+                <div class="flex items-center gap-3 w-full sm:w-auto">
+                    <button id="play-btn" class="w-full sm:w-auto bg-white text-black hover:bg-zinc-200 border border-white px-8 py-3 text-xs font-mono font-bold tracking-widest uppercase transition-colors" title="Putar / Jeda">
+                        PLAY
+                    </button>
+                </div>
+
+                <!-- Download Button -->
+                <div class="w-full sm:w-auto">
+                    <button id="download-btn" class="w-full sm:w-auto border border-white text-white hover:bg-white hover:text-black px-6 py-3 text-xs font-mono font-bold tracking-widest uppercase transition-all flex items-center justify-center gap-2">
+                        <span>&#8595;</span> UNDUH WAV
+                    </button>
+                </div>
+
+            </div>
+        </main>
+
+        <!-- 5. FOOTER -->
+        <footer class="border-t border-zinc-900 pt-6 text-center">
+            <p class="text-xs text-zinc-600 font-mono tracking-widest uppercase">arisplrfifteen &copy; Pure Monochrome Audio Engine</p>
+        </footer>
+
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-white text-black px-5 py-3 text-xs font-mono border border-black uppercase shadow-2xl transition-opacity duration-300 opacity-0 pointer-events-none z-50">
+        Notifikasi
+    </div>
+
+    <!-- Web Audio Synthesizer & Player Logic -->
+    <script>
+        let audioCtx = null;
+        function getAudioContext() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        // Generate expanded array of ~99 sound samples dynamically
+        const categories = [
+            { cat: 'KICK', count: 18, prefix: 'Kick' },
+            { cat: 'SNARE', count: 18, prefix: 'Snare' },
+            { cat: 'CLAP', count: 15, prefix: 'Clap' },
+            { cat: 'HAT', count: 16, prefix: 'Hi-Hat' },
+            { cat: 'PERC', count: 16, prefix: 'Percussion' },
+            { cat: 'FX', count: 16, prefix: 'FX Synth' }
+        ];
+
+        const sampleDescriptions = {
+            KICK: ['Deep Sub Boom', 'Punchy Studio Kick', '808 Decay Sub', 'Tight Acoustic Kick', 'Distorted Hard Kick', 'Soft Jazz Kick'],
+            SNARE: ['Crisp Snap Snare', 'Studio Layered Snare', 'Tight Crack Snare', 'Rimshot Style Snare', 'Noise Decay Snare', 'High Pitch Snap'],
+            CLAP: ['Hand Clap Multi', 'Electro Digital Clap', 'Tight Single Clap', 'Stereo Spread Clap', 'Vintage Analog Clap'],
+            HAT: ['Closed Metal Hat', 'Open Crisp Hat', 'Sizzle Cymbal', 'Pedal Tap Hat', 'Short Tick Hat'],
+            PERC: ['Sub Tom Boom', 'High Wood Block', 'Metallic Rim Strike', 'Conga Tap', 'Shaker Shake', 'Agogo Bell'],
+            FX: ['Frequency Down Sweep', 'Filtered Noise Riser', 'Cyber Laser Beam', 'Zap Pulse Wave', 'Space Drop FX', 'Sub Impact Stabs']
+        };
+
+        const builtInSamples = [];
+        let idCounter = 1;
+
+        categories.forEach(({ cat, count, prefix }) => {
+            const descs = sampleDescriptions[cat];
+            for (let i = 1; i <= count; i++) {
+                const num = String(i).padStart(2, '0');
+                const desc = descs[(i - 1) % descs.length];
+                builtInSamples.push({
+                    id: `${cat.toLowerCase()}_${i}`,
+                    name: `${prefix} ${num}`,
+                    category: cat,
+                    desc: `${desc} #${num}`
+                });
+            }
+        });
+
+        let samples = [...builtInSamples];
+        let currentSample = samples[0];
+        let currentCategory = 'ALL';
+        let isPlaying = false;
+        let selectedSampleIds = new Set(); // Multi-selection tracking
+        
+        // Playback variables
+        let audioSourceNode = null;
+        let gainNode = null;
+        let activeAudioBuffer = null;
+        let playbackStartTime = 0;
+        let pausedAtTime = 0;
+        let animFrameReq = null;
+
+        // DOM Elements
+        const sampleGrid = document.getElementById('sample-grid');
+        const searchInput = document.getElementById('search-input');
+        const clearSearchBtn = document.getElementById('clear-search');
+        const currentTitleEl = document.getElementById('current-title');
+        const sampleTypeTag = document.getElementById('sample-type-tag');
+        const playBtn = document.getElementById('play-btn');
+        const downloadBtn = document.getElementById('download-btn');
+        const seekBar = document.getElementById('seek-bar');
+        const currentTimeEl = document.getElementById('current-time');
+        const totalDurationEl = document.getElementById('total-duration');
+        const sampleCountBadge = document.getElementById('sample-count-badge');
+        const noSamplesMsg = document.getElementById('no-samples-msg');
+        const toastEl = document.getElementById('toast');
+        const selectAllBtn = document.getElementById('select-all-btn');
+        const deselectAllBtn = document.getElementById('deselect-all-btn');
+        const downloadSelectedBtn = document.getElementById('download-selected-btn');
+        const selectedCountEl = document.getElementById('selected-count');
+
+        // Init App
+        window.addEventListener('DOMContentLoaded', () => {
+            renderSamplePads();
+            selectSample(samples[0].id);
+            updateSelectedCount();
+        });
+
+        // Render Sample Selector Pads
+        function renderSamplePads() {
+            sampleGrid.innerHTML = '';
+            
+            const filtered = getFilteredSamples();
+
+            sampleCountBadge.textContent = `${filtered.length} SAMPLES`;
+
+            if (filtered.length === 0) {
+                noSamplesMsg.classList.remove('hidden');
+                return;
+            } else {
+                noSamplesMsg.classList.add('hidden');
+            }
+
+            filtered.forEach(s => {
+                const isCurrent = currentSample && currentSample.id === s.id;
+                const isChecked = selectedSampleIds.has(s.id);
+
+                const card = document.createElement('div');
+                card.className = `p-4 border text-left flex flex-col justify-between transition-all relative group cursor-pointer ${
+                    isCurrent 
+                        ? 'border-white bg-zinc-900' 
+                        : 'border-zinc-800 bg-black hover:border-zinc-500'
+                }`;
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-start w-full gap-2">
+                        <span class="text-[9px] font-mono tracking-widest border px-1.5 py-0.5 ${
+                            isCurrent ? 'border-white text-white bg-black' : 'border-zinc-800 text-zinc-500'
+                        }">${s.category}</span>
+                        <div class="flex items-center gap-1.5" onclick="event.stopPropagation()">
+                            <input type="checkbox" data-id="${s.id}" class="sample-checkbox accent-white w-4 h-4 cursor-pointer" ${isChecked ? 'checked' : ''}>
+                        </div>
+                    </div>
+                    <div class="mt-4 pad-click-area">
+                        <div class="flex items-center justify-between">
+                            <p class="text-xs font-mono uppercase tracking-wider line-clamp-1 font-bold ${isCurrent ? 'text-white' : 'text-zinc-200'}">${escapeHtml(s.name)}</p>
+                        </div>
+                        <p class="text-[9px] font-mono mt-0.5 text-zinc-500 truncate">${escapeHtml(s.desc)}</p>
+                    </div>
+                `;
+
+                // Toggle play/select current track when clicking pad body
+                card.querySelector('.pad-click-area').onclick = () => {
+                    selectSample(s.id);
+                };
+
+                // Checkbox toggle logic
+                const checkbox = card.querySelector('.sample-checkbox');
+                checkbox.onchange = (e) => {
+                    if (e.target.checked) {
+                        selectedSampleIds.add(s.id);
+                    } else {
+                        selectedSampleIds.delete(s.id);
+                    }
+                    updateSelectedCount();
+                };
+
+                sampleGrid.appendChild(card);
+            });
+        }
+
+        function getFilteredSamples() {
+            return samples.filter(s => {
+                const matchesCat = currentCategory === 'ALL' || s.category === currentCategory;
+                const q = searchInput.value.toLowerCase().trim();
+                const matchesSearch = !q || s.name.toLowerCase().includes(q) || s.category.toLowerCase().includes(q);
+                return matchesCat && matchesSearch;
+            });
+        }
+
+        function updateSelectedCount() {
+            selectedCountEl.textContent = selectedSampleIds.size;
+        }
+
+        // Select All Visible Samples
+        selectAllBtn.addEventListener('click', () => {
+            const filtered = getFilteredSamples();
+            filtered.forEach(s => selectedSampleIds.add(s.id));
+            renderSamplePads();
+            updateSelectedCount();
+            showToast(`${filtered.length} SAMPLE DIPILIH`);
+        });
+
+        // Deselect All Samples
+        deselectAllBtn.addEventListener('click', () => {
+            selectedSampleIds.clear();
+            renderSamplePads();
+            updateSelectedCount();
+            showToast("BATAL PILIH SEMUA SAMPLE");
+        });
+
+        // Batch Download Selected Samples One By One
+        downloadSelectedBtn.addEventListener('click', () => {
+            if (selectedSampleIds.size === 0) {
+                showToast("PILIH MINIMAL 1 SAMPLE UNTUK DIUNDUH");
+                return;
+            }
+
+            const itemsToDownload = samples.filter(s => selectedSampleIds.has(s.id));
+            showToast(`MENGUNDUH ${itemsToDownload.length} FILE WAV...`);
+
+            // Download each selected sample with a short delay to ensure browser handles multiple downloads
+            itemsToDownload.forEach((s, index) => {
+                setTimeout(() => {
+                    const buffer = generateSyntheticBuffer(s.id, 0.8);
+                    const wavBlob = audioBufferToWav(buffer);
+                    const url = URL.createObjectURL(wavBlob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = `${s.name.toLowerCase().replace(/\s+/g, '-')}-arisplrfifteen.wav`;
+                    document.body.appendChild(a);
+                    a.click();
+                    setTimeout(() => {
+                        document.body.removeChild(a);
+                        window.URL.revokeObjectURL(url);
+                    }, 200);
+                }, index * 300); // 300ms delay between downloads
+            });
+        });
+
+        // Select Current Active Sample
+        function selectSample(id) {
+            stopAudio();
+            currentSample = samples.find(s => s.id === id);
+            if (!currentSample) return;
+
+            currentTitleEl.textContent = currentSample.name;
+            sampleTypeTag.textContent = currentSample.category;
+
+            activeAudioBuffer = generateSyntheticBuffer(currentSample, 0.6);
+
+            totalDurationEl.textContent = formatTime(activeAudioBuffer.duration);
+            currentTimeEl.textContent = "00:00.00";
+            seekBar.value = 0;
+            pausedAtTime = 0;
+
+            renderSamplePads();
+        }
+
+        function startAudio(startOffset = 0) {
+            if (!activeAudioBuffer) return;
+
+            stopAudioSourceOnly();
+
+            const ctx = getAudioContext();
+            audioSourceNode = ctx.createBufferSource();
+            audioSourceNode.buffer = activeAudioBuffer;
+
+            gainNode = ctx.createGain();
+            gainNode.gain.value = 0.9;
+
+            audioSourceNode.connect(gainNode);
+            gainNode.connect(ctx.destination);
+
+            playbackStartTime = ctx.currentTime - startOffset;
+            audioSourceNode.start(0, startOffset);
+            
+            isPlaying = true;
+            playBtn.textContent = "PAUSE";
+
+            audioSourceNode.onended = () => {
+                if (isPlaying && (getCurrentPlaybackTime() >= activeAudioBuffer.duration)) {
+                    isPlaying = false;
+                    playBtn.textContent = "PLAY";
+                    pausedAtTime = 0;
+                    seekBar.value = 0;
+                    currentTimeEl.textContent = "00:00.00";
+                    cancelAnimationFrame(animFrameReq);
+                }
+            };
+
+            updateProgressLoop();
+        }
+
+        function stopAudioSourceOnly() {
+            if (audioSourceNode) {
+                try { audioSourceNode.stop(); } catch(e){}
+                audioSourceNode.disconnect();
+                audioSourceNode = null;
+            }
+            if (animFrameReq) cancelAnimationFrame(animFrameReq);
+        }
+
+        function stopAudio() {
+            stopAudioSourceOnly();
+            isPlaying = false;
+            playBtn.textContent = "PLAY";
+            pausedAtTime = 0;
+        }
+
+        function pauseAudio() {
+            if (!isPlaying) return;
+            pausedAtTime = getCurrentPlaybackTime();
+            stopAudioSourceOnly();
+            isPlaying = false;
+            playBtn.textContent = "PLAY";
+        }
+
+        function getCurrentPlaybackTime() {
+            if (!isPlaying) return pausedAtTime;
+            const ctx = getAudioContext();
+            const elapsed = ctx.currentTime - playbackStartTime;
+            return Math.min(elapsed, activeAudioBuffer ? activeAudioBuffer.duration : 0);
+        }
+
+        function updateProgressLoop() {
+            if (!isPlaying || !activeAudioBuffer) return;
+
+            const curTime = getCurrentPlaybackTime();
+            const duration = activeAudioBuffer.duration;
+
+            currentTimeEl.textContent = formatTime(curTime);
+            seekBar.value = (curTime / duration) * 100;
+
+            animFrameReq = requestAnimationFrame(updateProgressLoop);
+        }
+
+        seekBar.addEventListener('input', () => {
+            if (!activeAudioBuffer) return;
+            const seekTo = (seekBar.value / 100) * activeAudioBuffer.duration;
+            pausedAtTime = seekTo;
+            currentTimeEl.textContent = formatTime(seekTo);
+
+            if (isPlaying) {
+                startAudio(seekTo);
+            }
+        });
+
+        playBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                pauseAudio();
+            } else {
+                startAudio(pausedAtTime);
+            }
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            if (e.target.value.trim()) {
+                clearSearchBtn.classList.remove('hidden');
+            } else {
+                clearSearchBtn.classList.add('hidden');
+            }
+            renderSamplePads();
+        });
+
+        clearSearchBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            clearSearchBtn.classList.add('hidden');
+            renderSamplePads();
+        });
+
+        // Setup Category Filters dynamically
+        document.addEventListener('click', (e) => {
+            if (e.target && e.target.classList.contains('cat-filter')) {
+                document.querySelectorAll('.cat-filter').forEach(b => {
+                    b.classList.remove('border-white', 'bg-white', 'text-black');
+                    b.classList.add('border-zinc-800', 'text-zinc-400');
+                });
+                e.target.classList.remove('border-zinc-800', 'text-zinc-400');
+                e.target.classList.add('border-white', 'bg-white', 'text-black');
+
+                currentCategory = e.target.getAttribute('data-cat');
+                renderSamplePads();
+            }
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            if (!activeAudioBuffer) {
+                showToast("TIDAK ADA AUDIO UNTUK DIUNDUH");
+                return;
+            }
+
+            const wavBlob = audioBufferToWav(activeAudioBuffer);
+            const url = URL.createObjectURL(wavBlob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = `${currentSample.name.toLowerCase().replace(/\s+/g, '-')}-arisplrfifteen.wav`;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 100);
+
+            showToast("MENGUNDUH FILE WAV...");
+        });
+
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "00:00.00";
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            const ms = Math.floor((seconds % 1) * 100);
+            return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}.${String(ms).padStart(2, '0')}`;
+        }
+
+        function audioBufferToWav(buffer) {
+            const numOfChan = buffer.numberOfChannels;
+            const length = buffer.length * numOfChan * 2 + 44;
+            const outBuffer = new DataView(new ArrayBuffer(length));
+            const channels = [];
+            let sample = 0;
+            let offset = 0;
+
+            function writeString(str) {
+                for (let i = 0; i < str.length; i++) {
+                    outBuffer.setUint8(offset++, str.charCodeAt(i));
+                }
+            }
+
+            function setUint16(data) {
+                outBuffer.setUint16(offset, data, true);
+                offset += 2;
+            }
+
+            function setUint32(data) {
+                outBuffer.setUint32(offset, data, true);
+                offset += 4;
+            }
+
+            writeString('RIFF');
+            setUint32(length - 8);
+            writeString('WAVE');
+
+            writeString('fmt ');
+            setUint32(16);
+            setUint16(1);
+            setUint16(numOfChan);
+            setUint32(buffer.sampleRate);
+            setUint32(buffer.sampleRate * 2 * numOfChan);
+            setUint16(numOfChan * 2);
+            setUint16(16);
+
+            writeString('data');
+            setUint32(length - offset - 4);
+
+            for (let i = 0; i < buffer.numberOfChannels; i++) {
+                channels.push(buffer.getChannelData(i));
+            }
+
+            while (sample < buffer.length) {
+                for (let i = 0; i < numOfChan; i++) {
+                    let sampleVal = Math.max(-1, Math.min(1, channels[i][sample]));
+                    sampleVal = (0.5 + sampleVal < 0 ? sampleVal * 32768 : sampleVal * 32767) | 0;
+                    outBuffer.setInt16(offset, sampleVal, true);
+                    offset += 2;
+                }
+                sample++;
+            }
+
+            return new Blob([outBuffer], { type: 'audio/wav' });
+        }
+
+        function showToast(msg) {
+            toastEl.textContent = msg;
+            toastEl.classList.remove('opacity-0');
+            toastEl.classList.add('opacity-100');
+            setTimeout(() => {
+                toastEl.classList.remove('opacity-100');
+                toastEl.classList.add('opacity-0');
+            }, 2000);
+        }
+
+        function generateSyntheticBuffer(sampleObjOrId, duration = 0.5) {
+            const ctx = getAudioContext();
+            const sample = typeof sampleObjOrId === 'object' ? sampleObjOrId : samples.find(s => s.id === sampleObjOrId) || samples[0];
+            const sampleRate = ctx.sampleRate;
+            const bufferLen = Math.floor(sampleRate * duration);
+            const buffer = ctx.createBuffer(1, bufferLen, sampleRate);
+            const data = buffer.getChannelData(0);
+
+            const cat = sample.category || 'KICK';
+            const idNum = parseInt((sample.id || '1').replace(/\D/g, '')) || 1;
+
+            if (cat === 'KICK') {
+                const baseFreq = 120 + (idNum * 5) % 40;
+                for (let i = 0; i < bufferLen; i++) {
+                    const t = i / sampleRate;
+                    const env = Math.exp(-t * 10);
+                    const freq = baseFreq * Math.exp(-t * 30);
+                    data[i] = Math.sin(2 * Math.PI * freq * t) * env;
+                }
+            } else if (cat === 'SNARE') {
+                for (let i = 0; i < bufferLen; i++) {
+                    const t = i / sampleRate;
+                    const toneEnv = Math.exp(-t * 25);
+                    const noiseEnv = Math.exp(-t * 15);
+                    const tone = Math.sin(2 * Math.PI * (180 + (idNum % 5) * 10) * t) * toneEnv;
+                    const noise = (Math.random() * 2 - 1) * noiseEnv;
+                    data[i] = tone * 0.5 + noise * 0.5;
+                }
+            } else if (cat === 'CLAP') {
+                for (let i = 0; i < bufferLen; i++) {
+                    const t = i / sampleRate;
+                    let env = Math.exp(-t * 20);
+                    if (t < 0.03) {
+                        env *= (Math.sin(t * 500) > 0 ? 1 : 0.3);
+                    }
+                    data[i] = (Math.random() * 2 - 1) * env;
+                }
+            } else if (cat === 'HAT') {
+                for (let i = 0; i < bufferLen; i++) {
+                    const t = i / sampleRate;
+                    const env = Math.exp(-t * 35);
+                    data[i] = (Math.random() * 2 - 1) * env * 0.6;
+                }
+            } else if (cat === 'PERC') {
+                const freq = 300 + (idNum * 25) % 300;
+                for (let i = 0; i < bufferLen; i++) {
+                    const t = i / sampleRate;
+                    const env = Math.exp(-t * 18);
+                    data[i] = Math.sin(2 * Math.PI * freq * t) * env;
+                }
+            } else { // FX
+                const startFreq = 800 - (idNum % 5) * 80;
+                for (let i = 0; i < bufferLen; i++) {
+                    const t = i / sampleRate;
+                    const env = Math.exp(-t * 4);
+                    const freq = Math.max(50, startFreq * (1 - t / duration));
+                    data[i] = Math.sin(2 * Math.PI * freq * t) * env;
+                }
+            }
+
+            return buffer;
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        }
+    </script>
+</body>
+</html>
