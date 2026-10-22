@@ -99,7 +99,7 @@
           <h1 class="text-base sm:text-lg font-extrabold tracking-wider text-white uppercase font-mono">
             ARISPLRFIFTEEN
           </h1>
-          <p class="text-xs text-zinc-500 font-mono">FL Studio Projects Archive</p>
+          <p class="text-xs text-zinc-500 font-mono">FL Studio | Remixer Indonesia | Samples | Bahan Remix</p>
         </div>
       </div>
 
@@ -139,12 +139,12 @@
 
       <!-- PASSCODE LOCK SCREEN -->
       <div id="adminAuthBox" class="py-6 text-center space-y-4 max-w-sm mx-auto">
-        <p class="text-xs font-mono text-zinc-400">Masukan Password (Default: <code class="text-white bg-zinc-800 px-1.5 py-0.5 rounded">1515</code>):</p>
+        <p class="text-xs font-mono text-zinc-400">Log In</p>
         <div class="flex gap-2">
           <input 
             type="password" 
             id="adminPassInput" 
-            placeholder="Passcode..." 
+            placeholder="Masukan Password" 
             class="w-full px-4 py-2.5 bg-zinc-900 border border-zinc-800 rounded-xl text-sm font-mono text-center focus:outline-none focus:border-white"
           >
           <button 
@@ -164,23 +164,23 @@
         <div class="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-5 space-y-4">
           <div class="flex items-center justify-between">
             <h3 class="text-sm font-bold text-white flex items-center gap-2">
-              <span>🐙</span> GitHub Auto-Sync Config
+              <span>🐈‍⬛</span> GitHub Sync
             </h3>
             <span class="text-[10px] font-mono px-2 py-0.5 bg-zinc-800 text-zinc-400 rounded-full">Data Sync</span>
           </div>
 
           <p class="text-xs text-zinc-400 leading-relaxed">
-            Data project beserta gambar yang di-upload akan disimpan ke file <code class="text-zinc-200">projects.json</code> di repository GitHub milikmu.
+            Data product yang di-upload akan disimpan ke file <code class="text-zinc-200">projects.json</code> di repository GitHub milikmu.
           </p>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
             <div>
-              <label class="block text-zinc-400 font-mono mb-1">GitHub Token (PAT)</label>
+              <label class="block text-zinc-400 font-mono mb-1">GitHub Token</label>
               <input type="password" id="ghToken" placeholder="ghp_xxxx..." class="w-full px-3 py-2 bg-black border border-zinc-800 rounded-xl font-mono text-white text-xs">
             </div>
             <div>
-              <label class="block text-zinc-400 font-mono mb-1">Repo (user/repo)</label>
-              <input type="text" id="ghRepo" placeholder="arisplrfifteen/my-fl-projects" class="w-full px-3 py-2 bg-black border border-zinc-800 rounded-xl font-mono text-white text-xs">
+              <label class="block text-zinc-400 font-mono mb-1">Repository</label>
+              <input type="text" id="ghRepo" placeholder="arisplrfifteen/..." class="w-full px-3 py-2 bg-black border border-zinc-800 rounded-xl font-mono text-white text-xs">
             </div>
             <div>
               <label class="block text-zinc-400 font-mono mb-1">Branch</label>
@@ -197,13 +197,13 @@
               id="btnSaveGhConfig" 
               class="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-mono font-bold rounded-xl transition"
             >
-              Simpan Config GitHub
+              📝 Simpan Config GitHub
             </button>
             <button 
               id="btnPushToGithub" 
               class="px-5 py-2 bg-white hover:bg-zinc-200 text-black text-xs font-mono font-bold rounded-xl transition flex items-center gap-2"
             >
-              <span>🚀</span> Push / Sync Data ke GitHub Now
+              <span>✅</span> Update Data ke GitHub
             </button>
           </div>
           <p id="ghSyncStatus" class="text-xs font-mono mt-1 hidden"></p>
@@ -211,18 +211,18 @@
 
         <!-- FORM TAMBAH / EDIT PROJECT -->
         <div class="border border-zinc-800 rounded-2xl p-5 space-y-4">
-          <h3 class="text-sm font-bold text-white" id="formTitle">➕ Tambah Project Baru</h3>
+          <h3 class="text-sm font-bold text-white" id="formTitle">➕ Tambah Produk Baru</h3>
 
           <form id="projectForm" class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <input type="hidden" id="editProjectId" value="">
 
             <div>
-              <label class="block text-zinc-400 font-mono mb-1">Judul Project *</label>
+              <label class="block text-zinc-400 font-mono mb-1">Judul Produk *</label>
               <input type="text" id="inputTitle" required placeholder="Contoh: Aca Aca Nehi Nehi Bootleg" class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white">
             </div>
 
             <div>
-              <label class="block text-zinc-400 font-mono mb-1">Kategori Project *</label>
+              <label class="block text-zinc-400 font-mono mb-1">Kategori Produk *</label>
               <select id="inputCategory" class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white">
                 <option value="FL STUDIO">FLP</option>
                 <option value="FL MOBILE">FLM</option>
@@ -235,7 +235,7 @@
             </div>
 
             <div>
-              <label class="block text-zinc-400 font-mono mb-1">Link Google Drive Download *</label>
+              <label class="block text-zinc-400 font-mono mb-1">Link Download *</label>
               <input type="url" id="inputUrl" required placeholder="https://drive.google.com/file/d/..." class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white">
             </div>
 
