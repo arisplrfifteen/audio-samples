@@ -1,1 +1,798 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARISPLRFIFTEEN - FL Studio Projects</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Glowing Light Animations for Product Cards */
+    @keyframes lightSweep {
+      0% { transform: translateX(-150%) rotate(25deg); opacity: 0; }
+      20% { opacity: 0.6; }
+      80% { opacity: 0.6; }
+      100% { transform: translateX(250%) rotate(25deg); opacity: 0; }
+    }
+
+    .animate-light-sweep {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .animate-light-sweep::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 60%;
+      height: 200%;
+      background: linear-gradient(
+        90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.25) 50%, 
+        transparent 100%
+      );
+      transform: rotate(25deg);
+      animation: lightSweep 5s infinite ease-in-out;
+      pointer-events: none;
+    }
+
+    .product-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 15px 30px -10px rgba(255, 255, 255, 0.12), 0 0 20px rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #000;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #222;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #444;
+    }
+  </style>
+</head>
+<body class="bg-black text-white font-sans min-h-screen flex flex-col selection:bg-white selection:text-black">
+
+  <!-- TOP HEADER -->
+  <header class="border-b border-zinc-800 bg-black/80 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      
+      <!-- BRAND TEXT -->
+      <div class="flex items-center gap-3">
+        <div>
+          <h1 class="text-base sm:text-lg font-extrabold tracking-wider text-white uppercase font-mono">
+            ARISPLRFIFTEEN
+          </h1>
+          <p class="text-xs text-zinc-500 font-mono">FL Studio Projects Archive</p>
+        </div>
+      </div>
+
+      <!-- HEADER NAVIGATION & ADMIN TOGGLE -->
+      <div class="w-full sm:w-auto flex items-center justify-between sm:justify-end gap-4">
+        <div class="text-right hidden sm:block">
+          <p class="text-xs text-zinc-500 font-mono">Total Released</p>
+          <p class="text-sm font-bold text-white font-mono" id="totalCountDisplay">3 PROJECTS</p>
+        </div>
+
+        <button 
+          id="btnToggleAdmin" 
+          class="px-4 py-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-mono text-zinc-300 hover:text-white rounded-xl transition flex items-center gap-2"
+        >
+          <span>⚙️</span>
+          <span>Admin Panel</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-8">
+    
+    <!-- ADMIN DASHBOARD PANEL (HIDDEN BY DEFAULT) -->
+    <section id="adminSection" class="hidden mb-12 bg-zinc-950 border border-zinc-800 rounded-3xl p-6 sm:p-8 space-y-8 shadow-2xl relative">
+      <div class="flex items-center justify-between border-b border-zinc-800 pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>⚙️</span> Dashboard Admin & GitHub Sync
+          </h2>
+          <p class="text-xs text-zinc-500 mt-0.5">Kelola data project, upload gambar, dan simpan otomatis ke repository GitHub</p>
+        </div>
+        <button id="btnCloseAdmin" class="text-zinc-500 hover:text-white text-xs font-mono">✕ TUTUP</button>
+      </div>
+
+      <!-- PASSCODE LOCK SCREEN -->
+      <div id="adminAuthBox" class="py-6 text-center space-y-4 max-w-sm mx-auto">
+        <p class="text-xs font-mono text-zinc-400">Masukkan Passcode Admin (Default: <code class="text-white bg-zinc-800 px-1.5 py-0.5 rounded">1515</code>):</p>
+        <div class="flex gap-2">
+          <input 
+            type="password" 
+            id="adminPassInput" 
+            placeholder="Passcode..." 
+            class="w-full px-4 py-2.5 bg-zinc-900 border border-zinc-800 rounded-xl text-sm font-mono text-center focus:outline-none focus:border-white"
+          >
+          <button 
+            id="btnUnlockAdmin" 
+            class="px-5 py-2.5 bg-white text-black text-xs font-bold font-mono rounded-xl hover:bg-zinc-200 transition"
+          >
+            UNLOCK
+          </button>
+        </div>
+        <p id="adminAuthMsg" class="text-xs text-red-400 hidden"></p>
+      </div>
+
+      <!-- ADMIN CONTROLS (UNLOCKED) -->
+      <div id="adminContent" class="hidden space-y-8">
+        
+        <!-- GITHUB SYNC CONFIGURATION -->
+        <div class="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-5 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+              <span>🐙</span> GitHub Auto-Sync Config
+            </h3>
+            <span class="text-[10px] font-mono px-2 py-0.5 bg-zinc-800 text-zinc-400 rounded-full">Data Sync</span>
+          </div>
+
+          <p class="text-xs text-zinc-400 leading-relaxed">
+            Data project beserta gambar yang di-upload akan disimpan ke file <code class="text-zinc-200">projects.json</code> di repository GitHub milikmu.
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+            <div>
+              <label class="block text-zinc-400 font-mono mb-1">GitHub Token (PAT)</label>
+              <input type="password" id="ghToken" placeholder="ghp_xxxx..." class="w-full px-3 py-2 bg-black border border-zinc-800 rounded-xl font-mono text-white text-xs">
+            </div>
+            <div>
+              <label class="block text-zinc-400 font-mono mb-1">Repo (user/repo)</label>
+              <input type="text" id="ghRepo" placeholder="arisplrfifteen/my-fl-projects" class="w-full px-3 py-2 bg-black border border-zinc-800 rounded-xl font-mono text-white text-xs">
+            </div>
+            <div>
+              <label class="block text-zinc-400 font-mono mb-1">Branch</label>
+              <input type="text" id="ghBranch" value="main" class="w-full px-3 py-2 bg-black border border-zinc-800 rounded-xl font-mono text-white text-xs">
+            </div>
+            <div>
+              <label class="block text-zinc-400 font-mono mb-1">File Path</label>
+              <input type="text" id="ghPath" value="projects.json" class="w-full px-3 py-2 bg-black border border-zinc-800 rounded-xl font-mono text-white text-xs">
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pt-2">
+            <button 
+              id="btnSaveGhConfig" 
+              class="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-mono font-bold rounded-xl transition"
+            >
+              Simpan Config GitHub
+            </button>
+            <button 
+              id="btnPushToGithub" 
+              class="px-5 py-2 bg-white hover:bg-zinc-200 text-black text-xs font-mono font-bold rounded-xl transition flex items-center gap-2"
+            >
+              <span>🚀</span> Push / Sync Data ke GitHub Now
+            </button>
+          </div>
+          <p id="ghSyncStatus" class="text-xs font-mono mt-1 hidden"></p>
+        </div>
+
+        <!-- FORM TAMBAH / EDIT PROJECT -->
+        <div class="border border-zinc-800 rounded-2xl p-5 space-y-4">
+          <h3 class="text-sm font-bold text-white" id="formTitle">➕ Tambah Project Baru</h3>
+
+          <form id="projectForm" class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            <input type="hidden" id="editProjectId" value="">
+
+            <div>
+              <label class="block text-zinc-400 font-mono mb-1">Judul Project *</label>
+              <input type="text" id="inputTitle" required placeholder="Contoh: Aca Aca Nehi Nehi Bootleg" class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white">
+            </div>
+
+            <div>
+              <label class="block text-zinc-400 font-mono mb-1">Kategori Project *</label>
+              <select id="inputCategory" class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white">
+                <option value="FL STUDIO">FL Studio (FLP)</option>
+                <option value="FL MOBILE">FL Mobile (FLM)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-zinc-400 font-mono mb-1">Ukuran File *</label>
+              <input type="text" id="inputSize" required placeholder="Contoh: 39.2 MB" class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white">
+            </div>
+
+            <div>
+              <label class="block text-zinc-400 font-mono mb-1">Link Google Drive Download *</label>
+              <input type="url" id="inputUrl" required placeholder="https://drive.google.com/file/d/..." class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white">
+            </div>
+
+            <div class="sm:col-span-2">
+              <label class="block text-zinc-400 font-mono mb-1">
+                Upload Gambar Sampul (Dari Perangkat)
+              </label>
+              <input 
+                type="file" 
+                id="inputImageFile" 
+                accept="image/*" 
+                class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-zinc-300 font-mono file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-white file:text-black hover:file:bg-zinc-200 cursor-pointer"
+              >
+              <input type="hidden" id="inputCoverBase64" value="">
+              <p class="text-[11px] text-zinc-500 mt-1">
+                *Pilih file gambar dari HP atau laptop. Gambar otomatis diproses ke dalam sistem database lokal & GitHub.
+              </p>
+            </div>
+
+            <div class="sm:col-span-2 flex justify-end gap-2 pt-2">
+              <button type="button" id="btnCancelEdit" class="hidden px-4 py-2 bg-zinc-800 text-zinc-300 text-xs font-mono rounded-xl hover:bg-zinc-700">
+                Batal Edit
+              </button>
+              <button type="submit" class="px-6 py-2.5 bg-white text-black text-xs font-bold font-mono rounded-xl hover:bg-zinc-200 transition">
+                Simpan Project
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- LIST PROJECT DATA MANAGER TABLE -->
+        <div class="border border-zinc-800 rounded-2xl overflow-hidden">
+          <div class="px-5 py-3 bg-zinc-900/80 border-b border-zinc-800 flex justify-between items-center">
+            <h3 class="text-xs font-mono font-bold text-zinc-300">Daftar Project Terdaftar (<span id="adminTableCount">0</span>)</h3>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-zinc-300 font-mono">
+              <thead class="bg-zinc-900 text-zinc-500 border-b border-zinc-800">
+                <tr>
+                  <th class="p-3">Sampul</th>
+                  <th class="p-3">Judul</th>
+                  <th class="p-3">Kategori</th>
+                  <th class="p-3">Size</th>
+                  <th class="p-3 text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="adminTableBody" class="divide-y divide-zinc-800/60">
+                <!-- Rows injected via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SEARCH BAR & CATEGORY FILTER TABS -->
+    <section class="mb-10 space-y-6">
+      
+      <!-- Search Input -->
+      <div class="relative w-full max-w-2xl mx-auto">
+        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-500">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </div>
+        <input 
+          type="text" 
+          id="searchInput"
+          placeholder="Cari project..." 
+          class="w-full pl-12 pr-4 py-3.5 bg-zinc-900/90 border border-zinc-800 rounded-full text-white placeholder-zinc-500 text-sm focus:outline-none focus:border-white focus:ring-2 focus:ring-white/20 transition duration-200"
+        >
+        <button 
+          id="clearSearch"
+          class="hidden absolute inset-y-0 right-0 pr-4 flex items-center text-xs text-zinc-500 hover:text-white font-mono"
+        >
+          CLEAR
+        </button>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3" id="categoryFilter">
+        <button 
+          data-category="ALL" 
+          class="filter-btn active px-5 py-2.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all duration-200 bg-white text-black shadow-lg shadow-white/10"
+        >
+          ALL (<span id="countAll">0</span>)
+        </button>
+        <button 
+          data-category="FL STUDIO" 
+          class="filter-btn px-5 py-2.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all duration-200 bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white hover:border-zinc-700"
+        >
+          FL STUDIO (<span id="countFLS">0</span>)
+        </button>
+        <button 
+          data-category="FL MOBILE" 
+          class="filter-btn px-5 py-2.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all duration-200 bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white hover:border-zinc-700"
+        >
+          FL MOBILE (<span id="countFLM">0</span>)
+        </button>
+      </div>
+
+    </section>
+
+    <!-- PRODUCT CATALOG GRID -->
+    <section>
+      <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <!-- Dynamic Cards rendered via JS -->
+      </div>
+
+      <!-- EMPTY STATE -->
+      <div id="emptyState" class="hidden text-center py-16 px-4">
+        <div class="w-16 h-16 mx-auto mb-4 text-zinc-600 flex items-center justify-center rounded-full bg-zinc-900 border border-zinc-800">
+          🔍
+        </div>
+        <h3 class="text-base font-bold text-white mb-1">Project Tidak Ditemukan</h3>
+        <p class="text-xs text-zinc-500 max-w-sm mx-auto">Coba kata kunci lain atau pilih kategori yang berbeda.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-zinc-900 bg-black py-8 mt-12 text-center text-xs text-zinc-500 font-mono">
+    <div class="max-w-6xl mx-auto px-4 space-y-2">
+      <p>ⓒ 2026 arisplrfifteen. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // Initial Default Data
+    const defaultProjects = [
+      {
+        id: "1",
+        title: "Aca Aca Nehi Nehi Bootleg",
+        category: "FL STUDIO",
+        categoryLabel: "FL Studio Project",
+        size: "39.2 MB",
+        type: "Zip Archive",
+        downloadUrl: "https://drive.google.com",
+        coverArt: ""
+      },
+      {
+        id: "2",
+        title: "Ala Bali",
+        category: "FL STUDIO",
+        categoryLabel: "FL Studio Project",
+        size: "57.5 MB",
+        type: "Zip Archive",
+        downloadUrl: "https://drive.google.com",
+        coverArt: ""
+      },
+      {
+        id: "3",
+        title: "Angker BBHC",
+        category: "FL MOBILE",
+        categoryLabel: "FL Mobile Project",
+        size: "35.8 MB",
+        type: "Zip Archive",
+        downloadUrl: "https://drive.google.com",
+        coverArt: ""
+      }
+    ];
+
+    let projectsData = [];
+    let currentCategory = "ALL";
+    let searchQuery = "";
+    let isAdminUnlocked = false;
+
+    // Encoded SVG Fallback if coverArt is empty
+    const fallbackImageSvg = "data:image/svg+xml;utf8," + encodeURIComponent(`
+      <svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+        <rect width="400" height="400" fill="#111111"/>
+        <text x="50%" y="48%" font-family="monospace" font-size="20" fill="#666666" text-anchor="middle" dominant-baseline="middle">ARISPLRFIFTEEN</text>
+        <text x="50%" y="58%" font-family="monospace" font-size="12" fill="#444444" text-anchor="middle" dominant-baseline="middle">NO COVER IMAGE</text>
+      </svg>
+    `);
+
+    // DOM Elements
+    const productGrid = document.getElementById("productGrid");
+    const emptyState = document.getElementById("emptyState");
+    const searchInput = document.getElementById("searchInput");
+    const clearSearch = document.getElementById("clearSearch");
+    const categoryButtons = document.querySelectorAll("#categoryFilter button");
+    const totalCountDisplay = document.getElementById("totalCountDisplay");
+
+    // Admin Elements
+    const btnToggleAdmin = document.getElementById("btnToggleAdmin");
+    const adminSection = document.getElementById("adminSection");
+    const btnCloseAdmin = document.getElementById("btnCloseAdmin");
+    const adminAuthBox = document.getElementById("adminAuthBox");
+    const adminPassInput = document.getElementById("adminPassInput");
+    const btnUnlockAdmin = document.getElementById("btnUnlockAdmin");
+    const adminAuthMsg = document.getElementById("adminAuthMsg");
+    const adminContent = document.getElementById("adminContent");
+
+    // Admin Form Elements
+    const projectForm = document.getElementById("projectForm");
+    const formTitle = document.getElementById("formTitle");
+    const editProjectId = document.getElementById("editProjectId");
+    const inputTitle = document.getElementById("inputTitle");
+    const inputCategory = document.getElementById("inputCategory");
+    const inputSize = document.getElementById("inputSize");
+    const inputUrl = document.getElementById("inputUrl");
+    const inputImageFile = document.getElementById("inputImageFile");
+    const inputCoverBase64 = document.getElementById("inputCoverBase64");
+    const btnCancelEdit = document.getElementById("btnCancelEdit");
+    const adminTableBody = document.getElementById("adminTableBody");
+    const adminTableCount = document.getElementById("adminTableCount");
+
+    // GitHub Sync Elements
+    const ghToken = document.getElementById("ghToken");
+    const ghRepo = document.getElementById("ghRepo");
+    const ghBranch = document.getElementById("ghBranch");
+    const ghPath = document.getElementById("ghPath");
+    const btnSaveGhConfig = document.getElementById("btnSaveGhConfig");
+    const btnPushToGithub = document.getElementById("btnPushToGithub");
+    const ghSyncStatus = document.getElementById("ghSyncStatus");
+
+    // File Reader for Base64 Upload
+    inputImageFile.addEventListener("change", function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(uploadEvent) {
+          inputCoverBase64.value = uploadEvent.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    function initData() {
+      const savedData = localStorage.getItem("aris_fl_projects");
+      if (savedData) {
+        try {
+          projectsData = JSON.parse(savedData);
+        } catch (e) {
+          projectsData = defaultProjects;
+        }
+      } else {
+        projectsData = defaultProjects;
+        saveToLocalStorage();
+      }
+
+      const ghConfig = JSON.parse(localStorage.getItem("aris_gh_config") || "{}");
+      if (ghConfig.token) ghToken.value = ghConfig.token;
+      if (ghConfig.repo) ghRepo.value = ghConfig.repo;
+      if (ghConfig.branch) ghBranch.value = ghConfig.branch;
+      if (ghConfig.path) ghPath.value = ghConfig.path;
+
+      updateCounts();
+      renderProducts();
+    }
+
+    function saveToLocalStorage() {
+      localStorage.setItem("aris_fl_projects", JSON.stringify(projectsData));
+      updateCounts();
+    }
+
+    function updateCounts() {
+      const total = projectsData.length;
+      const fls = projectsData.filter(p => p.category === "FL STUDIO").length;
+      const flm = projectsData.filter(p => p.category === "FL MOBILE").length;
+
+      document.getElementById("countAll").textContent = total;
+      document.getElementById("countFLS").textContent = fls;
+      document.getElementById("countFLM").textContent = flm;
+      totalCountDisplay.textContent = `${total} PROJECTS`;
+      if (adminTableCount) adminTableCount.textContent = total;
+    }
+
+    function renderProducts() {
+      const filtered = projectsData.filter(item => {
+        const matchesCategory = (currentCategory === "ALL") || (item.category === currentCategory);
+        const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                              item.categoryLabel.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesCategory && matchesSearch;
+      });
+
+      productGrid.innerHTML = "";
+
+      if (filtered.length === 0) {
+        emptyState.classList.remove("hidden");
+      } else {
+        emptyState.classList.add("hidden");
+        filtered.forEach(project => {
+          const imageSrc = project.coverArt ? project.coverArt : fallbackImageSvg;
+          const cardHtml = `
+            <div class="product-card animate-light-sweep bg-zinc-950/90 border border-zinc-800/80 rounded-3xl overflow-hidden flex flex-col justify-between p-4 sm:p-5 group">
+              <div>
+                <div class="relative w-full aspect-square rounded-2xl overflow-hidden mb-4 bg-zinc-900 border border-zinc-800/60">
+                  <img 
+                    src="${imageSrc}" 
+                    alt="${project.title}" 
+                    class="w-full h-full object-cover grayscale transition-transform duration-500 group-hover:scale-105 group-hover:grayscale-0"
+                    loading="lazy"
+                  >
+                  
+                  <div class="absolute top-3 left-3 flex flex-wrap gap-1.5">
+                    <span class="px-2.5 py-1 bg-black/80 backdrop-blur-md text-[10px] font-mono font-bold tracking-wider text-white rounded-full border border-white/20">
+                      ${project.category}
+                    </span>
+                  </div>
+
+                  <div class="absolute bottom-3 right-3">
+                    <span class="px-2.5 py-1 bg-black/80 backdrop-blur-md text-[10px] font-mono font-bold text-zinc-300 rounded-full border border-zinc-800">
+                      ${project.size}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="px-1 mb-4">
+                  <h3 class="font-extrabold text-base sm:text-lg text-white group-hover:text-white transition-colors duration-200 line-clamp-1 mb-1">
+                    ${project.title}
+                  </h3>
+                  <p class="text-xs text-zinc-400 font-mono flex items-center gap-1.5">
+                    <span>${project.categoryLabel}</span>
+                    <span class="text-zinc-600">•</span>
+                    <span class="text-zinc-500">${project.type}</span>
+                  </p>
+                </div>
+              </div>
+
+              <a 
+                href="${project.downloadUrl}" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="w-full py-3 px-4 bg-white hover:bg-zinc-200 text-black font-extrabold text-xs tracking-wider rounded-2xl transition duration-200 flex items-center justify-center gap-2 group/btn shadow-md shadow-white/5 active:scale-[0.98]"
+              >
+                <svg class="w-4 h-4 transition-transform group-hover/btn:translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                </svg>
+                <span>DOWNLOAD (GOOGLE DRIVE)</span>
+              </a>
+            </div>
+          `;
+          productGrid.insertAdjacentHTML("beforeend", cardHtml);
+        });
+      }
+
+      if (isAdminUnlocked) {
+        renderAdminTable();
+      }
+    }
+
+    function renderAdminTable() {
+      adminTableBody.innerHTML = "";
+      projectsData.forEach(item => {
+        const imgThumb = item.coverArt ? item.coverArt : fallbackImageSvg;
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-zinc-900/50";
+        tr.innerHTML = `
+          <td class="p-3">
+            <img src="${imgThumb}" class="w-8 h-8 rounded object-cover bg-zinc-800">
+          </td>
+          <td class="p-3 font-bold text-white">${item.title}</td>
+          <td class="p-3"><span class="px-2 py-0.5 bg-zinc-800 rounded text-[10px]">${item.category}</span></td>
+          <td class="p-3 text-zinc-400">${item.size}</td>
+          <td class="p-3 text-right space-x-2">
+            <button onclick="editProject('${item.id}')" class="text-blue-400 hover:text-blue-300">Edit</button>
+            <button onclick="deleteProject('${item.id}')" class="text-red-400 hover:text-red-300">Hapus</button>
+          </td>
+        `;
+        adminTableBody.appendChild(tr);
+      });
+    }
+
+    categoryButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        categoryButtons.forEach(b => {
+          b.classList.remove("active", "bg-white", "text-black", "shadow-lg", "shadow-white/10");
+          b.classList.add("bg-zinc-900", "text-zinc-400", "border", "border-zinc-800");
+        });
+        btn.classList.add("active", "bg-white", "text-black", "shadow-lg", "shadow-white/10");
+        btn.classList.remove("bg-zinc-900", "text-zinc-400", "border", "border-zinc-800");
+
+        currentCategory = btn.getAttribute("data-category");
+        renderProducts();
+      });
+    });
+
+    searchInput.addEventListener("input", (e) => {
+      searchQuery = e.target.value.trim();
+      clearSearch.classList.toggle("hidden", searchQuery === "");
+      renderProducts();
+    });
+
+    clearSearch.addEventListener("click", () => {
+      searchInput.value = "";
+      searchQuery = "";
+      clearSearch.classList.add("hidden");
+      renderProducts();
+    });
+
+    btnToggleAdmin.addEventListener("click", () => {
+      adminSection.classList.toggle("hidden");
+    });
+    btnCloseAdmin.addEventListener("click", () => {
+      adminSection.classList.add("hidden");
+    });
+
+    btnUnlockAdmin.addEventListener("click", () => {
+      const pass = adminPassInput.value.trim();
+      if (pass === "1515") {
+        isAdminUnlocked = true;
+        adminAuthBox.classList.add("hidden");
+        adminContent.classList.remove("hidden");
+        renderAdminTable();
+      } else {
+        adminAuthMsg.textContent = "Passcode salah!";
+        adminAuthMsg.classList.remove("hidden");
+      }
+    });
+
+    projectForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const id = editProjectId.value || Date.now().toString();
+      const catVal = inputCategory.value;
+      
+      const existingItem = projectsData.find(p => p.id === id);
+      let finalCover = inputCoverBase64.value;
+      if (!finalCover && existingItem) {
+        finalCover = existingItem.coverArt; // keep old image if not re-uploaded on edit
+      }
+
+      const newProj = {
+        id: id,
+        title: inputTitle.value.trim(),
+        category: catVal,
+        categoryLabel: catVal === "FL STUDIO" ? "FL Studio Project" : "FL Mobile Project",
+        size: inputSize.value.trim(),
+        type: "Zip Archive",
+        downloadUrl: inputUrl.value.trim(),
+        coverArt: finalCover || ""
+      };
+
+      const index = projectsData.findIndex(p => p.id === id);
+      if (index >= 0) {
+        projectsData[index] = newProj;
+      } else {
+        projectsData.unshift(newProj);
+      }
+
+      saveToLocalStorage();
+      renderProducts();
+      resetForm();
+    });
+
+    function editProject(id) {
+      const item = projectsData.find(p => p.id === id);
+      if (!item) return;
+
+      editProjectId.value = item.id;
+      inputTitle.value = item.title;
+      inputCategory.value = item.category;
+      inputSize.value = item.size;
+      inputUrl.value = item.downloadUrl;
+      inputCoverBase64.value = item.coverArt || "";
+      inputImageFile.value = "";
+
+      formTitle.textContent = "✏️ Edit Project";
+      btnCancelEdit.classList.remove("hidden");
+      projectForm.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function deleteProject(id) {
+      if (confirm("Apakah Anda yakin ingin menghapus project ini?")) {
+        projectsData = projectsData.filter(p => p.id !== id);
+        saveToLocalStorage();
+        renderProducts();
+      }
+    }
+
+    function resetForm() {
+      editProjectId.value = "";
+      projectForm.reset();
+      inputCoverBase64.value = "";
+      formTitle.textContent = "➕ Tambah Project Baru";
+      btnCancelEdit.classList.add("hidden");
+    }
+
+    btnCancelEdit.addEventListener("click", resetForm);
+
+    btnSaveGhConfig.addEventListener("click", () => {
+      const config = {
+        token: ghToken.value.trim(),
+        repo: ghRepo.value.trim(),
+        branch: ghBranch.value.trim() || "main",
+        path: ghPath.value.trim() || "projects.json"
+      };
+      localStorage.setItem("aris_gh_config", JSON.stringify(config));
+      alert("Konfigurasi GitHub tersimpan di browser!");
+    });
+
+    btnPushToGithub.addEventListener("click", async () => {
+      const token = ghToken.value.trim();
+      const repo = ghRepo.value.trim();
+      const branch = ghBranch.value.trim() || "main";
+      const path = ghPath.value.trim() || "projects.json";
+
+      if (!token || !repo) {
+        alert("Harap isi GitHub Token dan Repo Name terlebih dahulu!");
+        return;
+      }
+
+      ghSyncStatus.classList.remove("hidden", "text-red-400", "text-green-400");
+      ghSyncStatus.classList.add("text-zinc-400");
+      ghSyncStatus.textContent = "⏳ Memproses Sync ke GitHub...";
+
+      try {
+        const getUrl = `https://api.github.com/repos/${repo}/contents/${path}?ref=${branch}`;
+        let sha = "";
+
+        const getRes = await fetch(getUrl, {
+          headers: {
+            "Authorization": `token ${token}`,
+            "Accept": "application/vnd.github.v3+json"
+          }
+        });
+
+        if (getRes.ok) {
+          const getData = await getRes.json();
+          sha = getData.sha;
+        }
+
+        const contentBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(projectsData, null, 2))));
+        const payload = {
+          message: `update projects.json via admin dashboard [${new Date().toLocaleString()}]`,
+          content: contentBase64,
+          branch: branch
+        };
+        if (sha) payload.sha = sha;
+
+        const putRes = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
+          method: "PUT",
+          headers: {
+            "Authorization": `token ${token}`,
+            "Accept": "application/vnd.github.v3+json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (putRes.ok) {
+          ghSyncStatus.classList.add("text-green-400");
+          ghSyncStatus.textContent = "✅ Berhasil Sync & Push Data ke GitHub Repository!";
+        } else {
+          const errData = await putRes.json();
+          throw new Error(errData.message || "Gagal Push ke GitHub");
+        }
+
+      } catch (err) {
+        ghSyncStatus.classList.add("text-red-400");
+        ghSyncStatus.textContent = `❌ Error Sync: ${err.message}`;
+      }
+    });
+
+    window.addEventListener("DOMContentLoaded", initData);
+  </script>
+</body>
+</html>
