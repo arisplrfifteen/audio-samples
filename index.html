@@ -305,7 +305,7 @@
                 <tr>
                   <th class="p-3">Sampul</th>
                   <th class="p-3">Judul</th>
-                  <th class="p-3">Tipe / Kat</th>
+                  <th class="p-3">Kategori</th>
                   <th class="p-3 text-right">Aksi</th>
                 </tr>
               </thead>
@@ -319,7 +319,7 @@
       </div>
     </section>
 
-    <!-- LIMITED EDITION SECTION (TOOLS) -->
+    <!-- TOOLS -->
     <section id="limitedSection" class="mb-14">
       <div class="flex items-center justify-between mb-6 border-b border-zinc-800/80 pb-3">
         <div class="flex items-center gap-2.5">
@@ -338,11 +338,11 @@
       </div>
     </section>
 
-    <!-- SEARCH BAR & CATEGORY FILTER TABS -->
+    <!-- JUDUL -->
     <section class="mb-10 space-y-6">
       
       <div class="flex items-center justify-between border-b border-zinc-800/80 pb-3">
-        <h2 class="text-lg sm:text-xl font-extrabold text-white tracking-tight">ARISPLRFIFTEEN | OFFICIAL STORE</h2>
+        <h2 class="text-lg sm:text-xl font-extrabold text-white tracking-tight">Free Downloads</h2>
       </div>
 
       <!-- Search Input -->
@@ -353,7 +353,7 @@
         <input 
           type="text" 
           id="searchInput"
-          placeholder="Cari Produk..." 
+          placeholder="Cari FLM\FLP ( arisplrfifteen - ... )" 
           class="w-full pl-12 pr-12 py-3.5 bg-zinc-900/90 border border-zinc-800 rounded-full text-white placeholder-zinc-500 text-sm focus:outline-none focus:border-white focus:ring-2 focus:ring-white/20 transition duration-200"
         >
         <button 
@@ -364,23 +364,23 @@
         </button>
       </div>
 
-      <!-- Category Filter Pills -->
+      <!-- KATEGORI -->
       <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3" id="categoryFilter">
         <button 
           data-category="ALL" 
-          class="filter-btn active px-5 py-2.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all duration-200 bg-white text-black shadow-lg shadow-white/10 cursor-pointer"
+          class="filter-btn active px-3 py-2.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all duration-200 bg-white text-black shadow-lg shadow-white/10 cursor-pointer"
         >
           SEMUA (<span id="countAll">0</span>)
         </button>
         <button 
           data-category="FLP" 
-          class="filter-btn px-5 py-2.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all duration-200 bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white hover:border-zinc-700 cursor-pointer"
+          class="filter-btn active px-3 py-2.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all duration-200 bg-white text-black shadow-lg shadow-white/10 cursor-pointer"
         >
           FLP (<span id="countFLP">0</span>)
         </button>
         <button 
           data-category="FLM" 
-          class="filter-btn px-5 py-2.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all duration-200 bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white hover:border-zinc-700 cursor-pointer"
+          class="filter-btn active px-3 py-2.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all duration-200 bg-white text-black shadow-lg shadow-white/10 cursor-pointer"
         >
           FLM (<span id="countFLM">0</span>)
         </button>
