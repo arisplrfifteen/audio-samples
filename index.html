@@ -325,13 +325,13 @@
           SEMUA (<span id="countAll">0</span>)
         </button>
         <button 
-          data-category="FL STUDIO" 
+          data-category="FLP" 
           class="filter-btn px-5 py-2.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all duration-200 bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white hover:border-zinc-700"
         >
           FLP (<span id="countFLS">0</span>)
         </button>
         <button 
-          data-category="FL MOBILE" 
+          data-category="FLM" 
           class="filter-btn px-5 py-2.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all duration-200 bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white hover:border-zinc-700"
         >
           FLM (<span id="countFLM">0</span>)
@@ -375,26 +375,6 @@
         category: "FL STUDIO",
         categoryLabel: "FL Studio Project",
         size: "39.2 MB",
-        type: "Zip Archive",
-        downloadUrl: "https://drive.google.com",
-        coverArt: ""
-      },
-      {
-        id: "2",
-        title: "Ala Bali",
-        category: "FL STUDIO",
-        categoryLabel: "FL Studio Project",
-        size: "57.5 MB",
-        type: "Zip Archive",
-        downloadUrl: "https://drive.google.com",
-        coverArt: ""
-      },
-      {
-        id: "3",
-        title: "Angker BBHC",
-        category: "FL MOBILE",
-        categoryLabel: "FL Mobile Project",
-        size: "35.8 MB",
         type: "Zip Archive",
         downloadUrl: "https://drive.google.com",
         coverArt: ""
@@ -498,8 +478,8 @@
 
     function updateCounts() {
       const total = projectsData.length;
-      const fls = projectsData.filter(p => p.category === "FL STUDIO").length;
-      const flm = projectsData.filter(p => p.category === "FL MOBILE").length;
+      const fls = projectsData.filter(p => p.category === "FLP").length;
+      const flm = projectsData.filter(p => p.category === "FLM").length;
 
       document.getElementById("countAll").textContent = total;
       document.getElementById("countFLS").textContent = fls;
