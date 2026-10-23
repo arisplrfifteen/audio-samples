@@ -33,7 +33,7 @@
   </script>
 
   <style>
-    /* Glowing Light Animations for Product Cards */
+    /* Glowing Light Animations for Product Cards & Logo */
     @keyframes lightSweep {
       0% { transform: translateX(-150%) rotate(25deg); opacity: 0; }
       20% { opacity: 0.6; }
@@ -64,6 +64,16 @@
       pointer-events: none;
     }
 
+    /* Small Simple Animation for Header Logo */
+    @keyframes logoPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+    }
+
+    .logo-animate {
+      animation: logoPulse 3s infinite ease-in-out;
+    }
+
     .product-card {
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -83,8 +93,8 @@
       
       <!-- LOGO / BRANDING -->
       <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-white text-black font-black flex items-center justify-center font-mono text-base tracking-tighter">
-          15
+        <div class="logo-animate animate-light-sweep w-9 h-9 rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800 flex items-center justify-center shadow-md">
+          <img src="icon.png" alt="Logo" class="w-full h-full object-cover">
         </div>
         <div>
           <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-white leading-none">
@@ -924,7 +934,6 @@
       initDomElements();
       setupEventListeners();
 
-      // Load Saved / Default GitHub Config
       let currentGhConfig = defaultGhConfig;
       const savedGhConfig = localStorage.getItem("gh_config");
       if (savedGhConfig) {
@@ -938,7 +947,6 @@
       if (ghBranch) ghBranch.value = currentGhConfig.branch;
       if (ghPath) ghPath.value = currentGhConfig.path;
 
-      // OTOMATIS AMBIL DATA PRODUK DARI GITHUB AGAR SAMA DI SEMUA PERANGKAT
       const fetchRepo = currentGhConfig.repo || "arisplrfifteen/product-arisplrfifteen";
       const fetchBranch = currentGhConfig.branch || "main";
       const fetchPath = currentGhConfig.path || "projects.json";
