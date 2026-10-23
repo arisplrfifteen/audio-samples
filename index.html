@@ -10,6 +10,9 @@
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
   
   <!-- Google Fonts: Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -70,51 +73,49 @@
       box-shadow: 0 15px 30px -10px rgba(255, 255, 255, 0.12), 0 0 20px rgba(255, 255, 255, 0.15);
       border-color: rgba(255, 255, 255, 0.4);
     }
-
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #000;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #222;
-      border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #444;
-    }
   </style>
 </head>
-<body class="bg-black text-white font-sans min-h-screen flex flex-col selection:bg-white selection:text-black">
+<body class="bg-black text-zinc-100 font-sans min-h-screen flex flex-col antialiased selection:bg-white selection:text-black">
 
-  <!-- TOP HEADER -->
-  <header class="border-b border-zinc-800 bg-black/80 backdrop-blur-md sticky top-0 z-50">
+  <!-- HEADER -->
+  <header class="border-b border-zinc-900 bg-zinc-950/80 backdrop-blur-md sticky top-0 z-40">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
       
-      <!-- BRAND TITLE -->
+      <!-- LOGO / BRANDING -->
       <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-white text-black font-black flex items-center justify-center font-mono text-base tracking-tighter">
+          15
+        </div>
         <div>
-          <h1 class="text-base sm:text-lg font-extrabold tracking-wider text-white uppercase font-sans">
-            ARISPLRFIFTEEN OFFICIAL STORE
+          <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-white leading-none">
+            arisplrfifteen
           </h1>
-          <p class="text-xs text-zinc-500 font-sans">FL Studio | Remixer Indonesia | Samples | Bahan Remix</p>
+          <p class="text-[11px] font-mono text-zinc-400 mt-0.5">Official Store</p>
         </div>
       </div>
 
       <!-- HEADER NAVIGATION & ADMIN -->
-      <div class="w-full sm:w-auto flex items-center justify-between sm:justify-end gap-4">
+      <div class="w-full sm:w-auto flex items-center justify-between sm:justify-end gap-3 sm:gap-4">
         <div class="text-right hidden sm:block">
-          <p class="text-xs text-zinc-500 font-mono">Total Released</p>
-          <p class="text-sm font-bold text-white font-sans" id="totalCountDisplay">3 Projek</p>
+          <p class="text-xs text-zinc-500 font-mono">Total Product</p>
+          <p class="text-sm font-bold text-white font-sans" id="totalCountDisplay">0 Product</p>
         </div>
+
+        <!-- CHECKOUT CART BUTTON -->
+        <button 
+          id="btnOpenCart" 
+          class="relative px-4 py-2 bg-white hover:bg-zinc-200 text-black font-extrabold text-xs font-mono rounded-xl transition flex items-center gap-2 shadow-lg shadow-white/5 active:scale-95"
+        >
+          <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+          <span>Keranjang</span>
+          <span id="cartBadge" class="hidden px-2 py-0.5 bg-black text-white text-[10px] rounded-full font-bold ml-1">0</span>
+        </button>
 
         <button 
           id="btnToggleAdmin" 
           class="px-4 py-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-mono text-zinc-300 hover:text-white rounded-xl transition flex items-center gap-2"
         >
-          <span>⚙️</span>
+          <i data-lucide="settings" class="w-4 h-4"></i>
           <span>Admin</span>
         </button>
       </div>
@@ -130,11 +131,14 @@
       <div class="flex items-center justify-between border-b border-zinc-800 pb-4">
         <div>
           <h2 class="text-lg font-bold text-white flex items-center gap-2">
-            <span>⚙️</span>Log In Admin
+            <i data-lucide="settings" class="w-5 h-5 text-zinc-400"></i>
+            <span>Log In Admin</span>
           </h2>
           <p class="text-xs text-zinc-500 mt-0.5">arisplrfifteen | Official Store</p>
         </div>
-        <button id="btnCloseAdmin" class="text-zinc-500 hover:text-white text-xs font-mono">✕</button>
+        <button id="btnCloseAdmin" class="text-zinc-500 hover:text-white p-1 rounded-lg">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
       </div>
 
       <!-- PASSWORD LOCK SCREEN -->
@@ -164,7 +168,8 @@
         <div class="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-5 space-y-4">
           <div class="flex items-center justify-between">
             <h3 class="text-sm font-bold text-white flex items-center gap-2">
-              <span>⚫</span> GitHub Sync
+              <i data-lucide="git-branch" class="w-4 h-4"></i>
+              <span>GitHub Sync</span>
             </h3>
             <span class="text-[10px] font-mono px-2 py-0.5 bg-zinc-800 text-zinc-400 rounded-full">Data Sync</span>
           </div>
@@ -195,15 +200,17 @@
           <div class="flex items-center justify-between pt-2">
             <button 
               id="btnSaveGhConfig" 
-              class="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-mono font-bold rounded-xl transition"
+              class="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-mono font-bold rounded-xl transition flex items-center gap-2"
             >
-              📝 Simpan Config GitHub
+              <i data-lucide="save" class="w-3.5 h-3.5"></i>
+              <span>Simpan Config GitHub</span>
             </button>
             <button 
               id="btnPushToGithub" 
               class="px-5 py-2 bg-white hover:bg-zinc-200 text-black text-xs font-mono font-bold rounded-xl transition flex items-center gap-2"
             >
-              <span>✅</span> Update Data ke GitHub
+              <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i>
+              <span>Update Data ke GitHub</span>
             </button>
           </div>
           <p id="ghSyncStatus" class="text-xs font-mono mt-1 hidden"></p>
@@ -211,7 +218,10 @@
 
         <!-- FORM TAMBAH / EDIT PROJECT -->
         <div class="border border-zinc-800 rounded-2xl p-5 space-y-4">
-          <h3 class="text-sm font-bold text-white" id="formTitle">➕ Tambah Projek Baru</h3>
+          <h3 class="text-sm font-bold text-white flex items-center gap-2" id="formTitle">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>Tambah Projek Baru</span>
+          </h3>
 
           <form id="projectForm" class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <input type="hidden" id="editProjectId" value="">
@@ -269,7 +279,7 @@
         <!-- LIST PROJECT DATA MANAGER TABLE -->
         <div class="border border-zinc-800 rounded-2xl overflow-hidden">
           <div class="px-5 py-3 bg-zinc-900/80 border-b border-zinc-800 flex justify-between items-center">
-            <h3 class="text-xs font-mono font-bold text-zinc-300">Daftar Projek Ter-upload (<span id="adminTableCount">0</span>)</h3>
+            <h3 class="text-xs font-mono font-bold text-zinc-300">Daftar Product Ter-upload (<span id="adminTableCount">0</span>)</h3>
           </div>
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs text-zinc-300 font-mono">
@@ -298,21 +308,19 @@
       <!-- Search Input -->
       <div class="relative w-full max-w-2xl mx-auto">
         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-500">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-          </svg>
+          <i data-lucide="search" class="w-5 h-5"></i>
         </div>
         <input 
           type="text" 
           id="searchInput"
-          placeholder="Cari Projek" 
-          class="w-full pl-12 pr-4 py-3.5 bg-zinc-900/90 border border-zinc-800 rounded-full text-white placeholder-zinc-500 text-sm focus:outline-none focus:border-white focus:ring-2 focus:ring-white/20 transition duration-200"
+          placeholder="Cari Projek..." 
+          class="w-full pl-12 pr-12 py-3.5 bg-zinc-900/90 border border-zinc-800 rounded-full text-white placeholder-zinc-500 text-sm focus:outline-none focus:border-white focus:ring-2 focus:ring-white/20 transition duration-200"
         >
         <button 
           id="clearSearch"
           class="hidden absolute inset-y-0 right-0 pr-4 flex items-center text-xs text-zinc-500 hover:text-white font-mono"
         >
-         HAPUS
+          <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
 
@@ -349,7 +357,7 @@
       <!-- EMPTY STATE -->
       <div id="emptyState" class="hidden text-center py-16 px-4">
         <div class="w-16 h-16 mx-auto mb-4 text-zinc-600 flex items-center justify-center rounded-full bg-zinc-900 border border-zinc-800">
-          🔍
+          <i data-lucide="search-x" class="w-8 h-8"></i>
         </div>
         <h3 class="text-base font-bold text-white mb-1">Projek Tidak Ditemukan</h3>
         <p class="text-xs text-zinc-500 max-w-sm mx-auto">arisplrfifteen Official Store</p>
@@ -357,6 +365,145 @@
     </section>
 
   </main>
+
+  <!-- PRODUCT DETAIL MODAL POP-UP -->
+  <div id="productModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div class="bg-zinc-950 border border-zinc-800 rounded-3xl max-w-lg w-full p-5 sm:p-6 space-y-5 shadow-2xl relative animate-in fade-in zoom-in duration-200">
+      
+      <!-- Modal Header / Back Button -->
+      <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+        <button 
+          id="btnModalClose" 
+          class="px-3 py-1.5 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-mono text-zinc-300 hover:text-white rounded-xl transition flex items-center gap-2"
+        >
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          <span>BERANDA</span>
+        </button>
+
+        <span class="text-[11px] font-mono text-zinc-500">DETAIL PRODUCT</span>
+      </div>
+
+      <!-- Modal Product Info -->
+      <div class="space-y-4">
+        <div class="relative w-full aspect-square rounded-2xl overflow-hidden bg-zinc-900 border border-zinc-800">
+          <img id="modalImg" src="" class="w-full h-full object-cover">
+          <div class="absolute top-3 left-3">
+            <span id="modalCategory" class="px-3 py-1 bg-black/80 backdrop-blur-md text-xs font-mono font-bold tracking-wider text-white rounded-full border border-white/20"></span>
+          </div>
+          <div class="absolute bottom-3 right-3">
+            <span id="modalSize" class="px-3 py-1 bg-black/80 backdrop-blur-md text-xs font-mono font-bold text-zinc-300 rounded-full border border-zinc-800"></span>
+          </div>
+        </div>
+
+        <div>
+          <h2 id="modalTitle" class="text-lg sm:text-xl font-extrabold text-white leading-snug mb-1"></h2>
+          <p class="text-xs text-zinc-400 font-mono flex items-center gap-1.5">
+            <span id="modalCategoryLabel"></span>
+            <span class="text-zinc-600">•</span>
+            <span id="modalType" class="text-zinc-500"></span>
+          </p>
+        </div>
+      </div>
+
+      <!-- ACTION BUTTONS: UNDUH, TAMBAH KE CHECKOUT & BAGIKAN LINK -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2">
+        <a 
+          id="modalDownloadLink" 
+          href="#" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="py-3 px-3 bg-white hover:bg-zinc-200 text-black font-extrabold text-xs tracking-wider rounded-2xl transition duration-200 flex items-center justify-center gap-2 shadow-md shadow-white/5 active:scale-[0.98]"
+        >
+          <i data-lucide="download" class="w-4 h-4"></i>
+          <span>UNDUH (<span id="modalDownloadsCount">0</span>)</span>
+        </a>
+
+        <button 
+          id="btnModalAddToCart" 
+          class="py-3 px-3 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-white font-extrabold text-xs tracking-wider rounded-2xl transition duration-200 flex items-center justify-center gap-2 active:scale-[0.98]"
+        >
+          <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+          <span>+ KERANJANG</span>
+        </button>
+
+        <button 
+          id="btnShareLink" 
+          class="py-3 px-3 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white font-extrabold text-xs tracking-wider rounded-2xl transition duration-200 flex items-center justify-center gap-2 active:scale-[0.98]"
+        >
+          <i data-lucide="share-2" class="w-4 h-4"></i>
+          <span id="shareBtnText">BAGIKAN</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CHECKOUT / CART DRAWER SLIDE-OVER -->
+  <div id="cartDrawer" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex justify-end transition-opacity">
+    <div class="w-full max-w-md bg-zinc-950 border-l border-zinc-800 h-full flex flex-col justify-between p-6 shadow-2xl relative animate-in slide-in-from-right duration-300">
+      
+      <!-- Drawer Header -->
+      <div>
+        <div class="flex items-center justify-between border-b border-zinc-800 pb-4 mb-6">
+          <div class="flex items-center gap-2">
+            <i data-lucide="shopping-cart" class="w-5 h-5 text-white"></i>
+            <h2 class="text-base font-extrabold text-white">KERANJANG</h2>
+            <span id="cartItemCount" class="text-xs font-mono bg-zinc-800 text-zinc-300 px-2.5 py-0.5 rounded-full">0 Product</span>
+          </div>
+          <button id="btnCloseCart" class="p-1.5 bg-zinc-900 text-zinc-400 hover:text-white rounded-xl border border-zinc-800">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- Selected Items Container -->
+        <div id="cartItemsList" class="space-y-3 max-h-[calc(100vh-250px)] overflow-y-auto pr-1">
+          <!-- Dynamically inserted cart items -->
+        </div>
+
+        <div id="cartEmptyState" class="text-center py-12 space-y-3">
+          <i data-lucide="shopping-cart" class="w-12 h-12 mx-auto text-zinc-700"></i>
+          <p class="text-xs text-zinc-500 font-mono">Belum ada product yang ditambahkan ke keranjang.</p>
+        </div>
+      </div>
+
+      <!-- Drawer Footer Actions -->
+      <div class="border-t border-zinc-800 pt-4 space-y-3">
+        <div class="space-y-1 text-xs font-mono">
+          <div class="flex justify-between items-center text-zinc-400">
+            <span>Total Product:</span>
+            <span id="cartTotalSummary" class="text-white font-bold">0 Product</span>
+          </div>
+          <div class="flex justify-between items-center text-zinc-400">
+            <span>Total Ukuran File:</span>
+            <span id="cartTotalSize" class="text-white font-bold">0 MB</span>
+          </div>
+        </div>
+
+        <button 
+          id="btnDownloadAllCart" 
+          class="w-full py-3.5 bg-white hover:bg-zinc-200 text-black font-extrabold text-xs tracking-wider rounded-2xl transition duration-200 flex items-center justify-center gap-2 shadow-lg shadow-white/10 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled
+        >
+          <i data-lucide="download" class="w-4 h-4"></i>
+          <span>UNDUH SEMUA PRODUCT</span>
+        </button>
+
+        <button 
+          id="btnClearCart" 
+          class="w-full py-2 bg-transparent hover:bg-zinc-900 text-zinc-500 hover:text-red-400 font-mono text-[11px] rounded-xl transition"
+        >
+          Kosongkan Keranjang
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden bg-white text-black px-5 py-2.5 rounded-full shadow-2xl font-mono text-xs font-bold flex items-center gap-2">
+    <i data-lucide="check-circle-2" class="w-4 h-4 text-black"></i>
+    <span id="toastMsg">Link produk berhasil disalin!</span>
+  </div>
 
   <!-- FOOTER -->
   <footer class="border-t border-zinc-900 bg-black py-8 mt-12 text-center text-xs text-zinc-500 font-sans">
@@ -367,24 +514,15 @@
 
   <!-- JAVASCRIPT -->
   <script>
-    // Initial Default Data
-    const defaultProjects = [
-      {
-        id: "1",
-        title: "Aca Aca Nehi Nehi Bootleg",
-        category: "FL STUDIO",
-        categoryLabel: "FL Studio Project",
-        size: "39.2 MB",
-        type: "Zip Archive",
-        downloadUrl: "https://drive.google.com",
-        coverArt: ""
-      }
-    ];
+    // Initial Default Data (Default 0 Projek)
+    const defaultProjects = [];
 
     let projectsData = [];
+    let cartData = [];
     let currentCategory = "ALL";
     let searchQuery = "";
     let isAdminUnlocked = false;
+    let activeModalProject = null;
 
     // Encoded SVG Fallback if coverArt is empty
     const fallbackImageSvg = "data:image/svg+xml;utf8," + encodeURIComponent(`
@@ -396,60 +534,438 @@
     `);
 
     // DOM Elements
-    const productGrid = document.getElementById("productGrid");
-    const emptyState = document.getElementById("emptyState");
-    const searchInput = document.getElementById("searchInput");
-    const clearSearch = document.getElementById("clearSearch");
-    const categoryButtons = document.querySelectorAll("#categoryFilter button");
-    const totalCountDisplay = document.getElementById("totalCountDisplay");
+    let productGrid, emptyState, searchInput, clearSearch, categoryButtons, totalCountDisplay;
+    let btnOpenCart, btnCloseCart, cartDrawer, cartBadge, cartItemsList, cartEmptyState, cartItemCount, cartTotalSummary, cartTotalSize, btnDownloadAllCart, btnClearCart, btnModalAddToCart;
+    let productModal, btnModalClose, modalImg, modalCategory, modalSize, modalTitle, modalCategoryLabel, modalType, modalDownloadLink, modalDownloadsCount, btnShareLink, shareBtnText, toast, toastMsg;
+    let btnToggleAdmin, adminSection, btnCloseAdmin, adminAuthBox, adminPassInput, btnUnlockAdmin, adminAuthMsg, adminContent;
+    let projectForm, formTitle, editProjectId, inputTitle, inputCategory, inputSize, inputUrl, inputImageFile, inputCoverBase64, btnCancelEdit, adminTableBody, adminTableCount;
+    let ghToken, ghRepo, ghBranch, ghPath, btnSaveGhConfig, btnPushToGithub, ghSyncStatus;
 
-    // Admin Elements
-    const btnToggleAdmin = document.getElementById("btnToggleAdmin");
-    const adminSection = document.getElementById("adminSection");
-    const btnCloseAdmin = document.getElementById("btnCloseAdmin");
-    const adminAuthBox = document.getElementById("adminAuthBox");
-    const adminPassInput = document.getElementById("adminPassInput");
-    const btnUnlockAdmin = document.getElementById("btnUnlockAdmin");
-    const adminAuthMsg = document.getElementById("adminAuthMsg");
-    const adminContent = document.getElementById("adminContent");
+    function initDomElements() {
+      productGrid = document.getElementById("productGrid");
+      emptyState = document.getElementById("emptyState");
+      searchInput = document.getElementById("searchInput");
+      clearSearch = document.getElementById("clearSearch");
+      categoryButtons = document.querySelectorAll("#categoryFilter button");
+      totalCountDisplay = document.getElementById("totalCountDisplay");
 
-    // Admin Form Elements
-    const projectForm = document.getElementById("projectForm");
-    const formTitle = document.getElementById("formTitle");
-    const editProjectId = document.getElementById("editProjectId");
-    const inputTitle = document.getElementById("inputTitle");
-    const inputCategory = document.getElementById("inputCategory");
-    const inputSize = document.getElementById("inputSize");
-    const inputUrl = document.getElementById("inputUrl");
-    const inputImageFile = document.getElementById("inputImageFile");
-    const inputCoverBase64 = document.getElementById("inputCoverBase64");
-    const btnCancelEdit = document.getElementById("btnCancelEdit");
-    const adminTableBody = document.getElementById("adminTableBody");
-    const adminTableCount = document.getElementById("adminTableCount");
+      btnOpenCart = document.getElementById("btnOpenCart");
+      btnCloseCart = document.getElementById("btnCloseCart");
+      cartDrawer = document.getElementById("cartDrawer");
+      cartBadge = document.getElementById("cartBadge");
+      cartItemsList = document.getElementById("cartItemsList");
+      cartEmptyState = document.getElementById("cartEmptyState");
+      cartItemCount = document.getElementById("cartItemCount");
+      cartTotalSummary = document.getElementById("cartTotalSummary");
+      cartTotalSize = document.getElementById("cartTotalSize");
+      btnDownloadAllCart = document.getElementById("btnDownloadAllCart");
+      btnClearCart = document.getElementById("btnClearCart");
+      btnModalAddToCart = document.getElementById("btnModalAddToCart");
 
-    // GitHub Sync Elements
-    const ghToken = document.getElementById("ghToken");
-    const ghRepo = document.getElementById("ghRepo");
-    const ghBranch = document.getElementById("ghBranch");
-    const ghPath = document.getElementById("ghPath");
-    const btnSaveGhConfig = document.getElementById("btnSaveGhConfig");
-    const btnPushToGithub = document.getElementById("btnPushToGithub");
-    const ghSyncStatus = document.getElementById("ghSyncStatus");
+      productModal = document.getElementById("productModal");
+      btnModalClose = document.getElementById("btnModalClose");
+      modalImg = document.getElementById("modalImg");
+      modalCategory = document.getElementById("modalCategory");
+      modalSize = document.getElementById("modalSize");
+      modalTitle = document.getElementById("modalTitle");
+      modalCategoryLabel = document.getElementById("modalCategoryLabel");
+      modalType = document.getElementById("modalType");
+      modalDownloadLink = document.getElementById("modalDownloadLink");
+      modalDownloadsCount = document.getElementById("modalDownloadsCount");
+      btnShareLink = document.getElementById("btnShareLink");
+      shareBtnText = document.getElementById("shareBtnText");
+      toast = document.getElementById("toast");
+      toastMsg = document.getElementById("toastMsg");
 
-    // File Reader for Base64 Upload
-    inputImageFile.addEventListener("change", function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(uploadEvent) {
-          inputCoverBase64.value = uploadEvent.target.result;
-        };
-        reader.readAsDataURL(file);
+      btnToggleAdmin = document.getElementById("btnToggleAdmin");
+      adminSection = document.getElementById("adminSection");
+      btnCloseAdmin = document.getElementById("btnCloseAdmin");
+      adminAuthBox = document.getElementById("adminAuthBox");
+      adminPassInput = document.getElementById("adminPassInput");
+      btnUnlockAdmin = document.getElementById("btnUnlockAdmin");
+      adminAuthMsg = document.getElementById("adminAuthMsg");
+      adminContent = document.getElementById("adminContent");
+
+      projectForm = document.getElementById("projectForm");
+      formTitle = document.getElementById("formTitle");
+      editProjectId = document.getElementById("editProjectId");
+      inputTitle = document.getElementById("inputTitle");
+      inputCategory = document.getElementById("inputCategory");
+      inputSize = document.getElementById("inputSize");
+      inputUrl = document.getElementById("inputUrl");
+      inputImageFile = document.getElementById("inputImageFile");
+      inputCoverBase64 = document.getElementById("inputCoverBase64");
+      btnCancelEdit = document.getElementById("btnCancelEdit");
+      adminTableBody = document.getElementById("adminTableBody");
+      adminTableCount = document.getElementById("adminTableCount");
+
+      ghToken = document.getElementById("ghToken");
+      ghRepo = document.getElementById("ghRepo");
+      ghBranch = document.getElementById("ghBranch");
+      ghPath = document.getElementById("ghPath");
+      btnSaveGhConfig = document.getElementById("btnSaveGhConfig");
+      btnPushToGithub = document.getElementById("btnPushToGithub");
+      ghSyncStatus = document.getElementById("ghSyncStatus");
+    }
+
+    function setupEventListeners() {
+      // Search input
+      if (searchInput) {
+        searchInput.addEventListener("input", (e) => {
+          searchQuery = e.target.value;
+          if (clearSearch) {
+            clearSearch.classList.toggle("hidden", searchQuery === "");
+          }
+          renderProducts();
+        });
       }
-    });
+
+      if (clearSearch) {
+        clearSearch.addEventListener("click", () => {
+          searchQuery = "";
+          if (searchInput) searchInput.value = "";
+          clearSearch.classList.add("hidden");
+          renderProducts();
+        });
+      }
+
+      // Category filter buttons
+      categoryButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          categoryButtons.forEach((b) => {
+            b.classList.remove("bg-white", "text-black", "shadow-lg", "shadow-white/10");
+            b.classList.add("bg-zinc-900", "text-zinc-400", "border", "border-zinc-800");
+          });
+          btn.classList.remove("bg-zinc-900", "text-zinc-400", "border", "border-zinc-800");
+          btn.classList.add("bg-white", "text-black", "shadow-lg", "shadow-white/10");
+
+          currentCategory = btn.getAttribute("data-category");
+          renderProducts();
+        });
+      });
+
+      // Cart Drawer Toggle
+      if (btnOpenCart && cartDrawer) {
+        btnOpenCart.addEventListener("click", () => {
+          cartDrawer.classList.remove("hidden");
+          document.body.classList.add("overflow-hidden");
+        });
+      }
+
+      if (btnCloseCart && cartDrawer) {
+        btnCloseCart.addEventListener("click", () => {
+          cartDrawer.classList.add("hidden");
+          document.body.classList.remove("overflow-hidden");
+        });
+      }
+
+      if (btnClearCart) {
+        btnClearCart.addEventListener("click", () => {
+          cartData = [];
+          updateCartUI();
+          showToast("Keranjang dibersihkan.");
+        });
+      }
+
+      if (btnDownloadAllCart) {
+        btnDownloadAllCart.addEventListener("click", () => {
+          cartData.forEach((item) => {
+            window.open(item.downloadUrl, "_blank");
+            incrementDownloadCount(item.id);
+          });
+        });
+      }
+
+      // Admin Toggle & Auth
+      if (btnToggleAdmin && adminSection) {
+        btnToggleAdmin.addEventListener("click", () => {
+          adminSection.classList.toggle("hidden");
+          if (!adminSection.classList.contains("hidden")) {
+            adminSection.scrollIntoView({ behavior: "smooth" });
+          }
+        });
+      }
+
+      if (btnCloseAdmin && adminSection) {
+        btnCloseAdmin.addEventListener("click", () => {
+          adminSection.classList.add("hidden");
+        });
+      }
+
+      if (btnUnlockAdmin) {
+        btnUnlockAdmin.addEventListener("click", () => {
+          const pass = adminPassInput ? adminPassInput.value : "";
+          if (pass === "Arii12345@#$_" || pass === "admin") {
+            isAdminUnlocked = true;
+            adminAuthBox.classList.add("hidden");
+            adminContent.classList.remove("hidden");
+            if (adminAuthMsg) adminAuthMsg.classList.add("hidden");
+            renderAdminTable();
+          } else {
+            if (adminAuthMsg) {
+              adminAuthMsg.textContent = "Password Salah!";
+              adminAuthMsg.classList.remove("hidden");
+            }
+          }
+        });
+      }
+
+      // Modal Actions
+      if (btnModalClose) btnModalClose.addEventListener("click", closeModal);
+
+      if (btnModalAddToCart) {
+        btnModalAddToCart.addEventListener("click", () => {
+          if (activeModalProject) {
+            addToCart(activeModalProject.id);
+          }
+        });
+      }
+
+      if (btnShareLink) {
+        btnShareLink.addEventListener("click", () => {
+          if (activeModalProject) {
+            const shareUrl = `${window.location.origin}${window.location.pathname}?id=${activeModalProject.id}`;
+            copyFallback(shareUrl);
+          }
+        });
+      }
+
+      // Image File Reader to Base64
+      if (inputImageFile) {
+        inputImageFile.addEventListener("change", (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              if (inputCoverBase64) inputCoverBase64.value = reader.result;
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+
+      // Project Form Submit (Create / Edit)
+      if (projectForm) {
+        projectForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const id = editProjectId ? editProjectId.value : "";
+          const title = inputTitle ? inputTitle.value.trim() : "";
+          const category = inputCategory ? inputCategory.value : "FL STUDIO";
+          const size = inputSize ? inputSize.value.trim() : "";
+          const downloadUrl = inputUrl ? inputUrl.value.trim() : "";
+          const coverArt = inputCoverBase64 ? inputCoverBase64.value : "";
+
+          if (id) {
+            // Edit existing
+            const index = projectsData.findIndex((p) => p.id === id);
+            if (index !== -1) {
+              projectsData[index] = {
+                ...projectsData[index],
+                title,
+                category,
+                size,
+                downloadUrl,
+                coverArt: coverArt || projectsData[index].coverArt,
+              };
+            }
+          } else {
+            // Create new
+            const newProj = {
+              id: "proj_" + Date.now(),
+              title,
+              category,
+              size,
+              downloadUrl,
+              coverArt,
+              downloads: 0,
+            };
+            projectsData.unshift(newProj);
+          }
+
+          saveToLocalStorage();
+          updateCounts();
+          renderProducts();
+          resetForm();
+          showToast(id ? "Projek berhasil diperbarui!" : "Projek berhasil ditambahkan!");
+        });
+      }
+
+      if (btnCancelEdit) {
+        btnCancelEdit.addEventListener("click", resetForm);
+      }
+
+      // GitHub Config & Sync
+      if (btnSaveGhConfig) {
+        btnSaveGhConfig.addEventListener("click", () => {
+          const config = {
+            token: ghToken ? ghToken.value.trim() : "",
+            repo: ghRepo ? ghRepo.value.trim() : "",
+            branch: ghBranch ? ghBranch.value.trim() : "main",
+            path: ghPath ? ghPath.value.trim() : "projects.json",
+          };
+          localStorage.setItem("gh_config", JSON.stringify(config));
+          showToast("Konfigurasi GitHub tersimpan!");
+        });
+      }
+
+      if (btnPushToGithub) {
+        btnPushToGithub.addEventListener("click", pushDataToGitHub);
+      }
+    }
+
+    function calculateTotalCartSize() {
+      let totalBytes = 0;
+
+      cartData.forEach((item) => {
+        if (!item.size) return;
+        const sizeStr = item.size.toString().trim().toUpperCase();
+        const match = sizeStr.match(/([\d.]+)\s*(KB|MB|GB|TB|B)?/);
+
+        if (match) {
+          const val = parseFloat(match[1]);
+          const unit = match[2] || "MB";
+
+          switch (unit) {
+            case "B": totalBytes += val; break;
+            case "KB": totalBytes += val * 1024; break;
+            case "MB": totalBytes += val * 1024 * 1024; break;
+            case "GB": totalBytes += val * 1024 * 1024 * 1024; break;
+            case "TB": totalBytes += val * 1024 * 1024 * 1024 * 1024; break;
+            default: totalBytes += val * 1024 * 1024; break;
+          }
+        }
+      });
+
+      if (totalBytes === 0) return "0 MB";
+      if (totalBytes < 1024 * 1024) return (totalBytes / 1024).toFixed(1) + " KB";
+      if (totalBytes < 1024 * 1024 * 1024) return (totalBytes / (1024 * 1024)).toFixed(1) + " MB";
+      return (totalBytes / (1024 * 1024 * 1024)).toFixed(2) + " GB";
+    }
+
+    function addToCart(id) {
+      const project = projectsData.find((p) => p.id === id);
+      if (!project) return;
+
+      if (!cartData.some((item) => item.id === id)) {
+        cartData.push(project);
+        updateCartUI();
+        showToast("Ditambahkan ke keranjang!");
+      } else {
+        showToast("Product sudah ada di keranjang!");
+      }
+    }
+
+    function removeFromCart(id) {
+      cartData = cartData.filter((item) => item.id !== id);
+      updateCartUI();
+      showToast("Dihapus dari keranjang.");
+    }
+
+    function incrementDownloadCount(id) {
+      const project = projectsData.find((p) => p.id === id);
+      if (project) {
+        project.downloads = (project.downloads || 0) + 1;
+        saveToLocalStorage();
+        updateCounts();
+        renderProducts();
+        if (activeModalProject && activeModalProject.id === id) {
+          if (modalDownloadsCount) modalDownloadsCount.textContent = project.downloads;
+        }
+      }
+    }
+
+    function saveToLocalStorage() {
+      localStorage.setItem("arisplrfifteen_projects", JSON.stringify(projectsData));
+    }
+
+    async function pushDataToGitHub() {
+      const token = ghToken ? ghToken.value.trim() : "";
+      const repo = ghRepo ? ghRepo.value.trim() : "";
+      const branch = ghBranch ? ghBranch.value.trim() : "main";
+      const path = ghPath ? ghPath.value.trim() : "projects.json";
+
+      if (!token || !repo) {
+        if (ghSyncStatus) {
+          ghSyncStatus.textContent = "Error: Token dan Repo GitHub wajib diisi!";
+          ghSyncStatus.className = "text-xs font-mono mt-1 text-red-400";
+          ghSyncStatus.classList.remove("hidden");
+        }
+        return;
+      }
+
+      if (ghSyncStatus) {
+        ghSyncStatus.textContent = "Sedang menyinkronkan data ke GitHub...";
+        ghSyncStatus.className = "text-xs font-mono mt-1 text-yellow-400";
+        ghSyncStatus.classList.remove("hidden");
+      }
+
+      try {
+        const url = `https://api.github.com/repos/${repo}/contents/${path}`;
+        
+        let sha = "";
+        try {
+          const getRes = await fetch(url, {
+            headers: { Authorization: `token ${token}` },
+          });
+          if (getRes.ok) {
+            const getData = await getRes.json();
+            sha = getData.sha;
+          }
+        } catch (e) {}
+
+        const content = btoa(unescape(encodeURIComponent(JSON.stringify(projectsData, null, 2))));
+
+        const bodyData = {
+          message: "Update projects data via Admin Dashboard",
+          content: content,
+          branch: branch,
+        };
+        if (sha) bodyData.sha = sha;
+
+        const putRes = await fetch(url, {
+          method: "PUT",
+          headers: {
+            Authorization: `token ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(bodyData),
+        });
+
+        if (putRes.ok) {
+          if (ghSyncStatus) {
+            ghSyncStatus.textContent = "Berhasil update data ke GitHub!";
+            ghSyncStatus.className = "text-xs font-mono mt-1 text-green-400";
+          }
+        } else {
+          const errData = await putRes.json();
+          throw new Error(errData.message || "Gagal update");
+        }
+      } catch (err) {
+        if (ghSyncStatus) {
+          ghSyncStatus.textContent = `Error: ${err.message}`;
+          ghSyncStatus.className = "text-xs font-mono mt-1 text-red-400";
+        }
+      }
+    }
 
     function initData() {
-      const savedData = localStorage.getItem("aris_fl_projects");
+      initDomElements();
+      setupEventListeners();
+
+      // Load Saved GitHub Config
+      const savedGhConfig = localStorage.getItem("gh_config");
+      if (savedGhConfig) {
+        try {
+          const config = JSON.parse(savedGhConfig);
+          if (ghToken && config.token) ghToken.value = config.token;
+          if (ghRepo && config.repo) ghRepo.value = config.repo;
+          if (ghBranch && config.branch) ghBranch.value = config.branch;
+          if (ghPath && config.path) ghPath.value = config.path;
+        } catch (e) {}
+      }
+
+      // Load Projects Data
+      const savedData = localStorage.getItem("arisplrfifteen_projects");
       if (savedData) {
         try {
           projectsData = JSON.parse(savedData);
@@ -458,41 +974,92 @@
         }
       } else {
         projectsData = defaultProjects;
-        saveToLocalStorage();
       }
-
-      const ghConfig = JSON.parse(localStorage.getItem("aris_gh_config") || "{}");
-      if (ghConfig.token) ghToken.value = ghConfig.token;
-      if (ghConfig.repo) ghRepo.value = ghConfig.repo;
-      if (ghConfig.branch) ghBranch.value = ghConfig.branch;
-      if (ghConfig.path) ghPath.value = ghConfig.path;
 
       updateCounts();
       renderProducts();
+      updateCartUI();
+      checkUrlQueryParam();
     }
 
-    function saveToLocalStorage() {
-      localStorage.setItem("aris_fl_projects", JSON.stringify(projectsData));
-      updateCounts();
+    function updateCartUI() {
+      if (!cartBadge || !cartEmptyState || !btnDownloadAllCart || !cartItemCount || !cartTotalSummary || !cartItemsList) return;
+
+      if (cartData.length > 0) {
+        cartBadge.textContent = cartData.length;
+        cartBadge.classList.remove("hidden");
+        cartEmptyState.classList.add("hidden");
+        btnDownloadAllCart.removeAttribute("disabled");
+      } else {
+        cartBadge.classList.add("hidden");
+        cartEmptyState.classList.remove("hidden");
+        btnDownloadAllCart.setAttribute("disabled", "true");
+      }
+
+      cartItemCount.textContent = `${cartData.length} Item`;
+      cartTotalSummary.textContent = `${cartData.length} Projek`;
+      if (cartTotalSize) cartTotalSize.textContent = calculateTotalCartSize();
+
+      cartItemsList.innerHTML = "";
+      cartData.forEach((item) => {
+        const imageSrc = item.coverArt ? item.coverArt : fallbackImageSvg;
+        const displayCategory = item.category === "FL STUDIO" ? "FLP" : item.category === "FL MOBILE" ? "FLM" : item.category;
+
+        const cartItemEl = document.createElement("div");
+        cartItemEl.className = "flex items-center justify-between p-3 bg-zinc-900/90 border border-zinc-800/80 rounded-2xl gap-3";
+        cartItemEl.innerHTML = `
+          <div class="flex items-center gap-3 overflow-hidden">
+            <img src="${imageSrc}" class="w-12 h-12 rounded-xl object-cover bg-zinc-800 border border-zinc-800 flex-shrink-0">
+            <div class="truncate">
+              <h4 class="text-xs font-bold text-white truncate">${item.title}</h4>
+              <p class="text-[10px] text-zinc-400 font-mono">${displayCategory} • ${item.size}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 flex-shrink-0">
+            <a href="${item.downloadUrl}" target="_blank" onclick="incrementDownloadCount('${item.id}')" class="p-2 bg-white text-black rounded-xl hover:bg-zinc-200 text-xs font-bold flex items-center gap-1">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            </a>
+            <button onclick="removeFromCart('${item.id}')" class="p-2 bg-zinc-800 text-zinc-400 hover:text-red-400 rounded-xl transition">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        `;
+        cartItemsList.appendChild(cartItemEl);
+      });
+
+      refreshIcons();
     }
 
     function updateCounts() {
-      const total = projectsData.length;
-      const fls = projectsData.filter(p => p.category === "FLS").length;
-      const flm = projectsData.filter(p => p.category === "FLM").length;
+      const flpCount = projectsData.filter((p) => p.category === "FLP" || p.category === "FL STUDIO").length;
+      const flmCount = projectsData.filter((p) => p.category === "FLM" || p.category === "FL MOBILE").length;
 
-      document.getElementById("countAll").textContent = total;
-      document.getElementById("countFLP").textContent = fls;
-      document.getElementById("countFLM").textContent = flm;
-      totalCountDisplay.textContent = `${total} Projek`;
-      if (adminTableCount) adminTableCount.textContent = total;
+      const countAllEl = document.getElementById("countAll");
+      const countFLPEl = document.getElementById("countFLP");
+      const countFLMEl = document.getElementById("countFLM");
+
+      if (countAllEl) countAllEl.textContent = projectsData.length;
+      if (countFLPEl) countFLPEl.textContent = flpCount;
+      if (countFLMEl) countFLMEl.textContent = flmCount;
+      if (totalCountDisplay) totalCountDisplay.textContent = `${projectsData.length} Projek`;
+      if (adminTableCount) adminTableCount.textContent = projectsData.length;
+    }
+
+    function refreshIcons() {
+      if (window.lucide) {
+        lucide.createIcons();
+      }
     }
 
     function renderProducts() {
-      const filtered = projectsData.filter(item => {
-        const matchesCategory = (currentCategory === "ALL") || (item.category === currentCategory);
-        const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                              item.categoryLabel.toLowerCase().includes(searchQuery.toLowerCase());
+      if (!productGrid || !emptyState) return;
+
+      const filtered = projectsData.filter((item) => {
+        const itemCat = item.category === "FL STUDIO" ? "FLP" : item.category === "FL MOBILE" ? "FLM" : item.category;
+        const matchesCategory = currentCategory === "ALL" || itemCat === currentCategory;
+        const matchesSearch =
+          item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          (item.categoryLabel && item.categoryLabel.toLowerCase().includes(searchQuery.toLowerCase()));
         return matchesCategory && matchesSearch;
       });
 
@@ -502,10 +1069,16 @@
         emptyState.classList.remove("hidden");
       } else {
         emptyState.classList.add("hidden");
-        filtered.forEach(project => {
+        filtered.forEach((project) => {
           const imageSrc = project.coverArt ? project.coverArt : fallbackImageSvg;
+          const displayCategory = project.category === "FL STUDIO" ? "FLP" : project.category === "FL MOBILE" ? "FLM" : project.category;
+          const dlCount = project.downloads || 0;
+
           const cardHtml = `
-            <div class="product-card animate-light-sweep bg-zinc-950/90 border border-zinc-800/80 rounded-3xl overflow-hidden flex flex-col justify-between p-4 sm:p-5 group">
+            <div 
+              onclick="openModal('${project.id}')"
+              class="product-card animate-light-sweep bg-zinc-950/90 border border-zinc-800/80 rounded-3xl overflow-hidden flex flex-col justify-between p-4 sm:p-5 group cursor-pointer"
+            >
               <div>
                 <div class="relative w-full aspect-square rounded-2xl overflow-hidden mb-4 bg-zinc-900 border border-zinc-800/60">
                   <img 
@@ -517,11 +1090,15 @@
                   
                   <div class="absolute top-3 left-3 flex flex-wrap gap-1.5">
                     <span class="px-2.5 py-1 bg-black/80 backdrop-blur-md text-[10px] font-mono font-bold tracking-wider text-white rounded-full border border-white/20">
-                      ${project.category}
+                      ${displayCategory}
                     </span>
                   </div>
 
-                  <div class="absolute bottom-3 right-3">
+                  <div class="absolute bottom-3 right-3 flex items-center gap-1.5">
+                    <span class="px-2.5 py-1 bg-black/80 backdrop-blur-md text-[10px] font-mono font-bold text-zinc-300 rounded-full border border-zinc-800 flex items-center gap-1">
+                      <i data-lucide="download-cloud" class="w-3 h-3 text-zinc-400"></i>
+                      <span>${dlCount}</span>
+                    </span>
                     <span class="px-2.5 py-1 bg-black/80 backdrop-blur-md text-[10px] font-mono font-bold text-zinc-300 rounded-full border border-zinc-800">
                       ${project.size}
                     </span>
@@ -533,24 +1110,30 @@
                     ${project.title}
                   </h3>
                   <p class="text-xs text-zinc-400 font-mono flex items-center gap-1.5">
-                    <span>${project.categoryLabel}</span>
+                    <span>${displayCategory}</span>
                     <span class="text-zinc-600">•</span>
-                    <span class="text-zinc-500">${project.type}</span>
+                    <span class="text-zinc-500 flex items-center gap-1">
+                      <i data-lucide="arrow-down-to-line" class="w-3 h-3 text-zinc-500"></i>
+                      ${dlCount} Unduhan
+                    </span>
                   </p>
                 </div>
               </div>
 
-              <a 
-                href="${project.downloadUrl}" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                class="w-full py-3 px-4 bg-white hover:bg-zinc-200 text-black font-extrabold text-xs tracking-wider rounded-2xl transition duration-200 flex items-center justify-center gap-2 group/btn shadow-md shadow-white/5 active:scale-[0.98]"
-              >
-                <svg class="w-4 h-4 transition-transform group-hover/btn:translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                </svg>
-                <span>UNDUH</span>
-              </a>
+              <div class="flex gap-2">
+                <button 
+                  onclick="event.stopPropagation(); addToCart('${project.id}')"
+                  class="flex-1 py-2.5 px-3 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-white font-bold text-xs tracking-wider rounded-xl transition duration-200 flex items-center justify-center gap-1.5 active:scale-95"
+                >
+                  <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
+                  <span>+ Keranjang</span>
+                </button>
+
+                <div class="py-2.5 px-3 bg-white hover:bg-zinc-200 text-black font-extrabold text-xs tracking-wider rounded-xl transition duration-200 flex items-center justify-center gap-1.5 group/btn shadow-md shadow-white/5">
+                  <span>LIHAT</span>
+                  <i data-lucide="arrow-right" class="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-0.5"></i>
+                </div>
+              </div>
             </div>
           `;
           productGrid.insertAdjacentHTML("beforeend", cardHtml);
@@ -560,12 +1143,90 @@
       if (isAdminUnlocked) {
         renderAdminTable();
       }
+
+      refreshIcons();
+    }
+
+    function openModal(id) {
+      const project = projectsData.find((p) => p.id === id);
+      if (!project) return;
+
+      activeModalProject = project;
+      const displayCategory = project.category === "FL STUDIO" ? "FLP" : project.category === "FL MOBILE" ? "FLM" : project.category;
+
+      if (modalImg) modalImg.src = project.coverArt ? project.coverArt : fallbackImageSvg;
+      if (modalCategory) modalCategory.textContent = displayCategory;
+      if (modalSize) modalSize.textContent = project.size;
+      if (modalTitle) modalTitle.textContent = project.title;
+      if (modalCategoryLabel) modalCategoryLabel.textContent = displayCategory;
+      if (modalType) modalType.textContent = project.type || "arisplrfifteen";
+      if (modalDownloadLink) modalDownloadLink.href = project.downloadUrl;
+      if (modalDownloadsCount) modalDownloadsCount.textContent = project.downloads || 0;
+
+      if (productModal) productModal.classList.remove("hidden");
+      document.body.classList.add("overflow-hidden");
+
+      try {
+        const newUrl = `${window.location.pathname}?id=${project.id}`;
+        window.history.pushState({ path: newUrl }, "", newUrl);
+      } catch (e) {}
+
+      refreshIcons();
+    }
+
+    function closeModal() {
+      if (productModal) productModal.classList.add("hidden");
+      document.body.classList.remove("overflow-hidden");
+      activeModalProject = null;
+
+      try {
+        window.history.pushState({ path: window.location.pathname }, "", window.location.pathname);
+      } catch (e) {}
+    }
+
+    function checkUrlQueryParam() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const projectId = urlParams.get("id");
+      if (projectId) {
+        setTimeout(() => {
+          openModal(projectId);
+        }, 300);
+      }
+    }
+
+    function copyFallback(text) {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      try {
+        document.execCommand("copy");
+        showToast("Link produk berhasil disalin!");
+      } catch (err) {
+        showToast("Gagal menyalin link.");
+      }
+      document.body.removeChild(textarea);
+    }
+
+    function showToast(message) {
+      if (!toast || !toastMsg) return;
+      toastMsg.textContent = message;
+      toast.classList.remove("hidden");
+      refreshIcons();
+      setTimeout(() => {
+        toast.classList.add("hidden");
+      }, 3000);
     }
 
     function renderAdminTable() {
+      if (!adminTableBody) return;
       adminTableBody.innerHTML = "";
-      projectsData.forEach(item => {
+      projectsData.forEach((item) => {
         const imgThumb = item.coverArt ? item.coverArt : fallbackImageSvg;
+        const displayCategory = item.category === "FL STUDIO" ? "FLP" : item.category === "FL MOBILE" ? "FLM" : item.category;
         const tr = document.createElement("tr");
         tr.className = "hover:bg-zinc-900/50";
         tr.innerHTML = `
@@ -573,207 +1234,49 @@
             <img src="${imgThumb}" class="w-8 h-8 rounded object-cover bg-zinc-800">
           </td>
           <td class="p-3 font-bold text-white">${item.title}</td>
-          <td class="p-3"><span class="px-2 py-0.5 bg-zinc-800 rounded text-[10px]">${item.category}</span></td>
-          <td class="p-3 text-zinc-400">${item.size}</td>
+          <td class="p-3"><span class="px-2 py-0.5 bg-zinc-800 rounded text-[10px]">${displayCategory}</span></td>
+          <td class="p-3 text-zinc-400">${item.size} (${item.downloads || 0} DL)</td>
           <td class="p-3 text-right space-x-2">
-            <button onclick="editProject('${item.id}')" class="text-blue-400 hover:text-blue-300">Edit</button>
-            <button onclick="deleteProject('${item.id}')" class="text-red-400 hover:text-red-300">Hapus</button>
+            <button onclick="editProject('${item.id}')" class="text-blue-400 hover:text-blue-300 font-bold">Edit</button>
+            <button onclick="deleteProject('${item.id}')" class="text-red-400 hover:text-red-300 font-bold">Hapus</button>
           </td>
         `;
         adminTableBody.appendChild(tr);
       });
     }
 
-    categoryButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        categoryButtons.forEach(b => {
-          b.classList.remove("active", "bg-white", "text-black", "shadow-lg", "shadow-white/10");
-          b.classList.add("bg-zinc-900", "text-zinc-400", "border", "border-zinc-800");
-        });
-        btn.classList.add("active", "bg-white", "text-black", "shadow-lg", "shadow-white/10");
-        btn.classList.remove("bg-zinc-900", "text-zinc-400", "border", "border-zinc-800");
-
-        currentCategory = btn.getAttribute("data-category");
-        renderProducts();
-      });
-    });
-
-    searchInput.addEventListener("input", (e) => {
-      searchQuery = e.target.value.trim();
-      clearSearch.classList.toggle("hidden", searchQuery === "");
-      renderProducts();
-    });
-
-    clearSearch.addEventListener("click", () => {
-      searchInput.value = "";
-      searchQuery = "";
-      clearSearch.classList.add("hidden");
-      renderProducts();
-    });
-
-    btnToggleAdmin.addEventListener("click", () => {
-      adminSection.classList.toggle("hidden");
-    });
-    btnCloseAdmin.addEventListener("click", () => {
-      adminSection.classList.add("hidden");
-    });
-
-    btnUnlockAdmin.addEventListener("click", () => {
-      const pass = adminPassInput.value.trim();
-      if (pass === "Arii12345@#$_") {
-        isAdminUnlocked = true;
-        adminAuthBox.classList.add("hidden");
-        adminContent.classList.remove("hidden");
-        renderAdminTable();
-      } else {
-        adminAuthMsg.textContent = "Password salah!";
-        adminAuthMsg.classList.remove("hidden");
-      }
-    });
-
-    projectForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-
-      const id = editProjectId.value || Date.now().toString();
-      const catVal = inputCategory.value;
-      
-      const existingItem = projectsData.find(p => p.id === id);
-      let finalCover = inputCoverBase64.value;
-      if (!finalCover && existingItem) {
-        finalCover = existingItem.coverArt; // keep old image if not re-uploaded on edit
-      }
-
-      const newProj = {
-        id: id,
-        title: inputTitle.value.trim(),
-        category: catVal,
-        categoryLabel: catVal === "FL STUDIO" ? "FLP" : "FLM",
-        size: inputSize.value.trim(),
-        type: "arisplrfifteen",
-        downloadUrl: inputUrl.value.trim(),
-        coverArt: finalCover || ""
-      };
-
-      const index = projectsData.findIndex(p => p.id === id);
-      if (index >= 0) {
-        projectsData[index] = newProj;
-      } else {
-        projectsData.unshift(newProj);
-      }
-
-      saveToLocalStorage();
-      renderProducts();
-      resetForm();
-    });
-
     function editProject(id) {
-      const item = projectsData.find(p => p.id === id);
+      const item = projectsData.find((p) => p.id === id);
       if (!item) return;
 
-      editProjectId.value = item.id;
-      inputTitle.value = item.title;
-      inputCategory.value = item.category;
-      inputSize.value = item.size;
-      inputUrl.value = item.downloadUrl;
-      inputCoverBase64.value = item.coverArt || "";
-      inputImageFile.value = "";
+      if (editProjectId) editProjectId.value = item.id;
+      if (inputTitle) inputTitle.value = item.title;
+      if (inputCategory) inputCategory.value = item.category;
+      if (inputSize) inputSize.value = item.size;
+      if (inputUrl) inputUrl.value = item.downloadUrl;
+      if (inputCoverBase64) inputCoverBase64.value = item.coverArt || "";
+      if (inputImageFile) inputImageFile.value = "";
 
-      formTitle.textContent = "✏️ Edit Projek";
-      btnCancelEdit.classList.remove("hidden");
-      projectForm.scrollIntoView({ behavior: 'smooth' });
+      if (formTitle) formTitle.textContent = "✏️ Edit Projek";
+      if (btnCancelEdit) btnCancelEdit.classList.remove("hidden");
+      if (projectForm) projectForm.scrollIntoView({ behavior: "smooth" });
     }
 
     function deleteProject(id) {
       if (confirm("Apakah Anda yakin ingin menghapus projek ini?")) {
-        projectsData = projectsData.filter(p => p.id !== id);
+        projectsData = projectsData.filter((p) => p.id !== id);
         saveToLocalStorage();
         renderProducts();
       }
     }
 
     function resetForm() {
-      editProjectId.value = "";
-      projectForm.reset();
-      inputCoverBase64.value = "";
-      formTitle.textContent = "➕ Tambah Projek Baru";
-      btnCancelEdit.classList.add("hidden");
+      if (editProjectId) editProjectId.value = "";
+      if (projectForm) projectForm.reset();
+      if (inputCoverBase64) inputCoverBase64.value = "";
+      if (formTitle) formTitle.textContent = "➕ Tambah Projek Baru";
+      if (btnCancelEdit) btnCancelEdit.classList.add("hidden");
     }
-
-    btnCancelEdit.addEventListener("click", resetForm);
-
-    btnSaveGhConfig.addEventListener("click", () => {
-      const config = {
-        token: ghToken.value.trim(),
-        repo: ghRepo.value.trim(),
-        branch: ghBranch.value.trim() || "main",
-        path: ghPath.value.trim() || "projects.json"
-      };
-      localStorage.setItem("aris_gh_config", JSON.stringify(config));
-      alert("Konfigurasi GitHub tersimpan di browser!");
-    });
-
-    btnPushToGithub.addEventListener("click", async () => {
-      const token = ghToken.value.trim();
-      const repo = ghRepo.value.trim();
-      const branch = ghBranch.value.trim() || "main";
-      const path = ghPath.value.trim() || "projects.json";
-
-      if (!token || !repo) {
-        alert("Harap isi GitHub Token dan Repo Name terlebih dahulu!");
-        return;
-      }
-
-      ghSyncStatus.classList.remove("hidden", "text-red-400", "text-green-400");
-      ghSyncStatus.classList.add("text-zinc-400");
-      ghSyncStatus.textContent = "⏳ Memproses Update Data ke GitHub...";
-
-      try {
-        const getUrl = `https://api.github.com/repos/${repo}/contents/${path}?ref=${branch}`;
-        let sha = "";
-
-        const getRes = await fetch(getUrl, {
-          headers: {
-            "Authorization": `token ${token}`,
-            "Accept": "application/vnd.github.v3+json"
-          }
-        });
-
-        if (getRes.ok) {
-          const getData = await getRes.json();
-          sha = getData.sha;
-        }
-
-        const contentBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(projectsData, null, 2))));
-        const payload = {
-          message: `update projects.json via admin dashboard [${new Date().toLocaleString()}]`,
-          content: contentBase64,
-          branch: branch
-        };
-        if (sha) payload.sha = sha;
-
-        const putRes = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
-          method: "PUT",
-          headers: {
-            "Authorization": `token ${token}`,
-            "Accept": "application/vnd.github.v3+json",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(payload)
-        });
-
-        if (putRes.ok) {
-          ghSyncStatus.classList.add("text-green-400");
-          ghSyncStatus.textContent = "✅ Berhasil Update ke GitHub Repository!";
-        } else {
-          const errData = await putRes.json();
-          throw new Error(errData.message || "Gagal Push ke GitHub");
-        }
-
-      } catch (err) {
-        ghSyncStatus.classList.add("text-red-400");
-        ghSyncStatus.textContent = `❌ Error Sync: ${err.message}`;
-      }
-    });
 
     window.addEventListener("DOMContentLoaded", initData);
   </script>
