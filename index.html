@@ -514,7 +514,7 @@
 
   <!-- JAVASCRIPT -->
   <script>
-    // Initial Default Data (Default 0 Projek)
+    // Initial Default Data
     const defaultProjects = [];
 
     let projectsData = [];
@@ -524,7 +524,7 @@
     let isAdminUnlocked = false;
     let activeModalProject = null;
 
-    // Encoded SVG Fallback if coverArt is empty
+    // Encoded SVG Fallback
     const fallbackImageSvg = "data:image/svg+xml;utf8," + encodeURIComponent(`
       <svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
         <rect width="400" height="400" fill="#111111"/>
@@ -667,20 +667,25 @@
         });
       }
 
-      // Memperbaiki pengunduhan seluruh produk di keranjang (Multi-Download Fix)
+      // UNDUH SEMUA DENGAN IFRAME SEKUANSIAL
       if (btnDownloadAllCart) {
         btnDownloadAllCart.addEventListener("click", () => {
           if (cartData.length === 0) return;
 
-          showToast(`Mengunduh ${cartData.length} produk...`);
-
-          // Gunakan delay 500ms antar item agar browser tidak memblokir popup beruntun
           cartData.forEach((item, index) => {
             setTimeout(() => {
-              window.open(item.downloadUrl, "_blank");
+              const iframe = document.createElement("iframe");
+              iframe.style.display = "none";
+              iframe.src = item.downloadUrl;
+              document.body.appendChild(iframe);
+
               incrementDownloadCount(item.id);
-            }, index * 500);
+
+              setTimeout(() => iframe.remove(), 6000);
+            }, index * 800);
           });
+
+          showToast(`Mengunduh ${cartData.length} produk...`);
         });
       }
 
@@ -752,7 +757,7 @@
         });
       }
 
-      // Project Form Submit (Create / Edit)
+      // Project Form Submit
       if (projectForm) {
         projectForm.addEventListener("submit", (e) => {
           e.preventDefault();
@@ -764,7 +769,6 @@
           const coverArt = inputCoverBase64 ? inputCoverBase64.value : "";
 
           if (id) {
-            // Edit existing
             const index = projectsData.findIndex((p) => p.id === id);
             if (index !== -1) {
               projectsData[index] = {
@@ -777,7 +781,6 @@
               };
             }
           } else {
-            // Create new
             const newProj = {
               id: "proj_" + Date.now(),
               title,
