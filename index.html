@@ -233,7 +233,7 @@
               Produk Utama
             </button>
             <button id="tabLimitedEdition" type="button" class="px-4 py-2 rounded-xl text-xs font-mono font-bold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white transition">
-              Limited Edition
+              Tools
             </button>
           </div>
 
@@ -1381,7 +1381,7 @@
       projectsData.forEach((item) => {
         const imgThumb = item.coverArt ? item.coverArt : (item.isLimited ? fallbackImageRectSvg : fallbackImageSvg);
         const displayCategory = item.isLimited 
-          ? "LIMITED EDITION" 
+          ? "Tools" 
           : (item.category === "FL STUDIO" ? "FLP" : item.category === "FL MOBILE" ? "FLM" : item.category);
 
         const tr = document.createElement("tr");
@@ -1423,7 +1423,7 @@
       if (inputCoverBase64) inputCoverBase64.value = item.coverArt || "";
       if (inputImageFile) inputImageFile.value = "";
 
-      if (formTitle) formTitle.textContent = item.isLimited ? "✏️ Edit Limited Edition" : "✏️ Edit Produk Utama";
+      if (formTitle) formTitle.textContent = item.isLimited ? "✏️ Edit Tools" : "✏️ Edit Produk Utama";
       if (btnCancelEdit) btnCancelEdit.classList.remove("hidden");
       if (projectForm) projectForm.scrollIntoView({ behavior: "smooth" });
     }
@@ -1441,7 +1441,7 @@
       if (editProjectId) editProjectId.value = "";
       if (projectForm) projectForm.reset();
       if (inputCoverBase64) inputCoverBase64.value = "";
-      if (formTitle) formTitle.textContent = activeAdminTab === "LIMITED" ? "➕ Tambah Limited Edition" : "➕ Tambah Produk Utama";
+      if (formTitle) formTitle.textContent = activeAdminTab === "LIMITED" ? "➕ Tambah Tools" : "➕ Tambah Produk Utama";
       if (btnCancelEdit) btnCancelEdit.classList.add("hidden");
     }
 
