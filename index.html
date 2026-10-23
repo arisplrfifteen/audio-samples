@@ -94,7 +94,7 @@
       <!-- LOGO / BRANDING -->
       <div class="flex items-center gap-3">
         <div class="logo-animate animate-light-sweep w-9 h-9 rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800 flex items-center justify-center shadow-md">
-          <img src="icon.png" alt="Logo" class="w-full h-full object-cover">
+          <img src="icon.png" alt="Logo" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/111/fff?text=ARI'">
         </div>
         <div>
           <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-white leading-none">
@@ -114,7 +114,7 @@
         <!-- CHECKOUT CART BUTTON -->
         <button 
           id="btnOpenCart" 
-          class="relative px-4 py-2 bg-white hover:bg-zinc-200 text-black font-extrabold text-xs font-mono rounded-xl transition flex items-center gap-2 shadow-lg shadow-white/5 active:scale-95"
+          class="relative px-4 py-2 bg-white hover:bg-zinc-200 text-black font-extrabold text-xs font-mono rounded-xl transition flex items-center gap-2 shadow-lg shadow-white/5 active:scale-95 cursor-pointer"
         >
           <i data-lucide="shopping-cart" class="w-4 h-4"></i>
           <span>Keranjang</span>
@@ -123,7 +123,7 @@
 
         <button 
           id="btnToggleAdmin" 
-          class="px-4 py-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-mono text-zinc-300 hover:text-white rounded-xl transition flex items-center gap-2"
+          class="px-4 py-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-mono text-zinc-300 hover:text-white rounded-xl transition flex items-center gap-2 cursor-pointer"
         >
           <i data-lucide="settings" class="w-4 h-4"></i>
           <span>Admin</span>
@@ -146,7 +146,7 @@
           </h2>
           <p class="text-xs text-zinc-500 mt-0.5">arisplrfifteen | Official Store</p>
         </div>
-        <button id="btnCloseAdmin" class="text-zinc-500 hover:text-white p-1 rounded-lg">
+        <button id="btnCloseAdmin" class="text-zinc-500 hover:text-white p-1 rounded-lg cursor-pointer">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
@@ -159,11 +159,11 @@
             type="password" 
             id="adminPassInput" 
             placeholder="Masukkan Password" 
-            class="w-full px-4 py-2.5 bg-zinc-900 border border-zinc-800 rounded-xl text-sm font-mono text-center focus:outline-none focus:border-white"
+            class="w-full px-4 py-2.5 bg-zinc-900 border border-zinc-800 rounded-xl text-sm font-mono text-center focus:outline-none focus:border-white text-white"
           >
           <button 
             id="btnUnlockAdmin" 
-            class="px-5 py-2.5 bg-white text-black text-xs font-bold font-mono rounded-xl hover:bg-zinc-200 transition"
+            class="px-5 py-2.5 bg-white text-black text-xs font-bold font-mono rounded-xl hover:bg-zinc-200 transition cursor-pointer"
           >
             BUKA
           </button>
@@ -210,14 +210,14 @@
           <div class="flex items-center justify-between pt-2">
             <button 
               id="btnSaveGhConfig" 
-              class="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-mono font-bold rounded-xl transition flex items-center gap-2"
+              class="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-mono font-bold rounded-xl transition flex items-center gap-2 cursor-pointer"
             >
               <i data-lucide="save" class="w-3.5 h-3.5"></i>
               <span>Simpan Config GitHub</span>
             </button>
             <button 
               id="btnPushToGithub" 
-              class="px-5 py-2 bg-white hover:bg-zinc-200 text-black text-xs font-mono font-bold rounded-xl transition flex items-center gap-2"
+              class="px-5 py-2 bg-white hover:bg-zinc-200 text-black text-xs font-mono font-bold rounded-xl transition flex items-center gap-2 cursor-pointer"
             >
               <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i>
               <span>Update Data ke GitHub</span>
@@ -228,28 +228,38 @@
 
         <!-- FORM TAMBAH / EDIT PROJECT -->
         <div class="border border-zinc-800 rounded-2xl p-5 space-y-4">
+          <div class="flex items-center gap-3 border-b border-zinc-800 pb-3">
+            <button id="tabMainProduct" type="button" class="px-4 py-2 rounded-xl text-xs font-mono font-bold bg-white text-black transition">
+              Produk Utama
+            </button>
+            <button id="tabLimitedEdition" type="button" class="px-4 py-2 rounded-xl text-xs font-mono font-bold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white transition">
+              Limited Edition
+            </button>
+          </div>
+
           <h3 class="text-sm font-bold text-white flex items-center gap-2" id="formTitle">
             <i data-lucide="plus-circle" class="w-4 h-4"></i>
-            <span>Tambah Projek Baru</span>
+            <span>Tambah Produk Utama</span>
           </h3>
 
           <form id="projectForm" class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <input type="hidden" id="editProjectId" value="">
+            <input type="hidden" id="inputProductType" value="MAIN">
 
             <div>
-              <label class="block text-zinc-400 font-mono mb-1">Judul Projek *</label>
+              <label class="block text-zinc-400 font-mono mb-1">Judul Produk *</label>
               <input type="text" id="inputTitle" required placeholder="Masukkan Judul" class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white">
             </div>
 
-            <div>
-              <label class="block text-zinc-400 font-mono mb-1">Kategori Projek *</label>
+            <div id="categoryWrapper">
+              <label class="block text-zinc-400 font-mono mb-1">Kategori Produk *</label>
               <select id="inputCategory" class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white">
                 <option value="FL STUDIO">FLP</option>
                 <option value="FL MOBILE">FLM</option>
               </select>
             </div>
 
-            <div>
+            <div id="sizeWrapper">
               <label class="block text-zinc-400 font-mono mb-1">Ukuran File *</label>
               <input type="text" id="inputSize" required placeholder="Masukkan Ukuran File" class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white">
             </div>
@@ -261,7 +271,7 @@
 
             <div class="sm:col-span-2">
               <label class="block text-zinc-400 font-mono mb-1">
-                Upload Gambar Sampul
+                Upload Gambar Sampul <span id="coverAspectText" class="text-zinc-500">(Rasio 1:1)</span>
               </label>
               <input 
                 type="file" 
@@ -297,8 +307,7 @@
                 <tr>
                   <th class="p-3">Sampul</th>
                   <th class="p-3">Judul</th>
-                  <th class="p-3">Kategori</th>
-                  <th class="p-3">Size</th>
+                  <th class="p-3">Tipe / Kat</th>
                   <th class="p-3 text-right">Aksi</th>
                 </tr>
               </thead>
@@ -312,9 +321,32 @@
       </div>
     </section>
 
+    <!-- LIMITED EDITION SECTION -->
+    <section id="limitedSection" class="mb-14">
+      <div class="flex items-center justify-between mb-6 border-b border-zinc-800/80 pb-3">
+        <div class="flex items-center gap-2.5">
+          <span class="px-2.5 py-1 bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[10px] font-mono font-extrabold rounded-full tracking-wider uppercase">EXCLUSIVE</span>
+          <h2 class="text-lg sm:text-xl font-extrabold text-white tracking-tight">LIMITED EDITION</h2>
+        </div>
+        <span class="text-xs font-mono text-zinc-500" id="limitedCountDisplay">0 Item</span>
+      </div>
+
+      <div id="limitedGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Dynamic Limited Edition Cards -->
+      </div>
+
+      <div id="limitedEmptyState" class="hidden text-center py-8 bg-zinc-950/40 border border-zinc-900 rounded-2xl">
+        <p class="text-xs font-mono text-zinc-600">Belum ada produk Limited Edition.</p>
+      </div>
+    </section>
+
     <!-- SEARCH BAR & CATEGORY FILTER TABS -->
     <section class="mb-10 space-y-6">
       
+      <div class="flex items-center justify-between border-b border-zinc-800/80 pb-3">
+        <h2 class="text-lg sm:text-xl font-extrabold text-white tracking-tight">PRODUK UTAMA</h2>
+      </div>
+
       <!-- Search Input -->
       <div class="relative w-full max-w-2xl mx-auto">
         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-500">
@@ -328,7 +360,7 @@
         >
         <button 
           id="clearSearch"
-          class="hidden absolute inset-y-0 right-0 pr-4 flex items-center text-xs text-zinc-500 hover:text-white font-mono"
+          class="hidden absolute inset-y-0 right-0 pr-4 flex items-center text-xs text-zinc-500 hover:text-white font-mono cursor-pointer"
         >
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
@@ -338,19 +370,19 @@
       <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3" id="categoryFilter">
         <button 
           data-category="ALL" 
-          class="filter-btn active px-5 py-2.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all duration-200 bg-white text-black shadow-lg shadow-white/10"
+          class="filter-btn active px-5 py-2.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all duration-200 bg-white text-black shadow-lg shadow-white/10 cursor-pointer"
         >
           SEMUA (<span id="countAll">0</span>)
         </button>
         <button 
           data-category="FLP" 
-          class="filter-btn px-5 py-2.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all duration-200 bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white hover:border-zinc-700"
+          class="filter-btn px-5 py-2.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all duration-200 bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white hover:border-zinc-700 cursor-pointer"
         >
           FLP (<span id="countFLP">0</span>)
         </button>
         <button 
           data-category="FLM" 
-          class="filter-btn px-5 py-2.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all duration-200 bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white hover:border-zinc-700"
+          class="filter-btn px-5 py-2.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all duration-200 bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white hover:border-zinc-700 cursor-pointer"
         >
           FLM (<span id="countFLM">0</span>)
         </button>
@@ -358,8 +390,29 @@
 
     </section>
 
-    <!-- PRODUCT CATALOG GRID -->
+    <!-- LIMITED EDITION SECTION (BANNER / LANDSCAPE) -->
+    <section id="limitedEditionSection" class="mb-14 hidden">
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-2.5">
+          <span class="p-2 bg-gradient-to-r from-amber-500 to-yellow-300 text-black rounded-xl shadow-lg shadow-amber-500/20">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+          </span>
+          <h2 class="text-lg sm:text-xl font-extrabold text-white tracking-tight">LIMITED EDITION</h2>
+        </div>
+        <span class="text-xs font-mono px-3 py-1 bg-zinc-900 border border-zinc-800 text-zinc-400 rounded-full" id="limitedCountBadge">0 Produk</span>
+      </div>
+
+      <div id="limitedEditionGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Landscape Limited Cards injected via JS -->
+      </div>
+    </section>
+
+    <!-- PRODUCT CATALOG GRID (MAIN PRODUCTS) -->
     <section>
+      <div class="flex items-center justify-between mb-6" id="mainProductsHeader">
+        <h2 class="text-lg sm:text-xl font-extrabold text-white tracking-tight">PRODUK UTAMA</h2>
+      </div>
+
       <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         <!-- Dynamic Cards rendered via JS -->
       </div>
@@ -384,7 +437,7 @@
       <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
         <button 
           id="btnModalClose" 
-          class="px-3 py-1.5 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-mono text-zinc-300 hover:text-white rounded-xl transition flex items-center gap-2"
+          class="px-3 py-1.5 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-mono text-zinc-300 hover:text-white rounded-xl transition flex items-center gap-2 cursor-pointer"
         >
           <i data-lucide="arrow-left" class="w-4 h-4"></i>
           <span>BERANDA</span>
@@ -395,12 +448,12 @@
 
       <!-- Modal Product Info -->
       <div class="space-y-4">
-        <div class="relative w-full aspect-square rounded-2xl overflow-hidden bg-zinc-900 border border-zinc-800">
+        <div id="modalImgWrapper" class="relative w-full rounded-2xl overflow-hidden bg-zinc-900 border border-zinc-800 aspect-square">
           <img id="modalImg" src="" class="w-full h-full object-cover">
           <div class="absolute top-3 left-3">
             <span id="modalCategory" class="px-3 py-1 bg-black/80 backdrop-blur-md text-xs font-mono font-bold tracking-wider text-white rounded-full border border-white/20"></span>
           </div>
-          <div class="absolute bottom-3 right-3">
+          <div class="absolute bottom-3 right-3" id="modalSizeWrapper">
             <span id="modalSize" class="px-3 py-1 bg-black/80 backdrop-blur-md text-xs font-mono font-bold text-zinc-300 rounded-full border border-zinc-800"></span>
           </div>
         </div>
@@ -415,7 +468,7 @@
         </div>
       </div>
 
-      <!-- ACTION BUTTONS: UNDUH, TAMBAH KE CHECKOUT & BAGIKAN LINK -->
+      <!-- ACTION BUTTONS: LINK, TAMBAH KE KERANJANG & BAGIKAN -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2">
         <a 
           id="modalDownloadLink" 
@@ -424,13 +477,13 @@
           rel="noopener noreferrer"
           class="py-3 px-3 bg-white hover:bg-zinc-200 text-black font-extrabold text-xs tracking-wider rounded-2xl transition duration-200 flex items-center justify-center gap-2 shadow-md shadow-white/5 active:scale-[0.98]"
         >
-          <i data-lucide="download" class="w-4 h-4"></i>
-          <span>UNDUH</span>
+          <i data-lucide="external-link" class="w-4 h-4"></i>
+          <span id="modalBtnLinkLabel">LINK</span>
         </a>
 
         <button 
           id="btnModalAddToCart" 
-          class="py-3 px-3 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-white font-extrabold text-xs tracking-wider rounded-2xl transition duration-200 flex items-center justify-center gap-2 active:scale-[0.98]"
+          class="py-3 px-3 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-white font-extrabold text-xs tracking-wider rounded-2xl transition duration-200 flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer"
         >
           <i data-lucide="shopping-cart" class="w-4 h-4"></i>
           <span>+ KERANJANG</span>
@@ -438,7 +491,7 @@
 
         <button 
           id="btnShareLink" 
-          class="py-3 px-3 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white font-extrabold text-xs tracking-wider rounded-2xl transition duration-200 flex items-center justify-center gap-2 active:scale-[0.98]"
+          class="py-3 px-3 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white font-extrabold text-xs tracking-wider rounded-2xl transition duration-200 flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer"
         >
           <i data-lucide="share-2" class="w-4 h-4"></i>
           <span id="shareBtnText">BAGIKAN</span>
@@ -460,7 +513,7 @@
             <h2 class="text-base font-extrabold text-white">KERANJANG</h2>
             <span id="cartItemCount" class="text-xs font-mono bg-zinc-800 text-zinc-300 px-2.5 py-0.5 rounded-full">0 Produk</span>
           </div>
-          <button id="btnCloseCart" class="p-1.5 bg-zinc-900 text-zinc-400 hover:text-white rounded-xl border border-zinc-800">
+          <button id="btnCloseCart" class="p-1.5 bg-zinc-900 text-zinc-400 hover:text-white rounded-xl border border-zinc-800 cursor-pointer">
             <i data-lucide="x" class="w-5 h-5"></i>
           </button>
         </div>
@@ -483,7 +536,7 @@
             <span>Total Produk:</span>
             <span id="cartTotalSummary" class="text-white font-bold">0 Produk</span>
           </div>
-          <div class="flex justify-between items-center text-zinc-400">
+          <div class="flex justify-between items-center text-zinc-400" id="cartTotalSizeRow">
             <span>Total Ukuran File:</span>
             <span id="cartTotalSize" class="text-white font-bold">0 MB</span>
           </div>
@@ -491,7 +544,7 @@
 
         <button 
           id="btnClearCart" 
-          class="w-full py-2 bg-transparent hover:bg-zinc-900 text-zinc-500 hover:text-red-400 font-mono text-[11px] rounded-xl transition"
+          class="w-full py-2 bg-transparent hover:bg-zinc-900 text-zinc-500 hover:text-red-400 font-mono text-[11px] rounded-xl transition cursor-pointer"
         >
           Kosongkan Keranjang
         </button>
@@ -532,8 +585,9 @@
     let searchQuery = "";
     let isAdminUnlocked = false;
     let activeModalProject = null;
+    let activeAdminTab = "MAIN"; // "MAIN" or "LIMITED"
 
-    // Encoded SVG Fallback
+    // Encoded SVG Fallbacks
     const fallbackImageSvg = "data:image/svg+xml;utf8," + encodeURIComponent(`
       <svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
         <rect width="400" height="400" fill="#111111"/>
@@ -542,8 +596,18 @@
       </svg>
     `);
 
+    const fallbackImageRectSvg = "data:image/svg+xml;utf8," + encodeURIComponent(`
+      <svg xmlns="http://www.w3.org/2000/svg" width="600" height="338" viewBox="0 0 600 338">
+        <rect width="600" height="338" fill="#111111"/>
+        <text x="50%" y="48%" font-family="monospace" font-size="22" fill="#666666" text-anchor="middle" dominant-baseline="middle">LIMITED EDITION</text>
+        <text x="50%" y="58%" font-family="monospace" font-size="12" fill="#444444" text-anchor="middle" dominant-baseline="middle">ARISPLRFIFTEEN</text>
+      </svg>
+    `);
+
     // DOM Elements
     let productGrid, emptyState, searchInput, clearSearch, categoryButtons, totalCountDisplay;
+    let limitedGrid, limitedEmptyState, limitedCountDisplay;
+    let tabMainProduct, tabLimitedEdition, categoryWrapper, sizeWrapper, coverAspectText, inputProductType;
     let btnOpenCart, btnCloseCart, cartDrawer, cartBadge, cartItemsList, cartEmptyState, cartItemCount, cartTotalSummary, cartTotalSize, btnClearCart, btnModalAddToCart;
     let productModal, btnModalClose, modalImg, modalCategory, modalSize, modalTitle, modalCategoryLabel, modalType, modalDownloadLink, btnShareLink, shareBtnText, toast, toastMsg;
     let btnToggleAdmin, adminSection, btnCloseAdmin, adminAuthBox, adminPassInput, btnUnlockAdmin, adminAuthMsg, adminContent;
@@ -557,6 +621,17 @@
       clearSearch = document.getElementById("clearSearch");
       categoryButtons = document.querySelectorAll("#categoryFilter button");
       totalCountDisplay = document.getElementById("totalCountDisplay");
+
+      limitedGrid = document.getElementById("limitedGrid");
+      limitedEmptyState = document.getElementById("limitedEmptyState");
+      limitedCountDisplay = document.getElementById("limitedCountDisplay");
+
+      tabMainProduct = document.getElementById("tabMainProduct");
+      tabLimitedEdition = document.getElementById("tabLimitedEdition");
+      categoryWrapper = document.getElementById("categoryWrapper");
+      sizeWrapper = document.getElementById("sizeWrapper");
+      coverAspectText = document.getElementById("coverAspectText");
+      inputProductType = document.getElementById("inputProductType");
 
       btnOpenCart = document.getElementById("btnOpenCart");
       btnCloseCart = document.getElementById("btnCloseCart");
@@ -616,6 +691,33 @@
     }
 
     function setupEventListeners() {
+      // Tab Admin Product Mode
+      if (tabMainProduct && tabLimitedEdition) {
+        tabMainProduct.addEventListener("click", () => {
+          activeAdminTab = "MAIN";
+          tabMainProduct.className = "px-4 py-2 rounded-xl text-xs font-mono font-bold bg-white text-black transition";
+          tabLimitedEdition.className = "px-4 py-2 rounded-xl text-xs font-mono font-bold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white transition";
+          if (categoryWrapper) categoryWrapper.classList.remove("hidden");
+          if (sizeWrapper) sizeWrapper.classList.remove("hidden");
+          if (inputSize) inputSize.required = true;
+          if (coverAspectText) coverAspectText.textContent = "(Rasio 1:1)";
+          if (inputProductType) inputProductType.value = "MAIN";
+          resetForm();
+        });
+
+        tabLimitedEdition.addEventListener("click", () => {
+          activeAdminTab = "LIMITED";
+          tabLimitedEdition.className = "px-4 py-2 rounded-xl text-xs font-mono font-bold bg-white text-black transition";
+          tabMainProduct.className = "px-4 py-2 rounded-xl text-xs font-mono font-bold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white transition";
+          if (categoryWrapper) categoryWrapper.classList.add("hidden");
+          if (sizeWrapper) sizeWrapper.classList.add("hidden");
+          if (inputSize) inputSize.required = false;
+          if (coverAspectText) coverAspectText.textContent = "(Rasio Persegi Panjang / 16:9)";
+          if (inputProductType) inputProductType.value = "LIMITED";
+          resetForm();
+        });
+      }
+
       // Search input
       if (searchInput) {
         searchInput.addEventListener("input", (e) => {
@@ -747,11 +849,13 @@
         projectForm.addEventListener("submit", (e) => {
           e.preventDefault();
           const id = editProjectId ? editProjectId.value : "";
+          const isLimited = activeAdminTab === "LIMITED";
           const title = inputTitle ? inputTitle.value.trim() : "";
-          const category = inputCategory ? inputCategory.value : "FL STUDIO";
-          const size = inputSize ? inputSize.value.trim() : "";
+          const category = isLimited ? "LIMITED" : (inputCategory ? inputCategory.value : "FL STUDIO");
+          const size = isLimited ? "" : (inputSize ? inputSize.value.trim() : "");
           const downloadUrl = inputUrl ? inputUrl.value.trim() : "";
           const coverArt = inputCoverBase64 ? inputCoverBase64.value : "";
+          const isLimitedFlag = isLimited;
 
           if (id) {
             const index = projectsData.findIndex((p) => p.id === id);
@@ -762,6 +866,7 @@
                 category,
                 size,
                 downloadUrl,
+                isLimited: isLimitedFlag,
                 coverArt: coverArt || projectsData[index].coverArt,
               };
             }
@@ -772,6 +877,7 @@
               category,
               size,
               downloadUrl,
+              isLimited: isLimitedFlag,
               coverArt,
             };
             projectsData.unshift(newProj);
@@ -781,7 +887,7 @@
           updateCounts();
           renderProducts();
           resetForm();
-          showToast(id ? "Projek berhasil diperbarui!" : "Projek berhasil ditambahkan!");
+          showToast(id ? "Produk berhasil diperbarui!" : "Produk berhasil ditambahkan!");
         });
       }
 
@@ -839,7 +945,7 @@
 
     function addToCart(id) {
       const project = projectsData.find((p) => p.id === id);
-      if (!project) return;
+      if (!project || project.isLimited) return;
 
       if (!cartData.some((item) => item.id === id)) {
         cartData.push(project);
@@ -1030,17 +1136,21 @@
     }
 
     function updateCounts() {
-      const flpCount = projectsData.filter((p) => p.category === "FLP" || p.category === "FL STUDIO").length;
-      const flmCount = projectsData.filter((p) => p.category === "FLM" || p.category === "FL MOBILE").length;
+      const mainProducts = projectsData.filter((p) => !p.isLimited);
+      const limitedProducts = projectsData.filter((p) => p.isLimited);
+
+      const flpCount = mainProducts.filter((p) => p.category === "FLP" || p.category === "FL STUDIO").length;
+      const flmCount = mainProducts.filter((p) => p.category === "FLM" || p.category === "FL MOBILE").length;
 
       const countAllEl = document.getElementById("countAll");
       const countFLPEl = document.getElementById("countFLP");
       const countFLMEl = document.getElementById("countFLM");
 
-      if (countAllEl) countAllEl.textContent = projectsData.length;
+      if (countAllEl) countAllEl.textContent = mainProducts.length;
       if (countFLPEl) countFLPEl.textContent = flpCount;
       if (countFLMEl) countFLMEl.textContent = flmCount;
-      if (totalCountDisplay) totalCountDisplay.textContent = `${projectsData.length} Produk`;
+      if (totalCountDisplay) totalCountDisplay.textContent = `${mainProducts.length} Produk`;
+      if (limitedCountDisplay) limitedCountDisplay.textContent = `${limitedProducts.length} Item`;
       if (adminTableCount) adminTableCount.textContent = projectsData.length;
     }
 
@@ -1051,9 +1161,65 @@
     }
 
     function renderProducts() {
-      if (!productGrid || !emptyState) return;
+      if (!productGrid || !emptyState || !limitedGrid || !limitedEmptyState) return;
 
-      const filtered = projectsData.filter((item) => {
+      // 1. RENDER LIMITED EDITION SECTION
+      const limitedItems = projectsData.filter((p) => p.isLimited);
+      limitedGrid.innerHTML = "";
+
+      if (limitedItems.length === 0) {
+        limitedEmptyState.classList.remove("hidden");
+      } else {
+        limitedEmptyState.classList.add("hidden");
+        limitedItems.forEach((project) => {
+          const imageSrc = project.coverArt ? project.coverArt : fallbackImageRectSvg;
+
+          const cardHtml = `
+            <div class="product-card animate-light-sweep bg-zinc-950/90 border border-amber-500/20 hover:border-amber-500/50 rounded-3xl overflow-hidden flex flex-col justify-between p-4 group">
+              <div>
+                <div class="relative w-full aspect-video rounded-2xl overflow-hidden mb-4 bg-zinc-900 border border-zinc-800">
+                  <img 
+                    src="${imageSrc}" 
+                    alt="${project.title}" 
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  >
+                  <div class="absolute top-3 left-3">
+                    <span class="px-2.5 py-1 bg-amber-500/90 backdrop-blur-md text-[10px] font-mono font-extrabold tracking-wider text-black rounded-full shadow-lg">
+                      LIMITED
+                    </span>
+                  </div>
+                </div>
+
+                <div class="px-1 mb-4">
+                  <h3 class="font-extrabold text-base sm:text-lg text-white group-hover:text-amber-300 transition-colors duration-200 line-clamp-1 mb-1">
+                    ${project.title}
+                  </h3>
+                  <p class="text-xs text-zinc-500 font-mono">Exclusive Release</p>
+                </div>
+              </div>
+
+              <div>
+                <a 
+                  href="${project.downloadUrl}" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  class="w-full py-3 px-4 bg-amber-400 hover:bg-amber-300 text-black font-extrabold text-xs font-mono tracking-wider rounded-xl transition duration-200 flex items-center justify-center gap-2 shadow-lg shadow-amber-500/10 active:scale-95"
+                >
+                  <i data-lucide="external-link" class="w-4 h-4"></i>
+                  <span>LINK</span>
+                </a>
+              </div>
+            </div>
+          `;
+          limitedGrid.insertAdjacentHTML("beforeend", cardHtml);
+        });
+      }
+
+      // 2. RENDER MAIN PRODUCTS SECTION
+      const mainProducts = projectsData.filter((p) => !p.isLimited);
+
+      const filtered = mainProducts.filter((item) => {
         const itemCat = item.category === "FL STUDIO" ? "FLP" : item.category === "FL MOBILE" ? "FLM" : item.category;
         const matchesCategory = currentCategory === "ALL" || itemCat === currentCategory;
         const matchesSearch =
@@ -1138,7 +1304,7 @@
 
     function openModal(id) {
       const project = projectsData.find((p) => p.id === id);
-      if (!project) return;
+      if (!project || project.isLimited) return;
 
       activeModalProject = project;
       const displayCategory = project.category === "FL STUDIO" ? "FLP" : project.category === "FL MOBILE" ? "FLM" : project.category;
@@ -1213,17 +1379,23 @@
       if (!adminTableBody) return;
       adminTableBody.innerHTML = "";
       projectsData.forEach((item) => {
-        const imgThumb = item.coverArt ? item.coverArt : fallbackImageSvg;
-        const displayCategory = item.category === "FL STUDIO" ? "FLP" : item.category === "FL MOBILE" ? "FLM" : item.category;
+        const imgThumb = item.coverArt ? item.coverArt : (item.isLimited ? fallbackImageRectSvg : fallbackImageSvg);
+        const displayCategory = item.isLimited 
+          ? "LIMITED EDITION" 
+          : (item.category === "FL STUDIO" ? "FLP" : item.category === "FL MOBILE" ? "FLM" : item.category);
+
         const tr = document.createElement("tr");
         tr.className = "hover:bg-zinc-900/50";
         tr.innerHTML = `
           <td class="p-3">
-            <img src="${imgThumb}" class="w-8 h-8 rounded object-cover bg-zinc-800">
+            <img src="${imgThumb}" class="w-10 h-7 rounded object-cover bg-zinc-800 border border-zinc-800">
           </td>
           <td class="p-3 font-bold text-white">${item.title}</td>
-          <td class="p-3"><span class="px-2 py-0.5 bg-zinc-800 rounded text-[10px]">${displayCategory}</span></td>
-          <td class="p-3 text-zinc-400">${item.size}</td>
+          <td class="p-3">
+            <span class="px-2 py-0.5 rounded text-[10px] ${item.isLimited ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-zinc-800 text-zinc-300'}">
+              ${displayCategory}
+            </span>
+          </td>
           <td class="p-3 text-right space-x-2">
             <button onclick="editProject('${item.id}')" class="text-blue-400 hover:text-blue-300 font-bold">Edit</button>
             <button onclick="deleteProject('${item.id}')" class="text-red-400 hover:text-red-300 font-bold">Hapus</button>
@@ -1237,23 +1409,30 @@
       const item = projectsData.find((p) => p.id === id);
       if (!item) return;
 
+      if (item.isLimited) {
+        if (tabLimitedEdition) tabLimitedEdition.click();
+      } else {
+        if (tabMainProduct) tabMainProduct.click();
+      }
+
       if (editProjectId) editProjectId.value = item.id;
       if (inputTitle) inputTitle.value = item.title;
-      if (inputCategory) inputCategory.value = item.category;
-      if (inputSize) inputSize.value = item.size;
+      if (inputCategory && !item.isLimited) inputCategory.value = item.category;
+      if (inputSize && !item.isLimited) inputSize.value = item.size || "";
       if (inputUrl) inputUrl.value = item.downloadUrl;
       if (inputCoverBase64) inputCoverBase64.value = item.coverArt || "";
       if (inputImageFile) inputImageFile.value = "";
 
-      if (formTitle) formTitle.textContent = "✏️ Edit Projek";
+      if (formTitle) formTitle.textContent = item.isLimited ? "✏️ Edit Limited Edition" : "✏️ Edit Produk Utama";
       if (btnCancelEdit) btnCancelEdit.classList.remove("hidden");
       if (projectForm) projectForm.scrollIntoView({ behavior: "smooth" });
     }
 
     function deleteProject(id) {
-      if (confirm("Apakah Anda yakin ingin menghapus projek ini?")) {
+      if (confirm("Apakah Anda yakin ingin menghapus produk ini?")) {
         projectsData = projectsData.filter((p) => p.id !== id);
         saveToLocalStorage();
+        updateCounts();
         renderProducts();
       }
     }
@@ -1262,7 +1441,7 @@
       if (editProjectId) editProjectId.value = "";
       if (projectForm) projectForm.reset();
       if (inputCoverBase64) inputCoverBase64.value = "";
-      if (formTitle) formTitle.textContent = "➕ Tambah Projek Baru";
+      if (formTitle) formTitle.textContent = activeAdminTab === "LIMITED" ? "➕ Tambah Limited Edition" : "➕ Tambah Produk Utama";
       if (btnCancelEdit) btnCancelEdit.classList.add("hidden");
     }
 
