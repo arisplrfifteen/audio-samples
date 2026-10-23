@@ -456,7 +456,7 @@
         </div>
 
         <!-- Selected Items Container -->
-        <div id="cartItemsList" class="space-y-3 max-h-[calc(100vh-180px)] overflow-y-auto pr-1">
+        <div id="cartItemsList" class="space-y-3 max-h-[calc(100vh-250px)] overflow-y-auto pr-1">
           <!-- Dynamically inserted cart items -->
         </div>
 
@@ -468,6 +468,17 @@
 
       <!-- Drawer Footer Actions -->
       <div class="border-t border-zinc-800 pt-4 space-y-3">
+        <div class="space-y-1 text-xs font-mono">
+          <div class="flex justify-between items-center text-zinc-400">
+            <span>Total Produk:</span>
+            <span id="cartTotalSummary" class="text-white font-bold">0 Produk</span>
+          </div>
+          <div class="flex justify-between items-center text-zinc-400">
+            <span>Total Ukuran File:</span>
+            <span id="cartTotalSize" class="text-white font-bold">0 MB</span>
+          </div>
+        </div>
+
         <button 
           id="btnClearCart" 
           class="w-full py-2 bg-transparent hover:bg-zinc-900 text-zinc-500 hover:text-red-400 font-mono text-[11px] rounded-xl transition"
@@ -515,7 +526,7 @@
 
     // DOM Elements
     let productGrid, emptyState, searchInput, clearSearch, categoryButtons, totalCountDisplay;
-    let btnOpenCart, btnCloseCart, cartDrawer, cartBadge, cartItemsList, cartEmptyState, cartItemCount, btnClearCart, btnModalAddToCart;
+    let btnOpenCart, btnCloseCart, cartDrawer, cartBadge, cartItemsList, cartEmptyState, cartItemCount, cartTotalSummary, cartTotalSize, btnClearCart, btnModalAddToCart;
     let productModal, btnModalClose, modalImg, modalCategory, modalSize, modalTitle, modalCategoryLabel, modalType, modalDownloadLink, btnShareLink, shareBtnText, toast, toastMsg;
     let btnToggleAdmin, adminSection, btnCloseAdmin, adminAuthBox, adminPassInput, btnUnlockAdmin, adminAuthMsg, adminContent;
     let projectForm, formTitle, editProjectId, inputTitle, inputCategory, inputSize, inputUrl, inputImageFile, inputCoverBase64, btnCancelEdit, adminTableBody, adminTableCount;
@@ -536,6 +547,8 @@
       cartItemsList = document.getElementById("cartItemsList");
       cartEmptyState = document.getElementById("cartEmptyState");
       cartItemCount = document.getElementById("cartItemCount");
+      cartTotalSummary = document.getElementById("cartTotalSummary");
+      cartTotalSize = document.getElementById("cartTotalSize");
       btnClearCart = document.getElementById("btnClearCart");
       btnModalAddToCart = document.getElementById("btnModalAddToCart");
 
@@ -777,6 +790,35 @@
       }
     }
 
+    function calculateTotalCartSize() {
+      let totalBytes = 0;
+
+      cartData.forEach((item) => {
+        if (!item.size) return;
+        const sizeStr = item.size.toString().trim().toUpperCase();
+        const match = sizeStr.match(/([\d.]+)\s*(KB|MB|GB|TB|B)?/);
+
+        if (match) {
+          const val = parseFloat(match[1]);
+          const unit = match[2] || "MB";
+
+          switch (unit) {
+            case "B": totalBytes += val; break;
+            case "KB": totalBytes += val * 1024; break;
+            case "MB": totalBytes += val * 1024 * 1024; break;
+            case "GB": totalBytes += val * 1024 * 1024 * 1024; break;
+            case "TB": totalBytes += val * 1024 * 1024 * 1024 * 1024; break;
+            default: totalBytes += val * 1024 * 1024; break;
+          }
+        }
+      });
+
+      if (totalBytes === 0) return "0 MB";
+      if (totalBytes < 1024 * 1024) return (totalBytes / 1024).toFixed(1) + " KB";
+      if (totalBytes < 1024 * 1024 * 1024) return (totalBytes / (1024 * 1024)).toFixed(1) + " MB";
+      return (totalBytes / (1024 * 1024 * 1024)).toFixed(2) + " GB";
+    }
+
     function addToCart(id) {
       const project = projectsData.find((p) => p.id === id);
       if (!project) return;
@@ -917,6 +959,8 @@
       }
 
       cartItemCount.textContent = `${cartData.length} Produk`;
+      if (cartTotalSummary) cartTotalSummary.textContent = `${cartData.length} Produk`;
+      if (cartTotalSize) cartTotalSize.textContent = calculateTotalCartSize();
 
       cartItemsList.innerHTML = "";
       cartData.forEach((item) => {
