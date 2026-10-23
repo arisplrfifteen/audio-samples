@@ -415,7 +415,7 @@
           class="py-3 px-3 bg-white hover:bg-zinc-200 text-black font-extrabold text-xs tracking-wider rounded-2xl transition duration-200 flex items-center justify-center gap-2 shadow-md shadow-white/5 active:scale-[0.98]"
         >
           <i data-lucide="download" class="w-4 h-4"></i>
-          <span>UNDUH (<span id="modalDownloadsCount">0</span>)</span>
+          <span>UNDUH</span>
         </a>
 
         <button 
@@ -456,7 +456,7 @@
         </div>
 
         <!-- Selected Items Container -->
-        <div id="cartItemsList" class="space-y-3 max-h-[calc(100vh-250px)] overflow-y-auto pr-1">
+        <div id="cartItemsList" class="space-y-3 max-h-[calc(100vh-180px)] overflow-y-auto pr-1">
           <!-- Dynamically inserted cart items -->
         </div>
 
@@ -468,26 +468,6 @@
 
       <!-- Drawer Footer Actions -->
       <div class="border-t border-zinc-800 pt-4 space-y-3">
-        <div class="space-y-1 text-xs font-mono">
-          <div class="flex justify-between items-center text-zinc-400">
-            <span>Total Produk:</span>
-            <span id="cartTotalSummary" class="text-white font-bold">0 Produk</span>
-          </div>
-          <div class="flex justify-between items-center text-zinc-400">
-            <span>Total Ukuran File:</span>
-            <span id="cartTotalSize" class="text-white font-bold">0 MB</span>
-          </div>
-        </div>
-
-        <button 
-          id="btnDownloadAllCart" 
-          class="w-full py-3.5 bg-white hover:bg-zinc-200 text-black font-extrabold text-xs tracking-wider rounded-2xl transition duration-200 flex items-center justify-center gap-2 shadow-lg shadow-white/10 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
-          disabled
-        >
-          <i data-lucide="download" class="w-4 h-4"></i>
-          <span>UNDUH SEMUA PRODUK</span>
-        </button>
-
         <button 
           id="btnClearCart" 
           class="w-full py-2 bg-transparent hover:bg-zinc-900 text-zinc-500 hover:text-red-400 font-mono text-[11px] rounded-xl transition"
@@ -535,8 +515,8 @@
 
     // DOM Elements
     let productGrid, emptyState, searchInput, clearSearch, categoryButtons, totalCountDisplay;
-    let btnOpenCart, btnCloseCart, cartDrawer, cartBadge, cartItemsList, cartEmptyState, cartItemCount, cartTotalSummary, cartTotalSize, btnDownloadAllCart, btnClearCart, btnModalAddToCart;
-    let productModal, btnModalClose, modalImg, modalCategory, modalSize, modalTitle, modalCategoryLabel, modalType, modalDownloadLink, modalDownloadsCount, btnShareLink, shareBtnText, toast, toastMsg;
+    let btnOpenCart, btnCloseCart, cartDrawer, cartBadge, cartItemsList, cartEmptyState, cartItemCount, btnClearCart, btnModalAddToCart;
+    let productModal, btnModalClose, modalImg, modalCategory, modalSize, modalTitle, modalCategoryLabel, modalType, modalDownloadLink, btnShareLink, shareBtnText, toast, toastMsg;
     let btnToggleAdmin, adminSection, btnCloseAdmin, adminAuthBox, adminPassInput, btnUnlockAdmin, adminAuthMsg, adminContent;
     let projectForm, formTitle, editProjectId, inputTitle, inputCategory, inputSize, inputUrl, inputImageFile, inputCoverBase64, btnCancelEdit, adminTableBody, adminTableCount;
     let ghToken, ghRepo, ghBranch, ghPath, btnSaveGhConfig, btnPushToGithub, ghSyncStatus;
@@ -556,9 +536,6 @@
       cartItemsList = document.getElementById("cartItemsList");
       cartEmptyState = document.getElementById("cartEmptyState");
       cartItemCount = document.getElementById("cartItemCount");
-      cartTotalSummary = document.getElementById("cartTotalSummary");
-      cartTotalSize = document.getElementById("cartTotalSize");
-      btnDownloadAllCart = document.getElementById("btnDownloadAllCart");
       btnClearCart = document.getElementById("btnClearCart");
       btnModalAddToCart = document.getElementById("btnModalAddToCart");
 
@@ -571,7 +548,6 @@
       modalCategoryLabel = document.getElementById("modalCategoryLabel");
       modalType = document.getElementById("modalType");
       modalDownloadLink = document.getElementById("modalDownloadLink");
-      modalDownloadsCount = document.getElementById("modalDownloadsCount");
       btnShareLink = document.getElementById("btnShareLink");
       shareBtnText = document.getElementById("shareBtnText");
       toast = document.getElementById("toast");
@@ -664,28 +640,6 @@
           cartData = [];
           updateCartUI();
           showToast("Keranjang dibersihkan.");
-        });
-      }
-
-      // UNDUH SEMUA DENGAN IFRAME SEKUANSIAL
-      if (btnDownloadAllCart) {
-        btnDownloadAllCart.addEventListener("click", () => {
-          if (cartData.length === 0) return;
-
-          cartData.forEach((item, index) => {
-            setTimeout(() => {
-              const iframe = document.createElement("iframe");
-              iframe.style.display = "none";
-              iframe.src = item.downloadUrl;
-              document.body.appendChild(iframe);
-
-              incrementDownloadCount(item.id);
-
-              setTimeout(() => iframe.remove(), 6000);
-            }, index * 800);
-          });
-
-          showToast(`Mengunduh ${cartData.length} produk...`);
         });
       }
 
@@ -788,7 +742,6 @@
               size,
               downloadUrl,
               coverArt,
-              downloads: 0,
             };
             projectsData.unshift(newProj);
           }
@@ -824,35 +777,6 @@
       }
     }
 
-    function calculateTotalCartSize() {
-      let totalBytes = 0;
-
-      cartData.forEach((item) => {
-        if (!item.size) return;
-        const sizeStr = item.size.toString().trim().toUpperCase();
-        const match = sizeStr.match(/([\d.]+)\s*(KB|MB|GB|TB|B)?/);
-
-        if (match) {
-          const val = parseFloat(match[1]);
-          const unit = match[2] || "MB";
-
-          switch (unit) {
-            case "B": totalBytes += val; break;
-            case "KB": totalBytes += val * 1024; break;
-            case "MB": totalBytes += val * 1024 * 1024; break;
-            case "GB": totalBytes += val * 1024 * 1024 * 1024; break;
-            case "TB": totalBytes += val * 1024 * 1024 * 1024 * 1024; break;
-            default: totalBytes += val * 1024 * 1024; break;
-          }
-        }
-      });
-
-      if (totalBytes === 0) return "0 MB";
-      if (totalBytes < 1024 * 1024) return (totalBytes / 1024).toFixed(1) + " KB";
-      if (totalBytes < 1024 * 1024 * 1024) return (totalBytes / (1024 * 1024)).toFixed(1) + " MB";
-      return (totalBytes / (1024 * 1024 * 1024)).toFixed(2) + " GB";
-    }
-
     function addToCart(id) {
       const project = projectsData.find((p) => p.id === id);
       if (!project) return;
@@ -870,19 +794,6 @@
       cartData = cartData.filter((item) => item.id !== id);
       updateCartUI();
       showToast("Dihapus dari keranjang.");
-    }
-
-    function incrementDownloadCount(id) {
-      const project = projectsData.find((p) => p.id === id);
-      if (project) {
-        project.downloads = (project.downloads || 0) + 1;
-        saveToLocalStorage();
-        updateCounts();
-        renderProducts();
-        if (activeModalProject && activeModalProject.id === id) {
-          if (modalDownloadsCount) modalDownloadsCount.textContent = project.downloads;
-        }
-      }
     }
 
     function saveToLocalStorage() {
@@ -994,22 +905,18 @@
     }
 
     function updateCartUI() {
-      if (!cartBadge || !cartEmptyState || !btnDownloadAllCart || !cartItemCount || !cartTotalSummary || !cartItemsList) return;
+      if (!cartBadge || !cartEmptyState || !cartItemCount || !cartItemsList) return;
 
       if (cartData.length > 0) {
         cartBadge.textContent = cartData.length;
         cartBadge.classList.remove("hidden");
         cartEmptyState.classList.add("hidden");
-        btnDownloadAllCart.removeAttribute("disabled");
       } else {
         cartBadge.classList.add("hidden");
         cartEmptyState.classList.remove("hidden");
-        btnDownloadAllCart.setAttribute("disabled", "true");
       }
 
-      cartItemCount.textContent = `${cartData.length} Item`;
-      cartTotalSummary.textContent = `${cartData.length} Projek`;
-      if (cartTotalSize) cartTotalSize.textContent = calculateTotalCartSize();
+      cartItemCount.textContent = `${cartData.length} Produk`;
 
       cartItemsList.innerHTML = "";
       cartData.forEach((item) => {
@@ -1027,7 +934,7 @@
             </div>
           </div>
           <div class="flex items-center gap-2 flex-shrink-0">
-            <a href="${item.downloadUrl}" target="_blank" onclick="incrementDownloadCount('${item.id}')" class="p-2 bg-white text-black rounded-xl hover:bg-zinc-200 text-xs font-bold flex items-center gap-1">
+            <a href="${item.downloadUrl}" target="_blank" class="p-2 bg-white text-black rounded-xl hover:bg-zinc-200 text-xs font-bold flex items-center gap-1">
               <i data-lucide="download" class="w-3.5 h-3.5"></i>
             </a>
             <button onclick="removeFromCart('${item.id}')" class="p-2 bg-zinc-800 text-zinc-400 hover:text-red-400 rounded-xl transition">
@@ -1052,7 +959,7 @@
       if (countAllEl) countAllEl.textContent = projectsData.length;
       if (countFLPEl) countFLPEl.textContent = flpCount;
       if (countFLMEl) countFLMEl.textContent = flmCount;
-      if (totalCountDisplay) totalCountDisplay.textContent = `${projectsData.length} Projek`;
+      if (totalCountDisplay) totalCountDisplay.textContent = `${projectsData.length} Produk`;
       if (adminTableCount) adminTableCount.textContent = projectsData.length;
     }
 
@@ -1083,7 +990,6 @@
         filtered.forEach((project) => {
           const imageSrc = project.coverArt ? project.coverArt : fallbackImageSvg;
           const displayCategory = project.category === "FL STUDIO" ? "FLP" : project.category === "FL MOBILE" ? "FLM" : project.category;
-          const dlCount = project.downloads || 0;
 
           const cardHtml = `
             <div 
@@ -1106,10 +1012,6 @@
                   </div>
 
                   <div class="absolute bottom-3 right-3 flex items-center gap-1.5">
-                    <span class="px-2.5 py-1 bg-black/80 backdrop-blur-md text-[10px] font-mono font-bold text-zinc-300 rounded-full border border-zinc-800 flex items-center gap-1">
-                      <i data-lucide="download-cloud" class="w-3 h-3 text-zinc-400"></i>
-                      <span>${dlCount}</span>
-                    </span>
                     <span class="px-2.5 py-1 bg-black/80 backdrop-blur-md text-[10px] font-mono font-bold text-zinc-300 rounded-full border border-zinc-800">
                       ${project.size}
                     </span>
@@ -1120,13 +1022,8 @@
                   <h3 class="font-extrabold text-base sm:text-lg text-white group-hover:text-white transition-colors duration-200 line-clamp-1 mb-1">
                     ${project.title}
                   </h3>
-                  <p class="text-xs text-zinc-400 font-mono flex items-center gap-1.5">
+                  <p class="text-xs text-zinc-400 font-mono">
                     <span>${displayCategory}</span>
-                    <span class="text-zinc-600">•</span>
-                    <span class="text-zinc-500 flex items-center gap-1">
-                      <i data-lucide="arrow-down-to-line" class="w-3 h-3 text-zinc-500"></i>
-                      ${dlCount} Unduhan
-                    </span>
                   </p>
                 </div>
               </div>
@@ -1172,7 +1069,6 @@
       if (modalCategoryLabel) modalCategoryLabel.textContent = displayCategory;
       if (modalType) modalType.textContent = project.type || "arisplrfifteen";
       if (modalDownloadLink) modalDownloadLink.href = project.downloadUrl;
-      if (modalDownloadsCount) modalDownloadsCount.textContent = project.downloads || 0;
 
       if (productModal) productModal.classList.remove("hidden");
       document.body.classList.add("overflow-hidden");
@@ -1246,7 +1142,7 @@
           </td>
           <td class="p-3 font-bold text-white">${item.title}</td>
           <td class="p-3"><span class="px-2 py-0.5 bg-zinc-800 rounded text-[10px]">${displayCategory}</span></td>
-          <td class="p-3 text-zinc-400">${item.size} (${item.downloads || 0} DL)</td>
+          <td class="p-3 text-zinc-400">${item.size}</td>
           <td class="p-3 text-right space-x-2">
             <button onclick="editProject('${item.id}')" class="text-blue-400 hover:text-blue-300 font-bold">Edit</button>
             <button onclick="deleteProject('${item.id}')" class="text-red-400 hover:text-red-300 font-bold">Hapus</button>
