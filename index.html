@@ -181,11 +181,11 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
             <div>
               <label class="block text-zinc-400 font-mono mb-1">GitHub Token</label>
-              <input type="password" id="ghToken" placeholder="ghp_xxxx..." class="w-full px-3 py-2 bg-black border border-zinc-800 rounded-xl font-mono text-white text-xs">
+              <input type="password" id="ghToken" value="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" class="w-full px-3 py-2 bg-black border border-zinc-800 rounded-xl font-mono text-white text-xs">
             </div>
             <div>
               <label class="block text-zinc-400 font-mono mb-1">Repository</label>
-              <input type="text" id="ghRepo" placeholder="arisplrfifteen/..." class="w-full px-3 py-2 bg-black border border-zinc-800 rounded-xl font-mono text-white text-xs">
+              <input type="text" id="ghRepo" value="arisplrfifteen/product-arisplrfifteen" class="w-full px-3 py-2 bg-black border border-zinc-800 rounded-xl font-mono text-white text-xs">
             </div>
             <div>
               <label class="block text-zinc-400 font-mono mb-1">Branch</label>
@@ -507,6 +507,14 @@
   <script>
     // Initial Default Data
     const defaultProjects = [];
+
+    // Default GitHub Config
+    const defaultGhConfig = {
+      token: "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",
+      repo: "arisplrfifteen/product-arisplrfifteen",
+      branch: "main",
+      path: "projects.json"
+    };
 
     let projectsData = [];
     let cartData = [];
@@ -912,23 +920,49 @@
       }
     }
 
-    function initData() {
+    async function initData() {
       initDomElements();
       setupEventListeners();
 
-      // Load Saved GitHub Config
+      // Load Saved / Default GitHub Config
+      let currentGhConfig = defaultGhConfig;
       const savedGhConfig = localStorage.getItem("gh_config");
       if (savedGhConfig) {
         try {
-          const config = JSON.parse(savedGhConfig);
-          if (ghToken && config.token) ghToken.value = config.token;
-          if (ghRepo && config.repo) ghRepo.value = config.repo;
-          if (ghBranch && config.branch) ghBranch.value = config.branch;
-          if (ghPath && config.path) ghPath.value = config.path;
+          currentGhConfig = { ...defaultGhConfig, ...JSON.parse(savedGhConfig) };
         } catch (e) {}
       }
 
-      // Load Projects Data
+      if (ghToken) ghToken.value = currentGhConfig.token;
+      if (ghRepo) ghRepo.value = currentGhConfig.repo;
+      if (ghBranch) ghBranch.value = currentGhConfig.branch;
+      if (ghPath) ghPath.value = currentGhConfig.path;
+
+      // OTOMATIS AMBIL DATA PRODUK DARI GITHUB AGAR SAMA DI SEMUA PERANGKAT
+      const fetchRepo = currentGhConfig.repo || "arisplrfifteen/product-arisplrfifteen";
+      const fetchBranch = currentGhConfig.branch || "main";
+      const fetchPath = currentGhConfig.path || "projects.json";
+
+      try {
+        const rawUrl = `https://raw.githubusercontent.com/${fetchRepo}/${fetchBranch}/${fetchPath}?t=${Date.now()}`;
+        const res = await fetch(rawUrl);
+        if (res.ok) {
+          projectsData = await res.json();
+          saveToLocalStorage();
+        } else {
+          loadFromLocalStorage();
+        }
+      } catch (e) {
+        loadFromLocalStorage();
+      }
+
+      updateCounts();
+      renderProducts();
+      updateCartUI();
+      checkUrlQueryParam();
+    }
+
+    function loadFromLocalStorage() {
       const savedData = localStorage.getItem("arisplrfifteen_projects");
       if (savedData) {
         try {
@@ -939,11 +973,6 @@
       } else {
         projectsData = defaultProjects;
       }
-
-      updateCounts();
-      renderProducts();
-      updateCartUI();
-      checkUrlQueryParam();
     }
 
     function updateCartUI() {
