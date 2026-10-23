@@ -314,18 +314,46 @@
           </form>
         </div>
 
-                <!-- LIST PROJECT DATA MANAGER TABLE WITH SCROLLBAR -->
+                <!-- LIST PROJECT DATA MANAGER TABLE WITH FILTER & SEARCH -->
         <div class="border border-zinc-800 rounded-2xl overflow-hidden bg-zinc-950/60 shadow-inner">
-          <div class="px-5 py-3.5 bg-zinc-900/90 border-b border-zinc-800 flex justify-between items-center sticky top-0 z-10 backdrop-blur-md">
-            <h3 class="text-xs font-mono font-bold text-zinc-200 flex items-center gap-2">
-              <i data-lucide="list" class="w-4 h-4 text-zinc-400"></i>
-              <span>Daftar Produk Ter-upload (<span id="adminTableCount">0</span>)</span>
-            </h3>
-            <span class="text-[10px] font-mono text-zinc-500">Scroll untuk melihat lebih banyak ↓</span>
+          <div class="px-5 py-4 bg-zinc-900/90 border-b border-zinc-800 space-y-3">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+              <h3 class="text-xs font-mono font-bold text-zinc-200 flex items-center gap-2">
+                <i data-lucide="list" class="w-4 h-4 text-zinc-400"></i>
+                <span>Daftar Produk Ter-upload (<span id="adminTableCount">0</span>)</span>
+              </h3>
+
+              <!-- Search Bar Khusus Admin -->
+              <div class="relative w-full sm:w-64">
+                <input 
+                  type="text" 
+                  id="adminSearchInput" 
+                  placeholder="Cari judul di admin..." 
+                  class="w-full pl-8 pr-3 py-1.5 bg-black border border-zinc-800 rounded-xl text-white text-xs font-mono focus:outline-none focus:border-zinc-500"
+                >
+                <i data-lucide="search" class="w-3.5 h-3.5 text-zinc-500 absolute left-2.5 top-2.5"></i>
+              </div>
+            </div>
+
+            <!-- Tombol Filter Kategori di Admin -->
+            <div class="flex flex-wrap items-center gap-1.5 pt-1" id="adminCategoryFilter">
+              <button data-cat="ALL" class="admin-filter-btn px-3 py-1 rounded-lg text-[11px] font-mono font-bold bg-white text-black transition cursor-pointer">
+                Semua
+              </button>
+              <button data-cat="FLP" class="admin-filter-btn px-3 py-1 rounded-lg text-[11px] font-mono font-bold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white transition cursor-pointer">
+                FLP
+              </button>
+              <button data-cat="FLM" class="admin-filter-btn px-3 py-1 rounded-lg text-[11px] font-mono font-bold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white transition cursor-pointer">
+                FLM
+              </button>
+              <button data-cat="TOOLS" class="admin-filter-btn px-3 py-1 rounded-lg text-[11px] font-mono font-bold bg-zinc-900 text-amber-400 border border-amber-500/30 hover:bg-amber-500/10 transition cursor-pointer">
+                Tools
+              </button>
+            </div>
           </div>
           
-          <div class="max-h-80 overflow-y-auto custom-scrollbar">
-            <table class="w-full text-left text-xs text-zinc-300 font-mono">
+          <div class="max-h-80 overflow-y-auto overflow-x-auto custom-scrollbar">
+            <table class="w-full text-left text-xs text-zinc-300 font-mono min-w-[500px]">
               <thead class="bg-zinc-900/90 text-zinc-400 border-b border-zinc-800 sticky top-0 z-10">
                 <tr>
                   <th class="p-3 pl-4">Sampul</th>
@@ -613,6 +641,8 @@
     let projectForm, formTitle, editProjectId, inputTitle, inputCategory, inputSize, inputUrl, inputImageFile, inputCoverBase64, btnCancelEdit, adminTableBody, adminTableCount;
     let ghToken, ghRepo, ghBranch, ghPath, btnSaveGhConfig, btnPushToGithub, ghSyncStatus;
     let inputReleaseDate, modalDate;
+    let adminSearchQuery = "";
+    let adminCurrentCat = "ALL"; 
     
 
     function initDomElements() {
@@ -935,6 +965,35 @@
       if (totalBytes < 1024 * 1024 * 1024) return (totalBytes / (1024 * 1024)).toFixed(1) + " MB";
       return (totalBytes / (1024 * 1024 * 1024)).toFixed(2) + " GB";
     }
+
+          // Search input di tabel admin
+      const adminSearchInput = document.getElementById("adminSearchInput");
+      if (adminSearchInput) {
+        adminSearchInput.addEventListener("input", (e) => {
+          adminSearchQuery = e.target.value;
+          renderAdminTable();
+        });
+      }
+
+      // Tombol filter kategori di tabel admin
+      const adminFilterBtns = document.querySelectorAll(".admin-filter-btn");
+      adminFilterBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          adminFilterBtns.forEach((b) => {
+            b.classList.remove("bg-white", "text-black", "bg-amber-400");
+            b.classList.add("bg-zinc-900", "text-zinc-400", "border", "border-zinc-800");
+          });
+          btn.classList.remove("bg-zinc-900", "text-zinc-400", "border", "border-zinc-800");
+          if (btn.getAttribute("data-cat") === "TOOLS") {
+            btn.classList.add("bg-amber-400", "text-black");
+          } else {
+            btn.classList.add("bg-white", "text-black");
+          }
+
+          adminCurrentCat = btn.getAttribute("data-cat");
+          renderAdminTable();
+        });
+      });
 
     function addToCart(id) {
       const project = projectsData.find((p) => p.id === id);
@@ -1369,34 +1428,56 @@
       }, 3000);
     }
 
-    function renderAdminTable() {
+        function renderAdminTable() {
       if (!adminTableBody) return;
       adminTableBody.innerHTML = "";
-      projectsData.forEach((item) => {
+
+      // Filter data berdasarkan kategori & pencarian di admin
+      const filteredAdminData = projectsData.filter((item) => {
+        const itemCat = item.isLimited 
+          ? "TOOLS" 
+          : (item.category === "FL STUDIO" ? "FLP" : item.category === "FL MOBILE" ? "FLM" : item.category);
+
+        const matchesCat = adminCurrentCat === "ALL" || itemCat === adminCurrentCat;
+        const matchesSearch = item.title.toLowerCase().includes(adminSearchQuery.toLowerCase());
+
+        return matchesCat && matchesSearch;
+      });
+
+      filteredAdminData.forEach((item) => {
         const imgThumb = item.coverArt ? item.coverArt : (item.isLimited ? fallbackImageRectSvg : fallbackImageSvg);
         const displayCategory = item.isLimited 
           ? "Tools" 
           : (item.category === "FL STUDIO" ? "FLP" : item.category === "FL MOBILE" ? "FLM" : item.category);
 
         const tr = document.createElement("tr");
-        tr.className = "hover:bg-zinc-900/50";
+        tr.className = "hover:bg-zinc-900/80 transition-colors border-b border-zinc-800/60";
         tr.innerHTML = `
-          <td class="p-3">
-            <img src="${imgThumb}" class="w-10 h-7 rounded object-cover bg-zinc-800 border border-zinc-800">
+          <td class="p-2.5 pl-4 align-middle">
+            <img src="${imgThumb}" class="w-9 h-7 rounded object-cover bg-zinc-800 border border-zinc-800">
           </td>
-          <td class="p-3 font-bold text-white">${item.title}</td>
-          <td class="p-3">
+          <td class="p-2.5 font-bold text-white max-w-[120px] truncate align-middle" title="${item.title}">
+            ${item.title}
+          </td>
+          <td class="p-2.5 align-middle">
             <span class="px-2 py-0.5 rounded text-[10px] ${item.isLimited ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-zinc-800 text-zinc-300'}">
               ${displayCategory}
             </span>
           </td>
-          <td class="p-3 text-right space-x-2">
-            <button onclick="editProject('${item.id}')" class="text-blue-400 hover:text-blue-300 font-bold">Edit</button>
-            <button onclick="deleteProject('${item.id}')" class="text-red-400 hover:text-red-300 font-bold">Hapus</button>
+          <td class="p-2.5 text-[10px] text-zinc-400 whitespace-nowrap align-middle">
+            ${formatDateDisplay(item.releaseDate) || '-'}
+          </td>
+          <td class="p-2.5 text-right pr-4 whitespace-nowrap align-middle">
+            <div class="flex items-center justify-end gap-2">
+              <button onclick="editProject('${item.id}')" class="text-blue-400 hover:text-blue-300 font-bold text-[11px] transition">Edit</button>
+              <button onclick="deleteProject('${item.id}')" class="text-red-400 hover:text-red-300 font-bold text-[11px] transition">Hapus</button>
+            </div>
           </td>
         `;
         adminTableBody.appendChild(tr);
       });
+
+      if (adminTableCount) adminTableCount.textContent = filteredAdminData.length;
     }
 
     function editProject(id) {
