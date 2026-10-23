@@ -448,7 +448,7 @@
           <div class="flex items-center gap-2">
             <i data-lucide="shopping-cart" class="w-5 h-5 text-white"></i>
             <h2 class="text-base font-extrabold text-white">KERANJANG</h2>
-            <span id="cartItemCount" class="text-xs font-mono bg-zinc-800 text-zinc-300 px-2.5 py-0.5 rounded-full">0 ProduK</span>
+            <span id="cartItemCount" class="text-xs font-mono bg-zinc-800 text-zinc-300 px-2.5 py-0.5 rounded-full">0 Produk</span>
           </div>
           <button id="btnCloseCart" class="p-1.5 bg-zinc-900 text-zinc-400 hover:text-white rounded-xl border border-zinc-800">
             <i data-lucide="x" class="w-5 h-5"></i>
@@ -667,11 +667,19 @@
         });
       }
 
+      // Memperbaiki pengunduhan seluruh produk di keranjang (Multi-Download Fix)
       if (btnDownloadAllCart) {
         btnDownloadAllCart.addEventListener("click", () => {
-          cartData.forEach((item) => {
-            window.open(item.downloadUrl, "_blank");
-            incrementDownloadCount(item.id);
+          if (cartData.length === 0) return;
+
+          showToast(`Mengunduh ${cartData.length} produk...`);
+
+          // Gunakan delay 500ms antar item agar browser tidak memblokir popup beruntun
+          cartData.forEach((item, index) => {
+            setTimeout(() => {
+              window.open(item.downloadUrl, "_blank");
+              incrementDownloadCount(item.id);
+            }, index * 500);
           });
         });
       }
