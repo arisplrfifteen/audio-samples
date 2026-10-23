@@ -478,7 +478,7 @@
 
     function updateCounts() {
       const total = projectsData.length;
-      const flp = projectsData.filter(p => p.category === "FLP").length;
+      const fls = projectsData.filter(p => p.category === "FLS").length;
       const flm = projectsData.filter(p => p.category === "FLM").length;
 
       document.getElementById("countAll").textContent = total;
