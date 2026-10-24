@@ -721,22 +721,26 @@
     let projectForm, formTitle, editProjectId, inputTitle, inputCategory, inputSize, inputUrl, inputCoverUrl, btnCancelEdit, adminTableBody, adminTableCount;
     let ghToken, ghRepo, ghBranch, ghPath, btnSaveGhConfig, btnPushToGithub, ghSyncStatus;
 
-    // PENGHITUNG PENGUNJUNG MURNI CLOUD SERVER (BERTAMBAH SETIAP DI-REFRESH)
-    async function initVisitorCounter() {
-      const visitorDisplay = document.getElementById("visitorCountDisplay");
-      try {
-        // Setiap halaman dibuka/direfresh, server cloud otomatis menaikkan angka +1
-        const res = await fetch("https://api.counterapi.dev/v1/arisplrfifteen_official_store/visitors/up");
-        if (res.ok) {
-          const data = await res.json();
-          if (visitorDisplay) visitorDisplay.textContent = data.count.toLocaleString();
-        } else {
-          throw new Error("Gagal mengambil data cloud");
-        }
-      } catch (e) {
-        if (visitorDisplay) visitorDisplay.textContent = "372";
+    // PENGHITUNG PENGUNJUNG MENGGUNAKAN FIREBASE REALTIME DATABASE
+async function initVisitorCounter() {
+  const visitorDisplay = document.getElementById("visitorCountDisplay");
+  const visitorRef = database.ref("visitorCount");
+
+  try {
+    visitorRef.transaction((currentValue) => {
+      return (currentValue || 1369) + 1;
+    }, (error, committed, snapshot) => {
+      if (error) {
+        if (visitorDisplay) visitorDisplay.textContent = "1,369";
+      } else if (snapshot) {
+        const count = snapshot.val();
+        if (visitorDisplay) visitorDisplay.textContent = count.toLocaleString();
       }
-    }
+    });
+  } catch (e) {
+    if (visitorDisplay) visitorDisplay.textContent = "1,369";
+  }
+}
 
     // FUNGSI MENCATAT UNDUHAN TANPA DELAY (BACKGROUND SYNC)
     function trackAndOpenModal(id) {
@@ -1761,5 +1765,52 @@
 
     window.addEventListener("DOMContentLoaded", initData);
   </script>
+    <!-- Load SDK Firebase versi Compat -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<script>
+  // 1. Konfigurasi Firebase Anda
+  const firebaseConfig = {
+    apiKey: "AIzaSyAitMXK4JVpAqthuior-h6iCSoAMIXLY94",
+    authDomain: "arisplrfifteen-official-store.firebaseapp.com",
+    databaseURL: "https://arisplrfifteen-official-store-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "arisplrfifteen-official-store",
+    storageBucket: "arisplrfifteen-official-store.firebasestorage.app",
+    messagingSenderId: "571943518658",
+    appId: "1:571943518658:web:e6f9c091ed63fb883d965b",
+    measurementId: "G-63BERQ4T7H"
+  };
+
+  // 2. Inisialisasi Firebase
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  const database = firebase.database();
+
+  // 3. Jalankan Penghitung Pengunjung saat halaman selesai dimuat
+  async function initVisitorCounter() {
+    const visitorDisplay = document.getElementById("visitorCountDisplay");
+    const visitorRef = database.ref("visitorCount");
+
+    try {
+      visitorRef.transaction((currentValue) => {
+        return (currentValue || 1369) + 1;
+      }, (error, committed, snapshot) => {
+        if (error) {
+          if (visitorDisplay) visitorDisplay.textContent = "1,369";
+        } else if (snapshot) {
+          const count = snapshot.val();
+          if (visitorDisplay) visitorDisplay.textContent = count.toLocaleString();
+        }
+      });
+    } catch (e) {
+      if (visitorDisplay) visitorDisplay.textContent = "1,369";
+    }
+  }
+
+  // Panggil fungsi secara otomatis begitu halaman dimuat/refresh
+  document.addEventListener("DOMContentLoaded", initVisitorCounter);
+</script>
 </body>
 </html>
