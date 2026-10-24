@@ -314,7 +314,7 @@
           </form>
         </div>
 
-                <!-- LIST PROJECT DATA MANAGER TABLE WITH FILTER & SEARCH -->
+        <!-- LIST PROJECT DATA MANAGER TABLE WITH FILTER & SEARCH -->
         <div class="border border-zinc-800 rounded-2xl overflow-hidden bg-zinc-950/60 shadow-inner">
           <div class="px-5 py-4 bg-zinc-900/90 border-b border-zinc-800 space-y-3">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
@@ -369,7 +369,6 @@
             </table>
           </div>
         </div>
-        
 
       </div>
     </section>
@@ -615,6 +614,8 @@
     let isAdminUnlocked = false;
     let activeModalProject = null;
     let activeAdminTab = "MAIN";
+    let adminSearchQuery = "";
+    let adminCurrentCat = "ALL";
 
     const fallbackImageSvg = "data:image/svg+xml;utf8," + encodeURIComponent(`
       <svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
@@ -641,9 +642,6 @@
     let projectForm, formTitle, editProjectId, inputTitle, inputCategory, inputSize, inputUrl, inputImageFile, inputCoverBase64, btnCancelEdit, adminTableBody, adminTableCount;
     let ghToken, ghRepo, ghBranch, ghPath, btnSaveGhConfig, btnPushToGithub, ghSyncStatus;
     let inputReleaseDate, modalDate;
-    let adminSearchQuery = "";
-    let adminCurrentCat = "ALL"; 
-    
 
     function initDomElements() {
       productGrid = document.getElementById("productGrid");
@@ -881,6 +879,7 @@
           const title = inputTitle ? inputTitle.value.trim() : "";
           const category = isLimited ? "LIMITED" : (inputCategory ? inputCategory.value : "FL STUDIO");
           const size = isLimited ? "" : (inputSize ? inputSize.value.trim() : "");
+          const releaseDate = inputReleaseDate ? inputReleaseDate.value : new Date().toISOString().split('T')[0];
           const downloadUrl = inputUrl ? inputUrl.value.trim() : "";
           const coverArt = inputCoverBase64 ? inputCoverBase64.value : "";
           const isLimitedFlag = isLimited;
@@ -893,6 +892,7 @@
                 title,
                 category,
                 size,
+                releaseDate,
                 downloadUrl,
                 isLimited: isLimitedFlag,
                 coverArt: coverArt || projectsData[index].coverArt,
@@ -904,6 +904,7 @@
               title,
               category,
               size,
+              releaseDate,
               downloadUrl,
               isLimited: isLimitedFlag,
               coverArt,
@@ -939,34 +940,8 @@
       if (btnPushToGithub) {
         btnPushToGithub.addEventListener("click", pushDataToGitHub);
       }
-    }
 
-    function calculateTotalCartSize() {
-      let totalBytes = 0;
-      cartData.forEach((item) => {
-        if (!item.size) return;
-        const sizeStr = item.size.toString().trim().toUpperCase();
-        const match = sizeStr.match(/([\d.]+)\s*(KB|MB|GB|TB|B)?/);
-        if (match) {
-          const val = parseFloat(match[1]);
-          const unit = match[2] || "MB";
-          switch (unit) {
-            case "B": totalBytes += val; break;
-            case "KB": totalBytes += val * 1024; break;
-            case "MB": totalBytes += val * 1024 * 1024; break;
-            case "GB": totalBytes += val * 1024 * 1024 * 1024; break;
-            case "TB": totalBytes += val * 1024 * 1024 * 1024 * 1024; break;
-            default: totalBytes += val * 1024 * 1024; break;
-          }
-        }
-      });
-      if (totalBytes === 0) return "0 MB";
-      if (totalBytes < 1024 * 1024) return (totalBytes / 1024).toFixed(1) + " KB";
-      if (totalBytes < 1024 * 1024 * 1024) return (totalBytes / (1024 * 1024)).toFixed(1) + " MB";
-      return (totalBytes / (1024 * 1024 * 1024)).toFixed(2) + " GB";
-    }
-
-          // Search input di tabel admin
+      // Search input di tabel admin (Diletakkan di dalam fungsi ini dengan benar)
       const adminSearchInput = document.getElementById("adminSearchInput");
       if (adminSearchInput) {
         adminSearchInput.addEventListener("input", (e) => {
@@ -994,6 +969,32 @@
           renderAdminTable();
         });
       });
+    }
+
+    function calculateTotalCartSize() {
+      let totalBytes = 0;
+      cartData.forEach((item) => {
+        if (!item.size) return;
+        const sizeStr = item.size.toString().trim().toUpperCase();
+        const match = sizeStr.match(/([\d.]+)\s*(KB|MB|GB|TB|B)?/);
+        if (match) {
+          const val = parseFloat(match[1]);
+          const unit = match[2] || "MB";
+          switch (unit) {
+            case "B": totalBytes += val; break;
+            case "KB": totalBytes += val * 1024; break;
+            case "MB": totalBytes += val * 1024 * 1024; break;
+            case "GB": totalBytes += val * 1024 * 1024 * 1024; break;
+            case "TB": totalBytes += val * 1024 * 1024 * 1024 * 1024; break;
+            default: totalBytes += val * 1024 * 1024; break;
+          }
+        }
+      });
+      if (totalBytes === 0) return "0 MB";
+      if (totalBytes < 1024 * 1024) return (totalBytes / 1024).toFixed(1) + " KB";
+      if (totalBytes < 1024 * 1024 * 1024) return (totalBytes / (1024 * 1024)).toFixed(1) + " MB";
+      return (totalBytes / (1024 * 1024 * 1024)).toFixed(2) + " GB";
+    }
 
     function addToCart(id) {
       const project = projectsData.find((p) => p.id === id);
@@ -1130,7 +1131,6 @@
       updateCartUI();
       checkUrlQueryParam();
 
-      // PASTIKAN BARIS INI ADA DI SINI AGAR TABEL ADMIN LANGSUNG MUNCUL
       if (isAdminUnlocked) {
         renderAdminTable();
       }
@@ -1218,6 +1218,13 @@
       if (window.lucide) {
         lucide.createIcons();
       }
+    }
+
+    function formatDateDisplay(dateString) {
+      if (!dateString) return "";
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return dateString;
+      return date.toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
     }
 
     function renderProducts() {
@@ -1433,11 +1440,10 @@
       }, 3000);
     }
 
-        function renderAdminTable() {
+    function renderAdminTable() {
       if (!adminTableBody) return;
       adminTableBody.innerHTML = "";
 
-      // Filter data berdasarkan kategori & pencarian di admin
       const filteredAdminData = projectsData.filter((item) => {
         const itemCat = item.isLimited 
           ? "TOOLS" 
@@ -1456,7 +1462,7 @@
           : (item.category === "FL STUDIO" ? "FLP" : item.category === "FL MOBILE" ? "FLM" : item.category);
 
         const tr = document.createElement("tr");
-        tr.className = "hover:bg-zinc-900/80 transition-colors border-b border-zinc-800/60";
+        tr.className = "hover:bg-zinc-900/85 transition-colors border-b border-zinc-800/60";
         tr.innerHTML = `
           <td class="p-2.5 pl-4 align-middle">
             <img src="${imgThumb}" class="w-9 h-7 rounded object-cover bg-zinc-800 border border-zinc-800">
@@ -1499,6 +1505,7 @@
       if (inputTitle) inputTitle.value = item.title;
       if (inputCategory && !item.isLimited) inputCategory.value = item.category;
       if (inputSize && !item.isLimited) inputSize.value = item.size || "";
+      if (inputReleaseDate) inputReleaseDate.value = item.releaseDate || new Date().toISOString().split('T')[0];
       if (inputUrl) inputUrl.value = item.downloadUrl;
       if (inputCoverBase64) inputCoverBase64.value = item.coverArt || "";
       if (inputImageFile) inputImageFile.value = "";
@@ -1521,6 +1528,7 @@
       if (editProjectId) editProjectId.value = "";
       if (projectForm) projectForm.reset();
       if (inputCoverBase64) inputCoverBase64.value = "";
+      if (inputReleaseDate) inputReleaseDate.value = new Date().toISOString().split('T')[0];
       if (formTitle) formTitle.textContent = activeAdminTab === "LIMITED" ? "➕ Tambah Tools" : "➕ Tambah Produk Utama";
       if (btnCancelEdit) btnCancelEdit.classList.add("hidden");
     }
