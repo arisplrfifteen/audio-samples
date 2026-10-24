@@ -33,6 +33,21 @@
   </script>
 
   <style>
+    @keyframes pageEntrance {
+      0% {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-page-entrance {
+      animation: pageEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    
     @keyframes lightSweep {
       0% { transform: translateX(-150%) rotate(25deg); opacity: 0; }
       20% { opacity: 0.6; }
@@ -147,7 +162,7 @@
   </header>
 
   <!-- MAIN CONTAINER -->
-  <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-8">
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-8 animate-page-entrance">
     
     <!-- ADMIN DASHBOARD -->
     <section id="adminSection" class="hidden mb-12 bg-zinc-950 border border-zinc-800 rounded-3xl p-6 sm:p-8 space-y-8 shadow-2xl relative">
@@ -422,19 +437,19 @@
       <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3" id="categoryFilter">
         <button 
           data-category="ALL" 
-          class="filter-btn active px-3 py-2.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all duration-200 bg-white text-black shadow-lg shadow-white/10 cursor-pointer"
+          class="filter-btn active px-3 py-2 rounded-xl text-xs font-mono font-bold tracking-wider transition-all duration-200 bg-white text-black shadow-lg shadow-white/10 cursor-pointer"
         >
           SEMUA (<span id="countAll">0</span>)
         </button>
         <button 
           data-category="FLP" 
-          class="filter-btn active px-3 py-2.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all duration-200 bg-white text-black shadow-lg shadow-white/10 cursor-pointer"
+          class="filter-btn px-3 py-2 rounded-xl text-xs font-mono font-bold tracking-wider transition-all duration-200 bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-800 transition cursor-pointer"
         >
           FLP (<span id="countFLP">0</span>)
         </button>
         <button 
           data-category="FLM" 
-          class="filter-btn active px-3 py-2.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all duration-200 bg-white text-black shadow-lg shadow-white/10 cursor-pointer"
+          class="filter-btn px-3 py-2 rounded-xl text-xs font-mono font-bold tracking-wider transition-all duration-200 bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-800 transition cursor-pointer"
         >
           FLM (<span id="countFLM">0</span>)
         </button>
