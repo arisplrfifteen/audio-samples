@@ -297,11 +297,6 @@
               <label class="block text-zinc-400 font-mono mb-1">Ukuran File *</label>
               <input type="text" id="inputSize" value=" MB" class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white">
             </div>
-
-            <div>
-              <label class="block text-zinc-400 font-mono mb-1">Bulan/tanggal/Tahun *</label>
-              <input type="date" id="inputReleaseDate" required class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white font-mono focus:outline-none focus:border-zinc-500">
-            </div>
     
             <div>
               <label class="block text-zinc-400 font-mono mb-1">Link Download *</label>
@@ -368,7 +363,6 @@
                   <th class="p-3 pl-4">Sampul</th>
                   <th class="p-3">Judul</th>
                   <th class="p-3">Kategori</th>
-                  <th class="p-3">Tanggal</th>
                   <th class="p-3 text-right pr-4">Aksi</th>
                 </tr>
               </thead>
@@ -652,7 +646,6 @@
     let btnToggleAdmin, adminSection, btnCloseAdmin, adminAuthBox, adminPassInput, btnUnlockAdmin, adminAuthMsg, adminContent;
     let projectForm, formTitle, editProjectId, inputTitle, inputCategory, inputSize, inputUrl, inputCoverUrl, btnCancelEdit, adminTableBody, adminTableCount;
     let ghToken, ghRepo, ghBranch, ghPath, btnSaveGhConfig, btnPushToGithub, ghSyncStatus;
-    let inputReleaseDate, modalDate;
 
     function initDomElements() {
       productGrid = document.getElementById("productGrid");
@@ -693,7 +686,6 @@
       modalTitle = document.getElementById("modalTitle");
       modalCategoryLabel = document.getElementById("modalCategoryLabel");
       modalType = document.getElementById("modalType");
-      modalDate = document.getElementById("modalDate");
       modalDownloadLink = document.getElementById("modalDownloadLink");
       btnShareLink = document.getElementById("btnShareLink");
       shareBtnText = document.getElementById("shareBtnText");
@@ -715,10 +707,6 @@
       inputTitle = document.getElementById("inputTitle");
       inputCategory = document.getElementById("inputCategory");
       inputSize = document.getElementById("inputSize");
-      inputReleaseDate = document.getElementById("inputReleaseDate");
-      if (inputReleaseDate && !inputReleaseDate.value) {
-        inputReleaseDate.value = new Date().toISOString().split('T')[0];
-      }
       inputUrl = document.getElementById("inputUrl");
       inputCoverUrl = document.getElementById("inputCoverUrl");
       btnCancelEdit = document.getElementById("btnCancelEdit");
@@ -874,7 +862,6 @@
           const title = inputTitle ? inputTitle.value.trim() : "";
           const category = isLimited ? "LIMITED" : (inputCategory ? inputCategory.value : "FL STUDIO");
           const size = isLimited ? "" : (inputSize ? inputSize.value.trim() : "");
-          const releaseDate = inputReleaseDate ? inputReleaseDate.value : new Date().toISOString().split('T')[0];
           const downloadUrl = inputUrl ? inputUrl.value.trim() : "";
           const coverArt = inputCoverUrl ? inputCoverUrl.value.trim() : "";
 
@@ -886,7 +873,6 @@
                 title,
                 category,
                 size,
-                releaseDate,
                 downloadUrl,
                 isLimited,
                 coverArt: coverArt || projectsData[index].coverArt,
@@ -898,7 +884,6 @@
               title,
               category,
               size,
-              releaseDate,
               downloadUrl,
               isLimited,
               coverArt,
@@ -1220,13 +1205,6 @@
       }
     }
 
-    function formatDateDisplay(dateString) {
-      if (!dateString) return "";
-      const date = new Date(dateString);
-      if (isNaN(date.getTime())) return dateString;
-      return date.toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
-    }
-
     function renderProducts() {
       if (!productGrid || !emptyState || !limitedGrid || !limitedEmptyState) return;
 
@@ -1477,9 +1455,6 @@
               ${displayCategory}
             </span>
           </td>
-          <td class="p-2.5 text-[10px] text-zinc-400 whitespace-nowrap align-middle">
-            ${formatDateDisplay(item.releaseDate) || '-'}
-          </td>
           <td class="p-2.5 text-right pr-4 whitespace-nowrap align-middle">
             <div class="flex items-center justify-end gap-2">
               <button onclick="editProject('${item.id}')" class="text-blue-400 hover:text-blue-300 font-bold text-[11px] transition">Edit</button>
@@ -1507,7 +1482,6 @@
       if (inputTitle) inputTitle.value = item.title;
       if (inputCategory && !item.isLimited) inputCategory.value = item.category;
       if (inputSize && !item.isLimited) inputSize.value = item.size || "";
-      if (inputReleaseDate) inputReleaseDate.value = item.releaseDate || new Date().toISOString().split('T')[0];
       if (inputUrl) inputUrl.value = item.downloadUrl;
       if (inputCoverUrl) inputCoverUrl.value = item.coverArt || "";
 
@@ -1528,8 +1502,7 @@
     function resetForm() {
       if (editProjectId) editProjectId.value = "";
       if (projectForm) projectForm.reset();
-      if (inputCoverUrl) inputCoverUrl.value = "";
-      if (inputReleaseDate) inputReleaseDate.value = new Date().toISOString().split('T')[0];
+      if (inputCoverUrl) inputCoverUrl.value = "https://lh3.googleusercontent.com/d/";
       if (formTitle) formTitle.textContent = activeAdminTab === "LIMITED" ? "➕ Tambah Tools" : "➕ Tambah Produk Utama";
       if (btnCancelEdit) btnCancelEdit.classList.add("hidden");
     }
