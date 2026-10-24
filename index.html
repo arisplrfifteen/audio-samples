@@ -14,7 +14,7 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
   
-  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -32,6 +32,7 @@
     }
   </script>
 
+  <!-- ANIMASI / EFFECT-->
   <style>
     @keyframes pageEntrance {
       0% {
@@ -115,11 +116,11 @@
 </head>
 <body class="bg-black text-zinc-100 font-sans min-h-screen flex flex-col antialiased selection:bg-white selection:text-black">
 
-  <!-- HEADER -->
+  <!-- HEAD -->
   <header class="border-b border-zinc-900 bg-zinc-950/80 backdrop-blur-md sticky top-0 z-40">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       
-      <!-- LOGO / BRANDING -->
+      <!-- ARISPLRFIFTEEN | OFFICIAL STORE -->
       <div class="flex items-center gap-3">
         <div class="logo-animate animate-light-sweep w-9 h-9 rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800 flex items-center justify-center shadow-md">
           <img src="icon.png" alt="Logo" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/111/fff?text=ARI'">
@@ -132,14 +133,14 @@
         </div>
       </div>
 
-      <!-- HEADER NAVIGATION & ADMIN -->
+      <!-- HEAD TOTAL PRODUK -->
       <div class="w-full sm:w-auto flex items-center justify-between sm:justify-end gap-3 sm:gap-4">
         <div class="text-right hidden sm:block">
           <p class="text-xs text-zinc-500 font-mono">Total Produk</p>
           <p class="text-sm font-bold text-white font-sans" id="totalCountDisplay">0 Produk</p>
         </div>
 
-        <!-- CHECKOUT CART BUTTON -->
+        <!-- BUTTON KERANJANG -->
         <button 
           id="btnOpenCart" 
           class="relative px-4 py-2 bg-white hover:bg-zinc-200 text-black font-extrabold text-xs font-mono rounded-xl transition flex items-center gap-2 shadow-lg shadow-white/5 active:scale-95 cursor-pointer"
@@ -161,11 +162,11 @@
     </div>
   </header>
 
-  <!-- ADMIN DASHBOARD (POP-UP MODAL DI TENGAH) -->
+  <!-- ADMIN -->
   <div id="adminSection" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
     <div class="bg-zinc-950 border border-zinc-800 rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scrollbar">
       
-      <!-- Modal Admin Header -->
+      <!-- HEAD ADMIN -->
       <div class="flex items-center justify-between border-b border-zinc-800 pb-4">
         <div>
           <h2 class="text-lg font-bold text-white flex items-center gap-2">
@@ -199,10 +200,10 @@
         <p id="adminAuthMsg" class="text-xs text-red-400 hidden"></p>
       </div>
 
-      <!-- ADMIN CONTROLS (UNLOCKED) -->
+      <!-- ADMIN CONTROLS -->
       <div id="adminContent" class="hidden space-y-8">
         
-        <!-- GITHUB SYNC CONFIGURATION -->
+        <!-- GITHUB SYNC -->
         <div class="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-5 space-y-4">
           <div class="flex items-center justify-between">
             <h3 class="text-sm font-bold text-white flex items-center gap-2">
@@ -254,7 +255,7 @@
           <p id="ghSyncStatus" class="text-xs font-mono mt-1 hidden"></p>
         </div>
 
-        <!-- FORM TAMBAH / EDIT PROJECT -->
+        <!-- UPLOAD -->
         <div class="border border-zinc-800 rounded-2xl p-5 space-y-4">
           <div class="flex items-center gap-3 border-b border-zinc-800 pb-3">
             <button id="tabMainProduct" type="button" class="px-4 py-2 rounded-xl text-xs font-mono font-bold bg-white text-black transition">
@@ -326,7 +327,7 @@
           </form>
         </div>
 
-        <!-- LIST PROJECT DATA MANAGER TABLE WITH FILTER & SEARCH -->
+        <!-- DAFTAR PRODUK TER-UPLOAD -->
         <div class="border border-zinc-800 rounded-2xl overflow-hidden bg-zinc-950/60 shadow-inner">
           <div class="px-5 py-4 bg-zinc-900/90 border-b border-zinc-800 space-y-3">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
@@ -385,10 +386,10 @@
     </div>
   </div>
 
-  <!-- MAIN CONTAINER -->
+  <!-- MAIN -->
   <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-8 animate-page-entrance">
     
-    <!-- TOOLS -->
+    <!-- MAIN | TOOLS -->
     <section id="limitedSection" class="mb-14">
       <div class="flex items-center justify-between mb-6 border-b border-zinc-800/80 pb-3">
         <div class="flex items-center gap-2.5">
@@ -399,7 +400,7 @@
       </div>
 
       <div id="limitedGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Dynamic Limited Edition Cards -->
+        <!-- TOOLS CARDS -->
       </div>
 
       <div id="limitedEmptyState" class="hidden text-center py-8 bg-zinc-950/40 border border-zinc-900 rounded-2xl">
@@ -407,14 +408,14 @@
       </div>
     </section>
 
-    <!-- JUDUL -->
+    <!-- MAIN | PRODUK -->
     <section class="mb-10 space-y-6">
       
       <div class="flex items-center justify-between border-b border-zinc-800/80 pb-3">
         <h2 class="text-lg sm:text-xl font-extrabold text-white tracking-tight">Free Downloads</h2>
       </div>
 
-      <!-- Search Input -->
+      <!-- CARI | INPUT BUTTON -->
       <div class="relative w-full max-w-2xl mx-auto">
         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-500">
           <i data-lucide="search" class="w-5 h-5"></i>
@@ -433,7 +434,7 @@
         </button>
       </div>
 
-      <!-- KATEGORI -->
+      <!-- KATEGORI | BUTTON -->
       <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3" id="categoryFilter">
         <button 
           data-category="ALL" 
@@ -457,7 +458,7 @@
 
     </section>
 
-    <!-- PRODUCT CATALOG GRID (MAIN PRODUCTS) -->
+    <!-- MAIN | PRODUK UTAMA -->
     <section>
       <div class="flex items-center justify-between mb-6" id="mainProductsHeader">
         <h2 class="text-lg sm:text-xl font-extrabold text-white tracking-tight">PRODUK UTAMA</h2>
@@ -467,7 +468,7 @@
         <!-- Dynamic Cards rendered via JS -->
       </div>
 
-      <!-- EMPTY STATE -->
+      <!-- STATUS KOSONG -->
       <div id="emptyState" class="hidden text-center py-16 px-4">
         <div class="w-16 h-16 mx-auto mb-4 text-zinc-600 flex items-center justify-center rounded-full bg-zinc-900 border border-zinc-800">
           <i data-lucide="search-x" class="w-8 h-8"></i>
@@ -479,11 +480,11 @@
 
   </main>
 
-  <!-- PRODUCT DETAIL MODAL POP-UP -->
+  <!-- MAIN | PRODUK UTAMA POP-UP -->
   <div id="productModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
     <div class="bg-zinc-950 border border-zinc-800 rounded-3xl max-w-lg w-full p-5 sm:p-6 space-y-5 shadow-2xl relative animate-in fade-in zoom-in duration-700">
       
-      <!-- Modal Header / Back Button -->
+      <!-- BUTTON KEMBALI BERANDA -->
       <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
         <button 
           id="btnModalClose" 
@@ -496,7 +497,7 @@
         <span class="text-[11px] font-mono text-zinc-500">DETAIL PRODUK</span>
       </div>
 
-      <!-- Modal Product Info -->
+      <!-- PRODUK INFO -->
       <div class="space-y-4">
         <div id="modalImgWrapper" class="relative w-full rounded-2xl overflow-hidden bg-zinc-900 border border-zinc-800 aspect-square">
           <img id="modalImg" src="" class="w-full h-full object-cover">
@@ -518,7 +519,7 @@
         </div>
       </div>
 
-      <!-- ACTION BUTTONS -->
+      <!-- BUTTON | LINK / KERANJANG / BAGIKAN -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2">
         <a 
           id="modalDownloadLink" 
@@ -551,7 +552,7 @@
     </div>
   </div>
 
-  <!-- CHECKOUT / CART DRAWER -->
+  <!-- HEAD | KERANJANG -->
   <div id="cartDrawer" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex justify-end transition-opacity">
     <div class="w-full max-w-md bg-zinc-950 border-l border-zinc-800 h-full flex flex-col justify-between p-6 shadow-2xl relative animate-in slide-in-from-right duration-300">
       
@@ -598,7 +599,7 @@
     </div>
   </div>
 
-  <!-- TOAST NOTIFICATION -->
+  <!-- NOTIF PRODUK TERSALIN -->
   <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden bg-white text-black px-5 py-2.5 rounded-full shadow-2xl font-mono text-xs font-bold flex items-center gap-2">
     <i data-lucide="check-circle-2" class="w-4 h-4 text-black"></i>
     <span id="toastMsg">Link produk berhasil disalin!</span>
