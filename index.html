@@ -11,6 +11,16 @@
 
   <title>arisplrfifteen | Official Store</title>
 
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+  <script>
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+      await OneSignal.init({
+        appId: "3f6a38b4-31ac-480c-a9d2-9f04d3508e89",
+      });
+    });
+  </script>
+
   <!-- LOGO -->
   <link rel="icon" type="image/png" href="icon.png">
   
