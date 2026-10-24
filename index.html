@@ -167,7 +167,7 @@
     </div>
   </header>
 
-  <!-- ADMIN DASHBOARD (POP-UP MODAL DI TENGAH) -->
+  <!-- ADMIN DASHBOARD MODAL -->
   <div id="adminSection" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
     <div class="bg-zinc-950 border border-zinc-800 rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scrollbar">
       
@@ -310,13 +310,12 @@
 
             <div class="sm:col-span-2">
               <label class="block text-zinc-400 font-mono mb-1">
-                URL Gambar Sampul (Link Image) *
+                URL Gambar Sampul (Link Direct Image) *
               </label>
               <input 
                 type="url" 
                 id="inputCoverUrl" 
-                required
-                placeholder="Masukkan link gambar, contoh: https://i.ibb.co/... atau link dari GitHub" 
+                placeholder="https://files.catbox.moe/... atau https://raw.githubusercontent.com/..." 
                 class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white font-mono text-xs focus:outline-none focus:border-white"
               >
             </div>
@@ -394,7 +393,7 @@
   <!-- MAIN CONTAINER -->
   <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-8 animate-page-entrance">
     
-    <!-- TOOLS (HORIZONTAL SCROLLABLE 3 ITEMS) -->
+    <!-- TOOLS (HORIZONTAL SCROLLABLE) -->
     <section id="limitedSection" class="mb-14">
       <div class="flex items-center justify-between mb-4 border-b border-zinc-800/80 pb-3">
         <div class="flex items-center gap-2.5">
@@ -404,7 +403,6 @@
         <span class="text-xs font-mono text-zinc-500" id="limitedCountDisplay">0 Item</span>
       </div>
 
-      <!-- Scroll Container Horizontal -->
       <div id="limitedGrid" class="flex gap-4 overflow-x-auto pb-4 pt-1 snap-x snap-mandatory custom-scrollbar">
         <!-- Dynamic Limited Edition Cards -->
       </div>
@@ -414,7 +412,7 @@
       </div>
     </section>
 
-    <!-- JUDUL -->
+    <!-- JUDUL DAN SEARCH -->
     <section class="mb-10 space-y-6">
       
       <div class="flex items-center justify-between border-b border-zinc-800/80 pb-3">
@@ -464,14 +462,14 @@
 
     </section>
 
-    <!-- PRODUCT CATALOG GRID (MAIN PRODUCTS) -->
+    <!-- PRODUCT CATALOG GRID -->
     <section>
       <div class="flex items-center justify-between mb-6" id="mainProductsHeader">
         <h2 class="text-lg sm:text-xl font-extrabold text-white tracking-tight">PRODUK UTAMA</h2>
       </div>
 
       <div id="productGrid" class="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-8">
-        <!-- Dynamic Cards rendered via JS -->
+        <!-- Dynamic Cards -->
       </div>
 
       <!-- EMPTY STATE -->
@@ -486,11 +484,10 @@
 
   </main>
 
-  <!-- PRODUCT DETAIL MODAL POP-UP -->
+  <!-- PRODUCT DETAIL MODAL -->
   <div id="productModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
     <div class="bg-zinc-950 border border-zinc-800 rounded-3xl max-w-lg w-full p-5 sm:p-6 space-y-5 shadow-2xl relative animate-in fade-in zoom-in duration-700">
       
-      <!-- Modal Header / Back Button -->
       <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
         <button 
           id="btnModalClose" 
@@ -503,10 +500,9 @@
         <span class="text-[11px] font-mono text-zinc-500">DETAIL PRODUK</span>
       </div>
 
-      <!-- Modal Product Info -->
       <div class="space-y-4">
         <div id="modalImgWrapper" class="relative w-full rounded-2xl overflow-hidden bg-zinc-900 border border-zinc-800 aspect-square">
-          <img id="modalImg" src="" class="w-full h-full object-cover">
+          <img id="modalImg" src="" class="w-full h-full object-cover" onerror="this.src=fallbackImageSvg">
           <div class="absolute top-3 left-3">
             <span id="modalCategory" class="px-3 py-1 bg-black/80 backdrop-blur-md text-xs font-mono font-bold tracking-wider text-white rounded-full border border-white/20"></span>
           </div>
@@ -525,14 +521,13 @@
         </div>
       </div>
 
-      <!-- ACTION BUTTONS -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2">
         <a 
           id="modalDownloadLink" 
           href="#" 
           target="_blank" 
           rel="noopener noreferrer"
-          class="py-3 px-3 bg-white hover:bg-zinc-200 text-black font-extrabold text-xs tracking-wider rounded-2xl transition duration-200 flex items-center justify-center gap-2 shadow-md shadow-white/5 active:scale-[0.98]"
+          class="py-3 px-3 bg-white hover:bg-zinc-200 text-black font-extrabold text-xs tracking-wider rounded-2xl transition duration-200 flex items-center justify-center gap-2 shadow-md active:scale-[0.98]"
         >
           <i data-lucide="external-link" class="w-4 h-4"></i>
           <span id="modalBtnLinkLabel">LINK</span>
@@ -558,9 +553,9 @@
     </div>
   </div>
 
-  <!-- CHECKOUT / CART DRAWER -->
+  <!-- CART DRAWER -->
   <div id="cartDrawer" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex justify-end transition-opacity">
-    <div class="w-full max-w-md bg-zinc-950 border-l border-zinc-800 h-full flex flex-col justify-between p-6 shadow-2xl relative animate-in slide-in-from-right duration-300">
+    <div class="w-full max-w-md bg-zinc-950 border-l border-zinc-800 h-full flex flex-col justify-between p-6 shadow-2xl relative">
       
       <div>
         <div class="flex items-center justify-between border-b border-zinc-800 pb-4 mb-6">
@@ -661,7 +656,7 @@
     let btnOpenCart, btnCloseCart, cartDrawer, cartBadge, cartItemsList, cartEmptyState, cartItemCount, cartTotalSummary, cartTotalSize, btnClearCart, btnModalAddToCart;
     let productModal, btnModalClose, modalImg, modalCategory, modalSize, modalTitle, modalCategoryLabel, modalType, modalDownloadLink, btnShareLink, shareBtnText, toast, toastMsg;
     let btnToggleAdmin, adminSection, btnCloseAdmin, adminAuthBox, adminPassInput, btnUnlockAdmin, adminAuthMsg, adminContent;
-    let projectForm, formTitle, editProjectId, inputTitle, inputCategory, inputSize, inputUrl, inputImageFile, inputCoverBase64, btnCancelEdit, adminTableBody, adminTableCount;
+    let projectForm, formTitle, editProjectId, inputTitle, inputCategory, inputSize, inputUrl, inputCoverUrl, btnCancelEdit, adminTableBody, adminTableCount;
     let ghToken, ghRepo, ghBranch, ghPath, btnSaveGhConfig, btnPushToGithub, ghSyncStatus;
     let inputReleaseDate, modalDate;
 
@@ -731,8 +726,7 @@
         inputReleaseDate.value = new Date().toISOString().split('T')[0];
       }
       inputUrl = document.getElementById("inputUrl");
-      inputImageFile = document.getElementById("inputImageFile");
-      inputCoverBase64 = document.getElementById("inputCoverBase64");
+      inputCoverUrl = document.getElementById("inputCoverUrl");
       btnCancelEdit = document.getElementById("btnCancelEdit");
       adminTableBody = document.getElementById("adminTableBody");
       adminTableCount = document.getElementById("adminTableCount");
@@ -755,7 +749,6 @@
           if (categoryWrapper) categoryWrapper.classList.remove("hidden");
           if (sizeWrapper) sizeWrapper.classList.remove("hidden");
           if (inputSize) inputSize.required = true;
-          if (coverAspectText) coverAspectText.textContent = "(Rasio 1:1)";
           if (inputProductType) inputProductType.value = "MAIN";
           resetForm();
         });
@@ -767,7 +760,6 @@
           if (categoryWrapper) categoryWrapper.classList.add("hidden");
           if (sizeWrapper) sizeWrapper.classList.add("hidden");
           if (inputSize) inputSize.required = false;
-          if (coverAspectText) coverAspectText.textContent = "(Rasio Persegi Panjang / 16:9)";
           if (inputProductType) inputProductType.value = "LIMITED";
           resetForm();
         });
@@ -880,68 +872,53 @@
         });
       }
 
-      if (inputImageFile) {
-        inputImageFile.addEventListener("change", (e) => {
-          const file = e.target.files[0];
-          if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-              if (inputCoverBase64) inputCoverBase64.value = reader.result;
+      if (projectForm) {
+        projectForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const id = editProjectId ? editProjectId.value : "";
+          const isLimited = activeAdminTab === "LIMITED";
+          const title = inputTitle ? inputTitle.value.trim() : "";
+          const category = isLimited ? "LIMITED" : (inputCategory ? inputCategory.value : "FL STUDIO");
+          const size = isLimited ? "" : (inputSize ? inputSize.value.trim() : "");
+          const releaseDate = inputReleaseDate ? inputReleaseDate.value : new Date().toISOString().split('T')[0];
+          const downloadUrl = inputUrl ? inputUrl.value.trim() : "";
+          const coverArt = inputCoverUrl ? inputCoverUrl.value.trim() : "";
+
+          if (id) {
+            const index = projectsData.findIndex((p) => p.id === id);
+            if (index !== -1) {
+              projectsData[index] = {
+                ...projectsData[index],
+                title,
+                category,
+                size,
+                releaseDate,
+                downloadUrl,
+                isLimited,
+                coverArt: coverArt || projectsData[index].coverArt,
+              };
+            }
+          } else {
+            const newProj = {
+              id: "proj_" + Date.now(),
+              title,
+              category,
+              size,
+              releaseDate,
+              downloadUrl,
+              isLimited,
+              coverArt,
             };
-            reader.readAsDataURL(file);
+            projectsData.unshift(newProj);
           }
+
+          saveToLocalStorage();
+          updateCounts();
+          renderProducts();
+          resetForm();
+          showToast(id ? "Produk berhasil diperbarui!" : "Produk berhasil ditambahkan!");
         });
       }
-
-      if (projectForm) {
-  projectForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const id = editProjectId ? editProjectId.value : "";
-    const isLimited = activeAdminTab === "LIMITED";
-    const title = inputTitle ? inputTitle.value.trim() : "";
-    const category = isLimited ? "LIMITED" : (inputCategory ? inputCategory.value : "FL STUDIO");
-    const size = isLimited ? "" : (inputSize ? inputSize.value.trim() : "");
-    const releaseDate = inputReleaseDate ? inputReleaseDate.value : new Date().toISOString().split('T')[0];
-    const downloadUrl = inputUrl ? inputUrl.value.trim() : "";
-    
-    // AMBIL LINK DARI INPUT URL COVER
-    const coverArt = inputCoverUrl ? inputCoverUrl.value.trim() : "";
-
-    if (id) {
-      const index = projectsData.findIndex((p) => p.id === id);
-      if (index !== -1) {
-        projectsData[index] = {
-          ...projectsData[index],
-          title,
-          category,
-          size,
-          releaseDate,
-          downloadUrl,
-          isLimited,
-          coverArt: coverArt || projectsData[index].coverArt,
-        };
-      }
-    } else {
-      const newProj = {
-        id: "proj_" + Date.now(),
-        title,
-        category,
-        size,
-        releaseDate,
-        downloadUrl,
-        isLimited,
-        coverArt, // Menyimpan link URL gambar
-      };
-      projectsData.unshift(newProj);
-    }
-
-    saveToLocalStorage();
-    updateCounts();
-    renderProducts();
-    resetForm();
-    showToast(id ? "Produk berhasil diperbarui!" : "Produk berhasil ditambahkan!");
-  });
-}
 
       if (btnCancelEdit) {
         btnCancelEdit.addEventListener("click", resetForm);
@@ -1203,7 +1180,7 @@
         cartItemEl.className = "flex items-center justify-between p-3 bg-zinc-900/90 border border-zinc-800/80 rounded-2xl gap-3";
         cartItemEl.innerHTML = `
           <div class="flex items-center gap-3 overflow-hidden">
-            <img src="${imageSrc}" class="w-12 h-12 rounded-xl object-cover bg-zinc-800 border border-zinc-800 flex-shrink-0">
+            <img src="${imageSrc}" class="w-12 h-12 rounded-xl object-cover bg-zinc-800 border border-zinc-800 flex-shrink-0" onerror="this.src='${fallbackImageSvg}'">
             <div class="truncate">
               <h4 class="text-xs font-bold text-white truncate">${item.title}</h4>
               <p class="text-[10px] text-zinc-400 font-mono">${displayCategory} • ${item.size}</p>
@@ -1278,6 +1255,7 @@
                     alt="${project.title}" 
                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     loading="lazy"
+                    onerror="this.src='${fallbackImageRectSvg}'"
                   >
                   <div class="absolute top-2 left-2">
                     <span class="px-2 py-0.5 bg-amber-500/90 backdrop-blur-md text-[9px] font-mono font-extrabold tracking-wider text-black rounded-full shadow-lg">
@@ -1344,6 +1322,7 @@
                     alt="${project.title}" 
                     class="w-full h-full object-cover grayscale transition-transform duration-500 group-hover:scale-105 group-hover:grayscale-0"
                     loading="lazy"
+                    onerror="this.src='${fallbackImageSvg}'"
                   >
                   
                   <div class="absolute top-3 left-3 flex flex-wrap gap-1.5">
@@ -1494,7 +1473,7 @@
         tr.className = "hover:bg-zinc-900/85 transition-colors border-b border-zinc-800/60";
         tr.innerHTML = `
           <td class="p-2.5 pl-4 align-middle">
-            <img src="${imgThumb}" class="w-9 h-7 rounded object-cover bg-zinc-800 border border-zinc-800">
+            <img src="${imgThumb}" class="w-9 h-7 rounded object-cover bg-zinc-800 border border-zinc-800" onerror="this.src='${fallbackImageSvg}'">
           </td>
           <td class="p-2.5 font-bold text-white max-w-[120px] truncate align-middle" title="${item.title}">
             ${item.title}
@@ -1521,15 +1500,14 @@
     }
 
     function editProject(id) {
-  const item = projectsData.find((p) => p.id === id);
-  if (!item) return;
+      const item = projectsData.find((p) => p.id === id);
+      if (!item) return;
 
-  // ... kode lainnya ...
-
-  if (inputCoverUrl) inputCoverUrl.value = item.coverArt || ""; // Memasukkan link lama ke input form
-  
-  // ...
-}
+      if (item.isLimited) {
+        if (tabLimitedEdition) tabLimitedEdition.click();
+      } else {
+        if (tabMainProduct) tabMainProduct.click();
+      }
 
       if (editProjectId) editProjectId.value = item.id;
       if (inputTitle) inputTitle.value = item.title;
@@ -1537,8 +1515,7 @@
       if (inputSize && !item.isLimited) inputSize.value = item.size || "";
       if (inputReleaseDate) inputReleaseDate.value = item.releaseDate || new Date().toISOString().split('T')[0];
       if (inputUrl) inputUrl.value = item.downloadUrl;
-      if (inputCoverBase64) inputCoverBase64.value = item.coverArt || "";
-      if (inputImageFile) inputImageFile.value = "";
+      if (inputCoverUrl) inputCoverUrl.value = item.coverArt || "";
 
       if (formTitle) formTitle.textContent = item.isLimited ? "✏️ Edit Tools" : "✏️ Edit Produk Utama";
       if (btnCancelEdit) btnCancelEdit.classList.remove("hidden");
@@ -1557,7 +1534,7 @@
     function resetForm() {
       if (editProjectId) editProjectId.value = "";
       if (projectForm) projectForm.reset();
-      if (inputCoverBase64) inputCoverBase64.value = "";
+      if (inputCoverUrl) inputCoverUrl.value = "";
       if (inputReleaseDate) inputReleaseDate.value = new Date().toISOString().split('T')[0];
       if (formTitle) formTitle.textContent = activeAdminTab === "LIMITED" ? "➕ Tambah Tools" : "➕ Tambah Produk Utama";
       if (btnCancelEdit) btnCancelEdit.classList.add("hidden");
