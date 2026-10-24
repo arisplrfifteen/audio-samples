@@ -161,235 +161,232 @@
     </div>
   </header>
 
-  <!-- MAIN CONTAINER -->
-  <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-8 animate-page-entrance">
-    
-    
+  <!-- ADMIN DASHBOARD (POP-UP MODAL DI TENGAH) -->
+  <div id="adminSection" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div class="bg-zinc-950 border border-zinc-800 rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scrollbar">
+      
+      <!-- Modal Admin Header -->
+      <div class="flex items-center justify-between border-b border-zinc-800 pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <i data-lucide="settings" class="w-5 h-5 text-zinc-400"></i>
+            <span>Log In Admin</span>
+          </h2>
+          <p class="text-xs text-zinc-500 mt-0.5">arisplrfifteen | Official Store</p>
+        </div>
+        <button id="btnCloseAdmin" class="text-zinc-500 hover:text-white p-1 rounded-lg cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
       </div>
-    </section>
-<!-- ADMIN DASHBOARD (POP-UP MODAL DI TENGAH) -->
-    <div id="adminSection" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
-      <div class="bg-zinc-950 border border-zinc-800 rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scrollbar">
-        
-        <!-- Modal Admin Header -->
-        <div class="flex items-center justify-between border-b border-zinc-800 pb-4">
-          <div>
-            <h2 class="text-lg font-bold text-white flex items-center gap-2">
-              <i data-lucide="settings" class="w-5 h-5 text-zinc-400"></i>
-              <span>Log In Admin</span>
-            </h2>
-            <p class="text-xs text-zinc-500 mt-0.5">arisplrfifteen | Official Store</p>
-          </div>
-          <button id="btnCloseAdmin" class="text-zinc-500 hover:text-white p-1 rounded-lg cursor-pointer">
-            <i data-lucide="x" class="w-5 h-5"></i>
+
+      <!-- PASSWORD LOCK SCREEN -->
+      <div id="adminAuthBox" class="py-6 text-center space-y-4 max-w-sm mx-auto">
+        <p class="text-xs font-mono text-zinc-400">Masukkan Passcode Admin</p>
+        <div class="flex gap-2">
+          <input 
+            type="password" 
+            id="adminPassInput" 
+            placeholder="Masukkan Password" 
+            class="w-full px-4 py-2.5 bg-zinc-900 border border-zinc-800 rounded-xl text-sm font-mono text-center focus:outline-none focus:border-white text-white"
+          >
+          <button 
+            id="btnUnlockAdmin" 
+            class="px-5 py-2.5 bg-white text-black text-xs font-bold font-mono rounded-xl hover:bg-zinc-200 transition cursor-pointer"
+          >
+            BUKA
           </button>
         </div>
+        <p id="adminAuthMsg" class="text-xs text-red-400 hidden"></p>
+      </div>
 
-        <!-- PASSWORD LOCK SCREEN -->
-        <div id="adminAuthBox" class="py-6 text-center space-y-4 max-w-sm mx-auto">
-          <p class="text-xs font-mono text-zinc-400">Masukkan Passcode Admin</p>
-          <div class="flex gap-2">
-            <input 
-              type="password" 
-              id="adminPassInput" 
-              placeholder="Masukkan Password" 
-              class="w-full px-4 py-2.5 bg-zinc-900 border border-zinc-800 rounded-xl text-sm font-mono text-center focus:outline-none focus:border-white text-white"
-            >
+      <!-- ADMIN CONTROLS (UNLOCKED) -->
+      <div id="adminContent" class="hidden space-y-8">
+        
+        <!-- GITHUB SYNC CONFIGURATION -->
+        <div class="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-5 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+              <i data-lucide="git-branch" class="w-4 h-4"></i>
+              <span>GitHub Sync</span>
+            </h3>
+            <span class="text-[10px] font-mono px-2 py-0.5 bg-zinc-800 text-zinc-400 rounded-full">Data Sync</span>
+          </div>
+
+          <p class="text-xs text-zinc-400 leading-relaxed">
+            Data projek yang di-upload akan disimpan ke file <code class="text-zinc-200">projects.json</code> di repository GitHub milikmu.
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div>
+              <label class="block text-zinc-400 font-mono mb-1">GitHub Token</label>
+              <input type="password" id="ghToken" value="" placeholder="Masukkan Token ghp_..." class="w-full px-3 py-2 bg-black border border-zinc-800 rounded-xl font-mono text-white text-xs">
+            </div>
+            <div>
+              <label class="block text-zinc-400 font-mono mb-1">Repository</label>
+              <input type="text" id="ghRepo" value="arisplrfifteen/product-arisplrfifteen" class="w-full px-3 py-2 bg-black border border-zinc-800 rounded-xl font-mono text-white text-xs">
+            </div>
+            <div>
+              <label class="block text-zinc-400 font-mono mb-1">Branch</label>
+              <input type="text" id="ghBranch" value="main" class="w-full px-3 py-2 bg-black border border-zinc-800 rounded-xl font-mono text-white text-xs">
+            </div>
+            <div>
+              <label class="block text-zinc-400 font-mono mb-1">File Path</label>
+              <input type="text" id="ghPath" value="projects.json" class="w-full px-3 py-2 bg-black border border-zinc-800 rounded-xl font-mono text-white text-xs">
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pt-2">
             <button 
-              id="btnUnlockAdmin" 
-              class="px-5 py-2.5 bg-white text-black text-xs font-bold font-mono rounded-xl hover:bg-zinc-200 transition cursor-pointer"
+              id="btnSaveGhConfig" 
+              class="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-mono font-bold rounded-xl transition flex items-center gap-2 cursor-pointer"
             >
-              BUKA
+              <i data-lucide="save" class="w-3.5 h-3.5"></i>
+              <span>Simpan Config</span>
+            </button>
+            <button 
+              id="btnPushToGithub" 
+              class="px-5 py-2 bg-white hover:bg-zinc-200 text-black text-xs font-mono font-bold rounded-xl transition flex items-center gap-2 cursor-pointer"
+            >
+              <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i>
+              <span>Update ke GitHub</span>
             </button>
           </div>
-          <p id="adminAuthMsg" class="text-xs text-red-400 hidden"></p>
+          <p id="ghSyncStatus" class="text-xs font-mono mt-1 hidden"></p>
         </div>
 
-        <!-- ADMIN CONTROLS (UNLOCKED) -->
-        <div id="adminContent" class="hidden space-y-8">
-          
-          <!-- GITHUB SYNC CONFIGURATION -->
-          <div class="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-5 space-y-4">
-            <div class="flex items-center justify-between">
-              <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                <i data-lucide="git-branch" class="w-4 h-4"></i>
-                <span>GitHub Sync</span>
-              </h3>
-              <span class="text-[10px] font-mono px-2 py-0.5 bg-zinc-800 text-zinc-400 rounded-full">Data Sync</span>
-            </div>
-
-            <p class="text-xs text-zinc-400 leading-relaxed">
-              Data projek yang di-upload akan disimpan ke file <code class="text-zinc-200">projects.json</code> di repository GitHub milikmu.
-            </p>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-              <div>
-                <label class="block text-zinc-400 font-mono mb-1">GitHub Token</label>
-                <input type="password" id="ghToken" value="" placeholder="Masukkan Token ghp_..." class="w-full px-3 py-2 bg-black border border-zinc-800 rounded-xl font-mono text-white text-xs">
-              </div>
-              <div>
-                <label class="block text-zinc-400 font-mono mb-1">Repository</label>
-                <input type="text" id="ghRepo" value="arisplrfifteen/product-arisplrfifteen" class="w-full px-3 py-2 bg-black border border-zinc-800 rounded-xl font-mono text-white text-xs">
-              </div>
-              <div>
-                <label class="block text-zinc-400 font-mono mb-1">Branch</label>
-                <input type="text" id="ghBranch" value="main" class="w-full px-3 py-2 bg-black border border-zinc-800 rounded-xl font-mono text-white text-xs">
-              </div>
-              <div>
-                <label class="block text-zinc-400 font-mono mb-1">File Path</label>
-                <input type="text" id="ghPath" value="projects.json" class="w-full px-3 py-2 bg-black border border-zinc-800 rounded-xl font-mono text-white text-xs">
-              </div>
-            </div>
-
-            <div class="flex items-center justify-between pt-2">
-              <button 
-                id="btnSaveGhConfig" 
-                class="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-mono font-bold rounded-xl transition flex items-center gap-2 cursor-pointer"
-              >
-                <i data-lucide="save" class="w-3.5 h-3.5"></i>
-                <span>Simpan Config</span>
-              </button>
-              <button 
-                id="btnPushToGithub" 
-                class="px-5 py-2 bg-white hover:bg-zinc-200 text-black text-xs font-mono font-bold rounded-xl transition flex items-center gap-2 cursor-pointer"
-              >
-                <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i>
-                <span>Update ke GitHub</span>
-              </button>
-            </div>
-            <p id="ghSyncStatus" class="text-xs font-mono mt-1 hidden"></p>
+        <!-- FORM TAMBAH / EDIT PROJECT -->
+        <div class="border border-zinc-800 rounded-2xl p-5 space-y-4">
+          <div class="flex items-center gap-3 border-b border-zinc-800 pb-3">
+            <button id="tabMainProduct" type="button" class="px-4 py-2 rounded-xl text-xs font-mono font-bold bg-white text-black transition">
+              Produk Utama
+            </button>
+            <button id="tabLimitedEdition" type="button" class="px-4 py-2 rounded-xl text-xs font-mono font-bold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white transition">
+              Tools
+            </button>
           </div>
 
-          <!-- FORM TAMBAH / EDIT PROJECT -->
-          <div class="border border-zinc-800 rounded-2xl p-5 space-y-4">
-            <div class="flex items-center gap-3 border-b border-zinc-800 pb-3">
-              <button id="tabMainProduct" type="button" class="px-4 py-2 rounded-xl text-xs font-mono font-bold bg-white text-black transition">
-                Produk Utama
+          <h3 class="text-sm font-bold text-white flex items-center gap-2" id="formTitle">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>Tambah Produk Utama</span>
+          </h3>
+
+          <form id="projectForm" class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            <input type="hidden" id="editProjectId" value="">
+            <input type="hidden" id="inputProductType" value="MAIN">
+
+            <div>
+              <label class="block text-zinc-400 font-mono mb-1">Judul Produk *</label>
+              <input type="text" id="inputTitle" required placeholder="Masukkan Judul" class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white">
+            </div>
+
+            <div id="categoryWrapper">
+              <label class="block text-zinc-400 font-mono mb-1">Kategori Produk *</label>
+              <select id="inputCategory" class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white">
+                <option value="FL STUDIO">FLP</option>
+                <option value="FL MOBILE">FLM</option>
+              </select>
+            </div>
+
+            <div id="sizeWrapper">
+              <label class="block text-zinc-400 font-mono mb-1">Ukuran File *</label>
+              <input type="text" id="inputSize" value=" MB" class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white">
+            </div>
+
+            <div>
+              <label class="block text-zinc-400 font-mono mb-1">Tanggal/Bulan/Tahun *</label>
+              <input type="date" id="inputReleaseDate" required class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white font-mono focus:outline-none focus:border-zinc-500">
+            </div>
+    
+            <div>
+              <label class="block text-zinc-400 font-mono mb-1">Link Download *</label>
+              <input type="url" id="inputUrl" required placeholder="Masukkan Link Download" class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white">
+            </div>
+
+            <div class="sm:col-span-2">
+              <label class="block text-zinc-400 font-mono mb-1">
+                Upload Gambar Sampul <span id="coverAspectText" class="text-zinc-500">(Rasio 1:1)</span>
+              </label>
+              <input 
+                type="file" 
+                id="inputImageFile" 
+                accept="image/*" 
+                class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-zinc-300 font-mono file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-white file:text-black hover:file:bg-zinc-200 cursor-pointer"
+              >
+              <input type="hidden" id="inputCoverBase64" value="">
+            </div>
+
+            <div class="sm:col-span-2 flex justify-end gap-2 pt-2">
+              <button type="button" id="btnCancelEdit" class="hidden px-4 py-2 bg-zinc-800 text-zinc-300 text-xs font-mono rounded-xl hover:bg-zinc-700">
+                Batal Edit
               </button>
-              <button id="tabLimitedEdition" type="button" class="px-4 py-2 rounded-xl text-xs font-mono font-bold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white transition">
+              <button type="submit" class="px-6 py-2.5 bg-white text-black text-xs font-bold font-mono rounded-xl hover:bg-zinc-200 transition">
+                Upload Produk
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- LIST PROJECT DATA MANAGER TABLE WITH FILTER & SEARCH -->
+        <div class="border border-zinc-800 rounded-2xl overflow-hidden bg-zinc-950/60 shadow-inner">
+          <div class="px-5 py-4 bg-zinc-900/90 border-b border-zinc-800 space-y-3">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+              <h3 class="text-xs font-mono font-bold text-zinc-200 flex items-center gap-2">
+                <i data-lucide="list" class="w-4 h-4 text-zinc-400"></i>
+                <span>Daftar Produk (<span id="adminTableCount">0</span>)</span>
+              </h3>
+
+              <div class="relative w-full sm:w-64">
+                <input 
+                  type="text" 
+                  id="adminSearchInput" 
+                  placeholder="Cari judul..." 
+                  class="w-full pl-8 pr-3 py-1.5 bg-black border border-zinc-800 rounded-xl text-white text-xs font-mono focus:outline-none focus:border-zinc-500"
+                >
+                <i data-lucide="search" class="w-3.5 h-3.5 text-zinc-500 absolute left-2.5 top-2.5"></i>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-1.5 pt-1" id="adminCategoryFilter">
+              <button data-cat="ALL" class="admin-filter-btn px-3 py-1 rounded-lg text-[11px] font-mono font-bold bg-white text-black transition cursor-pointer">
+                Semua
+              </button>
+              <button data-cat="FLP" class="admin-filter-btn px-3 py-1 rounded-lg text-[11px] font-mono font-bold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white transition cursor-pointer">
+                FLP
+              </button>
+              <button data-cat="FLM" class="admin-filter-btn px-3 py-1 rounded-lg text-[11px] font-mono font-bold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white transition cursor-pointer">
+                FLM
+              </button>
+              <button data-cat="TOOLS" class="admin-filter-btn px-3 py-1 rounded-lg text-[11px] font-mono font-bold bg-zinc-900 text-amber-400 border border-amber-500/30 hover:bg-amber-500/10 transition cursor-pointer">
                 Tools
               </button>
             </div>
-
-            <h3 class="text-sm font-bold text-white flex items-center gap-2" id="formTitle">
-              <i data-lucide="plus-circle" class="w-4 h-4"></i>
-              <span>Tambah Produk Utama</span>
-            </h3>
-
-            <form id="projectForm" class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-              <input type="hidden" id="editProjectId" value="">
-              <input type="hidden" id="inputProductType" value="MAIN">
-
-              <div>
-                <label class="block text-zinc-400 font-mono mb-1">Judul Produk *</label>
-                <input type="text" id="inputTitle" required placeholder="Masukkan Judul" class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white">
-              </div>
-
-              <div id="categoryWrapper">
-                <label class="block text-zinc-400 font-mono mb-1">Kategori Produk *</label>
-                <select id="inputCategory" class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white">
-                  <option value="FL STUDIO">FLP</option>
-                  <option value="FL MOBILE">FLM</option>
-                </select>
-              </div>
-
-              <div id="sizeWrapper">
-                <label class="block text-zinc-400 font-mono mb-1">Ukuran File *</label>
-                <input type="text" id="inputSize" value=" MB" class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white">
-              </div>
-
-              <div>
-                <label class="block text-zinc-400 font-mono mb-1">Tanggal/Bulan/Tahun *</label>
-                <input type="date" id="inputReleaseDate" required class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white font-mono focus:outline-none focus:border-zinc-500">
-              </div>
-      
-              <div>
-                <label class="block text-zinc-400 font-mono mb-1">Link Download *</label>
-                <input type="url" id="inputUrl" required placeholder="Masukkan Link Download" class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white">
-              </div>
-
-              <div class="sm:col-span-2">
-                <label class="block text-zinc-400 font-mono mb-1">
-                  Upload Gambar Sampul <span id="coverAspectText" class="text-zinc-500">(Rasio 1:1)</span>
-                </label>
-                <input 
-                  type="file" 
-                  id="inputImageFile" 
-                  accept="image/*" 
-                  class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-zinc-300 font-mono file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-white file:text-black hover:file:bg-zinc-200 cursor-pointer"
-                >
-                <input type="hidden" id="inputCoverBase64" value="">
-              </div>
-
-              <div class="sm:col-span-2 flex justify-end gap-2 pt-2">
-                <button type="button" id="btnCancelEdit" class="hidden px-4 py-2 bg-zinc-800 text-zinc-300 text-xs font-mono rounded-xl hover:bg-zinc-700">
-                  Batal Edit
-                </button>
-                <button type="submit" class="px-6 py-2.5 bg-white text-black text-xs font-bold font-mono rounded-xl hover:bg-zinc-200 transition">
-                  Upload Produk
-                </button>
-              </div>
-            </form>
           </div>
-
-          <!-- LIST PROJECT DATA MANAGER TABLE WITH FILTER & SEARCH -->
-          <div class="border border-zinc-800 rounded-2xl overflow-hidden bg-zinc-950/60 shadow-inner">
-            <div class="px-5 py-4 bg-zinc-900/90 border-b border-zinc-800 space-y-3">
-              <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                <h3 class="text-xs font-mono font-bold text-zinc-200 flex items-center gap-2">
-                  <i data-lucide="list" class="w-4 h-4 text-zinc-400"></i>
-                  <span>Daftar Produk (<span id="adminTableCount">0</span>)</span>
-                </h3>
-
-                <div class="relative w-full sm:w-64">
-                  <input 
-                    type="text" 
-                    id="adminSearchInput" 
-                    placeholder="Cari judul..." 
-                    class="w-full pl-8 pr-3 py-1.5 bg-black border border-zinc-800 rounded-xl text-white text-xs font-mono focus:outline-none focus:border-zinc-500"
-                  >
-                  <i data-lucide="search" class="w-3.5 h-3.5 text-zinc-500 absolute left-2.5 top-2.5"></i>
-                </div>
-              </div>
-
-              <div class="flex flex-wrap items-center gap-1.5 pt-1" id="adminCategoryFilter">
-                <button data-cat="ALL" class="admin-filter-btn px-3 py-1 rounded-lg text-[11px] font-mono font-bold bg-white text-black transition cursor-pointer">
-                  Semua
-                </button>
-                <button data-cat="FLP" class="admin-filter-btn px-3 py-1 rounded-lg text-[11px] font-mono font-bold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white transition cursor-pointer">
-                  FLP
-                </button>
-                <button data-cat="FLM" class="admin-filter-btn px-3 py-1 rounded-lg text-[11px] font-mono font-bold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white transition cursor-pointer">
-                  FLM
-                </button>
-                <button data-cat="TOOLS" class="admin-filter-btn px-3 py-1 rounded-lg text-[11px] font-mono font-bold bg-zinc-900 text-amber-400 border border-amber-500/30 hover:bg-amber-500/10 transition cursor-pointer">
-                  Tools
-                </button>
-              </div>
-            </div>
-            
-            <div class="max-h-60 overflow-y-auto overflow-x-auto custom-scrollbar">
-              <table class="w-full text-left text-xs text-zinc-300 font-mono min-w-[500px]">
-                <thead class="bg-zinc-900/90 text-zinc-400 border-b border-zinc-800 sticky top-0 z-10">
-                  <tr>
-                    <th class="p-3 pl-4">Sampul</th>
-                    <th class="p-3">Judul</th>
-                    <th class="p-3">Kategori</th>
-                    <th class="p-3">Tanggal</th>
-                    <th class="p-3 text-right pr-4">Aksi</th>
-                  </tr>
-                </thead>
-                <tbody id="adminTableBody" class="divide-y divide-zinc-800/60">
-                  <!-- Rows injected via JS -->
-                </tbody>
-              </table>
-            </div>
+          
+          <div class="max-h-60 overflow-y-auto overflow-x-auto custom-scrollbar">
+            <table class="w-full text-left text-xs text-zinc-300 font-mono min-w-[500px]">
+              <thead class="bg-zinc-900/90 text-zinc-400 border-b border-zinc-800 sticky top-0 z-10">
+                <tr>
+                  <th class="p-3 pl-4">Sampul</th>
+                  <th class="p-3">Judul</th>
+                  <th class="p-3">Kategori</th>
+                  <th class="p-3">Tanggal</th>
+                  <th class="p-3 text-right pr-4">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="adminTableBody" class="divide-y divide-zinc-800/60">
+                <!-- Rows injected via JS -->
+              </tbody>
+            </table>
           </div>
-
         </div>
 
       </div>
+
     </div>
+  </div>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-8 animate-page-entrance">
     
     <!-- TOOLS -->
     <section id="limitedSection" class="mb-14">
@@ -959,7 +956,7 @@
         btnPushToGithub.addEventListener("click", pushDataToGitHub);
       }
 
-      // Search input di tabel admin (Diletakkan di dalam fungsi ini dengan benar)
+      // Search input di tabel admin
       const adminSearchInput = document.getElementById("adminSearchInput");
       if (adminSearchInput) {
         adminSearchInput.addEventListener("input", (e) => {
