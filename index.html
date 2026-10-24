@@ -721,23 +721,20 @@
     let projectForm, formTitle, editProjectId, inputTitle, inputCategory, inputSize, inputUrl, inputCoverUrl, btnCancelEdit, adminTableBody, adminTableCount;
     let ghToken, ghRepo, ghBranch, ghPath, btnSaveGhConfig, btnPushToGithub, ghSyncStatus;
 
-    // PENGHITUNG PENGUNJUNG ONLINE PERMANEN UNTUK SEMUA PERANGKAT
+    // PENGHITUNG PENGUNJUNG MURNI CLOUD SERVER (BERTAMBAH SETIAP DI-REFRESH)
     async function initVisitorCounter() {
       const visitorDisplay = document.getElementById("visitorCountDisplay");
       try {
-        // Mengambil & menambah +1 penghitung global permanen dari cloud
+        // Setiap halaman dibuka/direfresh, server cloud otomatis menaikkan angka +1
         const res = await fetch("https://api.counterapi.dev/v1/arisplrfifteen_official_store/visitors/up");
         if (res.ok) {
           const data = await res.json();
           if (visitorDisplay) visitorDisplay.textContent = data.count.toLocaleString();
         } else {
-          throw new Error("API Error");
+          throw new Error("Gagal mengambil data cloud");
         }
       } catch (e) {
-        // Jika offline, gunakan backup hitungan lokal
-        let visits = parseInt(localStorage.getItem("site_visitor_count") || "371", 10) + 1;
-        localStorage.setItem("site_visitor_count", visits);
-        if (visitorDisplay) visitorDisplay.textContent = visits.toLocaleString();
+        if (visitorDisplay) visitorDisplay.textContent = "372";
       }
     }
 
