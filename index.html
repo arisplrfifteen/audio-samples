@@ -742,27 +742,83 @@ async function initVisitorCounter() {
   }
 }
 
-    // FUNGSI MENCATAT UNDUHAN/KLIK KE FIREBASE REALTIME DATABASE
+    // 1. UPDATE FUNGSI trackAndOpenModal (Bebas Delay & Instant Response)
 function trackAndOpenModal(id) {
   const project = projectsData.find((p) => p.id === id);
   if (project) {
-    // 1. Tambah hitungan lokal untuk tampilan cepat di layar
+    // Tambah hitungan lokal agar UI langsung naik tanpa menunggu server
     project.clicks = (project.clicks || 0) + 1;
     saveToLocalStorage();
-    renderProducts();
+    
+    // Buka modal SEKARANG JUGA (tanpa delay/tunggu network)
+    openModal(project);
 
-    // 2. Simpan & update jumlah unduhan secara realtime ke Firebase
+    // Kirim update ke Firebase di background (tidak bikin macet UI)
     if (typeof database !== "undefined") {
       const clickRef = database.ref("downloads/" + id);
       clickRef.transaction((currentValue) => {
         return (currentValue || 0) + 1;
       });
     }
-
-    // 3. Buka modal detail produk
-    openModal(project);
   }
 }
+
+// 2. UPDATE FUNGSI initData (Menarik data unduhan permanen dari Firebase saat awal buka web)
+async function initData() {
+  initVisitorCounter(); 
+  initDomElements();
+  setupEventListeners();
+
+  let currentGhConfig = defaultGhConfig;
+  const savedGhConfig = localStorage.getItem("gh_config");
+  if (savedGhConfig) {
+    try {
+      currentGhConfig = { ...defaultGhConfig, ...JSON.parse(savedGhConfig) };
+    } catch (e) {}
+  }
+
+  if (ghToken) ghToken.value = currentGhConfig.token || "";
+  if (ghRepo) ghRepo.value = currentGhConfig.repo;
+  if (ghBranch) ghBranch.value = currentGhConfig.branch;
+  if (ghPath) ghPath.value = currentGhConfig.path;
+
+  try {
+    const res = await fetch(`./projects.json?t=${Date.now()}`);
+    if (res.ok) {
+      projectsData = await res.json();
+      saveToLocalStorage();
+    } else {
+      loadFromLocalStorage();
+    }
+  } catch (e) {
+    loadFromLocalStorage();
+  }
+
+  // AMBIL DATA TOTAL UNDUHAN PERMANEN DARI FIREBASE REALTIME DATABASE
+  if (typeof database !== "undefined") {
+    database.ref("downloads").once("value", (snapshot) => {
+      const downloadsData = snapshot.val();
+      if (downloadsData) {
+        projectsData.forEach((project) => {
+          if (downloadsData[project.id] !== undefined) {
+            project.clicks = downloadsData[project.id];
+          }
+        });
+      }
+      updateCounts();
+      renderProducts();
+    });
+  } else {
+    updateCounts();
+    renderProducts();
+  }
+
+  updateCartUI();
+  checkUrlQueryParam();
+
+  if (isAdminUnlocked) renderAdminTable();
+}
+
     
     function initDomElements() {
       productGrid = document.getElementById("productGrid");
