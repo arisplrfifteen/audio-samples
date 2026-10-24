@@ -742,49 +742,27 @@ async function initVisitorCounter() {
   }
 }
 
-    // FUNGSI MENCATAT UNDUHAN TANPA DELAY (BACKGROUND SYNC)
-    function trackAndOpenModal(id) {
-      const project = projectsData.find((p) => p.id === id);
-      if (project) {
-        project.clicks = (project.clicks || 0) + 1;
-        saveToLocalStorage();
-        renderProducts();
+    // FUNGSI MENCATAT UNDUHAN/KLIK KE FIREBASE REALTIME DATABASE
+function trackAndOpenModal(id) {
+  const project = projectsData.find((p) => p.id === id);
+  if (project) {
+    // 1. Tambah hitungan lokal untuk tampilan cepat di layar
+    project.clicks = (project.clicks || 0) + 1;
+    saveToLocalStorage();
+    renderProducts();
 
-        // Kirim update ke GitHub di background (tidak membuat UI delay/macet)
-        setTimeout(async () => {
-          const savedGhConfig = localStorage.getItem("gh_config");
-          if (savedGhConfig) {
-            try {
-              const config = JSON.parse(savedGhConfig);
-              if (config.token && config.repo) {
-                const filePath = config.path || "projects.json";
-                const url = `https://api.github.com/repos/${config.repo}/contents/${filePath}`;
-                const headers = {
-                  "Authorization": `Bearer ${config.token}`,
-                  "Accept": "application/vnd.github.v3+json"
-                };
-                const getRes = await fetch(url, { headers });
-                if (getRes.ok) {
-                  const getData = await getRes.json();
-                  const content = btoa(unescape(encodeURIComponent(JSON.stringify(projectsData, null, 2))));
-                  await fetch(url, {
-                    method: "PUT",
-                    headers: { ...headers, "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                      message: `Background update clicks for ${project.title}`,
-                      content: content,
-                      sha: getData.sha,
-                      branch: config.branch || "main"
-                    })
-                  });
-                }
-              }
-            } catch (e) {}
-          }
-        }, 100);
-      }
-      openModal(id);
+    // 2. Simpan & update jumlah unduhan secara realtime ke Firebase
+    if (typeof database !== "undefined") {
+      const clickRef = database.ref("downloads/" + id);
+      clickRef.transaction((currentValue) => {
+        return (currentValue || 0) + 1;
+      });
     }
+
+    // 3. Buka modal detail produk
+    openModal(project);
+  }
+}
     
     function initDomElements() {
       productGrid = document.getElementById("productGrid");
