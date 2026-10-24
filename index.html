@@ -262,12 +262,18 @@
 
         <!-- FORM TAMBAH / EDIT PROJECT -->
         <div class="border border-zinc-800 rounded-2xl p-5 space-y-4">
-          <div class="flex items-center gap-3 border-b border-zinc-800 pb-3">
+          <div class="flex flex-wrap items-center gap-2 border-b border-zinc-800 pb-3">
             <button id="tabMainProduct" type="button" class="px-4 py-2 rounded-xl text-xs font-mono font-bold bg-white text-black transition">
               Produk Utama
             </button>
             <button id="tabLimitedEdition" type="button" class="px-4 py-2 rounded-xl text-xs font-mono font-bold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white transition">
               Tools
+            </button>
+            <button id="tabPlugins" type="button" class="px-4 py-2 rounded-xl text-xs font-mono font-bold bg-zinc-900 text-purple-400 border border-zinc-800 hover:text-white transition">
+              Plugins
+            </button>
+            <button id="tabSamplePasaran" type="button" class="px-4 py-2 rounded-xl text-xs font-mono font-bold bg-zinc-900 text-emerald-400 border border-zinc-800 hover:text-white transition">
+              Sample Pasar-an
             </button>
           </div>
 
@@ -280,7 +286,7 @@
             <input type="hidden" id="editProjectId" value="">
             <input type="hidden" id="inputProductType" value="MAIN">
 
-            <div>
+            <div class="sm:col-span-2">
               <label class="block text-zinc-400 font-mono mb-1">Judul Produk *</label>
               <input type="text" id="inputTitle" required placeholder="Masukkan Judul" class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white">
             </div>
@@ -298,15 +304,19 @@
               <input type="text" id="inputSize" value=" MB" class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white">
             </div>
     
-            <div>
+            <div class="sm:col-span-2" id="urlWrapper">
               <label class="block text-zinc-400 font-mono mb-1">Link Download *</label>
               <input type="url" id="inputUrl" required placeholder="Masukkan Link Download" class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white">
             </div>
 
-            <div class="sm:col-span-2">
+            <div id="audioWrapper" class="hidden sm:col-span-2">
+              <label class="block text-emerald-400 font-mono mb-1">URL Audio Preview (.mp3 / .wav direct link) *</label>
+              <input type="url" id="inputAudioUrl" placeholder="https://domain.com/sample-audio.mp3" class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white">
+            </div>
+
+            <div class="sm:col-span-2" id="coverWrapper">
               <label class="block text-zinc-400 font-mono mb-1">URL Gambar Sampul (Link Direct Image) *</label>
-              <input 
-                type="url" id="inputCoverUrl" value="https://lh3.googleusercontent.com/d/" class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white">
+              <input type="url" id="inputCoverUrl" value="https://lh3.googleusercontent.com/d/" class="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white">
             </div>
 
             <div class="sm:col-span-2 flex justify-end gap-2 pt-2">
@@ -353,6 +363,12 @@
               <button data-cat="TOOLS" class="admin-filter-btn px-3 py-1 rounded-lg text-[11px] font-mono font-bold bg-zinc-900 text-amber-400 border border-amber-500/30 hover:bg-amber-500/10 transition cursor-pointer">
                 Tools
               </button>
+              <button data-cat="PLUGINS" class="admin-filter-btn px-3 py-1 rounded-lg text-[11px] font-mono font-bold bg-zinc-900 text-purple-400 border border-purple-500/30 hover:bg-purple-500/10 transition cursor-pointer">
+                Plugins
+              </button>
+              <button data-cat="SAMPLE" class="admin-filter-btn px-3 py-1 rounded-lg text-[11px] font-mono font-bold bg-zinc-900 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/10 transition cursor-pointer">
+                Sample Pasar-an
+              </button>
             </div>
           </div>
           
@@ -381,7 +397,7 @@
   <!-- MAIN CONTAINER -->
   <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-8 animate-page-entrance">
     
-    <!-- TOOLS (HORIZONTAL SCROLLABLE) -->
+    <!-- TOOLS SECTION -->
     <section id="limitedSection" class="mb-14">
       <div class="flex items-center justify-between mb-4 border-b border-zinc-800/80 pb-3">
         <div class="flex items-center gap-2.5">
@@ -391,18 +407,46 @@
         <span class="text-xs font-mono text-zinc-500" id="limitedCountDisplay">0 Item</span>
       </div>
 
-      <div id="limitedGrid" class="flex gap-4 overflow-x-auto pb-4 pt-1 snap-x snap-mandatory custom-scrollbar">
-        <!-- Dynamic Limited Edition Cards -->
-      </div>
-
+      <div id="limitedGrid" class="flex gap-4 overflow-x-auto pb-4 pt-1 snap-x snap-mandatory custom-scrollbar"></div>
       <div id="limitedEmptyState" class="hidden text-center py-8 bg-zinc-950/40 border border-zinc-900 rounded-2xl">
         <p class="text-xs font-mono text-zinc-600">Tidak Ada.</p>
       </div>
     </section>
 
+    <!-- PLUGINS SECTION -->
+    <section id="pluginsSection" class="mb-14">
+      <div class="flex items-center justify-between mb-4 border-b border-zinc-800/80 pb-3">
+        <div class="flex items-center gap-2.5">
+          <span class="px-2.5 py-1 bg-purple-500/10 text-purple-400 border border-purple-500/30 text-[10px] font-mono font-extrabold rounded-full tracking-wider uppercase">Plugins</span>
+          <h2 class="text-base sm:text-lg font-extrabold text-white tracking-tight">VST & FX Plugins</h2>
+        </div>
+        <span class="text-xs font-mono text-zinc-500" id="pluginsCountDisplay">0 Item</span>
+      </div>
+
+      <div id="pluginsGrid" class="flex gap-4 overflow-x-auto pb-4 pt-1 snap-x snap-mandatory custom-scrollbar"></div>
+      <div id="pluginsEmptyState" class="hidden text-center py-8 bg-zinc-950/40 border border-zinc-900 rounded-2xl">
+        <p class="text-xs font-mono text-zinc-600">Belum ada plugin tersedia.</p>
+      </div>
+    </section>
+
+    <!-- SAMPLE PASAR-AN SECTION -->
+    <section id="samplePasaranSection" class="mb-14">
+      <div class="flex items-center justify-between mb-4 border-b border-zinc-800/80 pb-3">
+        <div class="flex items-center gap-2.5">
+          <span class="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[10px] font-mono font-extrabold rounded-full tracking-wider uppercase">Audio Sample</span>
+          <h2 class="text-base sm:text-lg font-extrabold text-white tracking-tight">SAMPLE PASAR-AN</h2>
+        </div>
+        <span class="text-xs font-mono text-zinc-500" id="sampleCountDisplay">0 Item</span>
+      </div>
+
+      <div id="sampleGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      <div id="sampleEmptyState" class="hidden text-center py-8 bg-zinc-950/40 border border-zinc-900 rounded-2xl">
+        <p class="text-xs font-mono text-zinc-600">Belum ada sample audio yang ditambahkan.</p>
+      </div>
+    </section>
+
     <!-- JUDUL DAN SEARCH -->
     <section class="mb-10 space-y-6">
-      
       <div class="flex items-center justify-between border-b border-zinc-800/80 pb-3">
         <h2 class="text-lg sm:text-xl font-extrabold text-white tracking-tight">Free Downloads</h2>
       </div>
@@ -447,7 +491,6 @@
           FLM (<span id="countFLM">0</span>)
         </button>
       </div>
-
     </section>
 
     <!-- PRODUCT CATALOG GRID -->
@@ -456,9 +499,7 @@
         <h2 class="text-lg sm:text-xl font-extrabold text-white tracking-tight">PRODUK UTAMA</h2>
       </div>
 
-      <div id="productGrid" class="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-8">
-        <!-- Dynamic Cards -->
-      </div>
+      <div id="productGrid" class="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-8"></div>
 
       <!-- EMPTY STATE -->
       <div id="emptyState" class="hidden text-center py-16 px-4">
@@ -469,7 +510,6 @@
         <p class="text-xs text-zinc-500 max-w-sm mx-auto">arisplrfifteen Official Store</p>
       </div>
     </section>
-
   </main>
 
   <!-- PRODUCT DETAIL MODAL -->
@@ -484,7 +524,6 @@
           <i data-lucide="arrow-left" class="w-4 h-4"></i>
           <span>BERANDA</span>
         </button>
-
         <span class="text-[11px] font-mono text-zinc-500">DETAIL PRODUK</span>
       </div>
 
@@ -506,6 +545,14 @@
             <span class="text-zinc-600">•</span>
             <span id="modalType" class="text-zinc-500"></span>
           </p>
+        </div>
+
+        <!-- AUDIO PLAYER UNTUK MODAL -->
+        <div id="modalAudioSection" class="hidden bg-zinc-900 border border-zinc-800 rounded-2xl p-3">
+          <p class="text-[11px] font-mono text-emerald-400 mb-2 flex items-center gap-1">
+            <i data-lucide="music" class="w-3.5 h-3.5"></i> Audio Preview
+          </p>
+          <audio id="modalAudioPlayer" controls class="w-full h-8 rounded-lg outline-none"></audio>
         </div>
       </div>
 
@@ -622,6 +669,21 @@
     let adminSearchQuery = "";
     let adminCurrentCat = "ALL";
 
+    // DEFAULT ICON WAVE AUDIO SVG
+    const defaultWaveAudioSvg = "data:image/svg+xml;utf8," + encodeURIComponent(`
+      <svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+        <rect width="400" height="400" fill="#09090b"/>
+        <circle cx="200" cy="200" r="140" fill="#10b981" fill-opacity="0.08"/>
+        <!-- Audio Waves Icon -->
+        <g transform="translate(130, 150) scale(2.5)" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 18V5l12-2v13"></path>
+          <circle cx="6" cy="18" r="3"></circle>
+          <circle cx="18" cy="16" r="3"></circle>
+        </g>
+        <text x="50%" y="72%" font-family="monospace" font-size="14" fill="#10b981" text-anchor="middle" font-weight="bold">SAMPLE PASAR-AN</text>
+      </svg>
+    `);
+
     const fallbackImageSvg = "data:image/svg+xml;utf8," + encodeURIComponent(`
       <svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
         <rect width="400" height="400" fill="#111111"/>
@@ -633,16 +695,18 @@
     const fallbackImageRectSvg = "data:image/svg+xml;utf8," + encodeURIComponent(`
       <svg xmlns="http://www.w3.org/2000/svg" width="600" height="338" viewBox="0 0 600 338">
         <rect width="600" height="338" fill="#111111"/>
-        <text x="50%" y="48%" font-family="monospace" font-size="22" fill="#666666" text-anchor="middle" dominant-baseline="middle">TOOLS</text>
+        <text x="50%" y="48%" font-family="monospace" font-size="22" fill="#666666" text-anchor="middle" dominant-baseline="middle">TOOLS / PLUGINS</text>
         <text x="50%" y="58%" font-family="monospace" font-size="12" fill="#444444" text-anchor="middle" dominant-baseline="middle">ARISPLRFIFTEEN</text>
       </svg>
     `);
 
     let productGrid, emptyState, searchInput, clearSearch, categoryButtons, totalCountDisplay;
     let limitedGrid, limitedEmptyState, limitedCountDisplay;
-    let tabMainProduct, tabLimitedEdition, categoryWrapper, sizeWrapper, coverAspectText, inputProductType;
+    let pluginsGrid, pluginsEmptyState, pluginsCountDisplay;
+    let sampleGrid, sampleEmptyState, sampleCountDisplay;
+    let tabMainProduct, tabLimitedEdition, tabPlugins, tabSamplePasaran, categoryWrapper, sizeWrapper, audioWrapper, coverWrapper, inputProductType, inputAudioUrl;
     let btnOpenCart, btnCloseCart, cartDrawer, cartBadge, cartItemsList, cartEmptyState, cartItemCount, cartTotalSummary, cartTotalSize, btnClearCart, btnModalAddToCart;
-    let productModal, btnModalClose, modalImg, modalCategory, modalSize, modalTitle, modalCategoryLabel, modalType, modalDownloadLink, btnShareLink, shareBtnText, toast, toastMsg;
+    let productModal, btnModalClose, modalImg, modalCategory, modalSize, modalTitle, modalCategoryLabel, modalType, modalDownloadLink, btnShareLink, shareBtnText, toast, toastMsg, modalAudioSection, modalAudioPlayer;
     let btnToggleAdmin, adminSection, btnCloseAdmin, adminAuthBox, adminPassInput, btnUnlockAdmin, adminAuthMsg, adminContent;
     let projectForm, formTitle, editProjectId, inputTitle, inputCategory, inputSize, inputUrl, inputCoverUrl, btnCancelEdit, adminTableBody, adminTableCount;
     let ghToken, ghRepo, ghBranch, ghPath, btnSaveGhConfig, btnPushToGithub, ghSyncStatus;
@@ -659,12 +723,25 @@
       limitedEmptyState = document.getElementById("limitedEmptyState");
       limitedCountDisplay = document.getElementById("limitedCountDisplay");
 
+      pluginsGrid = document.getElementById("pluginsGrid");
+      pluginsEmptyState = document.getElementById("pluginsEmptyState");
+      pluginsCountDisplay = document.getElementById("pluginsCountDisplay");
+
+      sampleGrid = document.getElementById("sampleGrid");
+      sampleEmptyState = document.getElementById("sampleEmptyState");
+      sampleCountDisplay = document.getElementById("sampleCountDisplay");
+
       tabMainProduct = document.getElementById("tabMainProduct");
       tabLimitedEdition = document.getElementById("tabLimitedEdition");
+      tabPlugins = document.getElementById("tabPlugins");
+      tabSamplePasaran = document.getElementById("tabSamplePasaran");
+      
       categoryWrapper = document.getElementById("categoryWrapper");
       sizeWrapper = document.getElementById("sizeWrapper");
-      coverAspectText = document.getElementById("coverAspectText");
+      audioWrapper = document.getElementById("audioWrapper");
+      coverWrapper = document.getElementById("coverWrapper");
       inputProductType = document.getElementById("inputProductType");
+      inputAudioUrl = document.getElementById("inputAudioUrl");
 
       btnOpenCart = document.getElementById("btnOpenCart");
       btnCloseCart = document.getElementById("btnCloseCart");
@@ -691,6 +768,9 @@
       shareBtnText = document.getElementById("shareBtnText");
       toast = document.getElementById("toast");
       toastMsg = document.getElementById("toastMsg");
+
+      modalAudioSection = document.getElementById("modalAudioSection");
+      modalAudioPlayer = document.getElementById("modalAudioPlayer");
 
       btnToggleAdmin = document.getElementById("btnToggleAdmin");
       adminSection = document.getElementById("adminSection");
@@ -723,13 +803,14 @@
     }
 
     function setupEventListeners() {
-      if (tabMainProduct && tabLimitedEdition) {
+      if (tabMainProduct && tabLimitedEdition && tabPlugins && tabSamplePasaran) {
         tabMainProduct.addEventListener("click", () => {
           activeAdminTab = "MAIN";
-          tabMainProduct.className = "px-4 py-2 rounded-xl text-xs font-mono font-bold bg-white text-black transition";
-          tabLimitedEdition.className = "px-4 py-2 rounded-xl text-xs font-mono font-bold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white transition";
+          updateTabButtonsUI(tabMainProduct);
           if (categoryWrapper) categoryWrapper.classList.remove("hidden");
           if (sizeWrapper) sizeWrapper.classList.remove("hidden");
+          if (audioWrapper) audioWrapper.classList.add("hidden");
+          if (coverWrapper) coverWrapper.classList.remove("hidden");
           if (inputSize) inputSize.required = true;
           if (inputProductType) inputProductType.value = "MAIN";
           resetForm();
@@ -737,12 +818,37 @@
 
         tabLimitedEdition.addEventListener("click", () => {
           activeAdminTab = "LIMITED";
-          tabLimitedEdition.className = "px-4 py-2 rounded-xl text-xs font-mono font-bold bg-white text-black transition";
-          tabMainProduct.className = "px-4 py-2 rounded-xl text-xs font-mono font-bold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white transition";
+          updateTabButtonsUI(tabLimitedEdition);
           if (categoryWrapper) categoryWrapper.classList.add("hidden");
           if (sizeWrapper) sizeWrapper.classList.add("hidden");
+          if (audioWrapper) audioWrapper.classList.add("hidden");
+          if (coverWrapper) coverWrapper.classList.remove("hidden");
           if (inputSize) inputSize.required = false;
           if (inputProductType) inputProductType.value = "LIMITED";
+          resetForm();
+        });
+
+        tabPlugins.addEventListener("click", () => {
+          activeAdminTab = "PLUGINS";
+          updateTabButtonsUI(tabPlugins);
+          if (categoryWrapper) categoryWrapper.classList.add("hidden");
+          if (sizeWrapper) sizeWrapper.classList.add("hidden");
+          if (audioWrapper) audioWrapper.classList.add("hidden");
+          if (coverWrapper) coverWrapper.classList.remove("hidden");
+          if (inputSize) inputSize.required = false;
+          if (inputProductType) inputProductType.value = "PLUGINS";
+          resetForm();
+        });
+
+        tabSamplePasaran.addEventListener("click", () => {
+          activeAdminTab = "SAMPLE";
+          updateTabButtonsUI(tabSamplePasaran);
+          if (categoryWrapper) categoryWrapper.classList.add("hidden");
+          if (sizeWrapper) sizeWrapper.classList.add("hidden"); // Hilangkan ukuran file sesuai permintaan
+          if (audioWrapper) audioWrapper.classList.remove("hidden");
+          if (coverWrapper) coverWrapper.classList.add("hidden"); // Hilangkan upload sampul karena otomatis pakai icon wave audio
+          if (inputSize) inputSize.required = false;
+          if (inputProductType) inputProductType.value = "SAMPLE";
           resetForm();
         });
       }
@@ -750,9 +856,7 @@
       if (searchInput) {
         searchInput.addEventListener("input", (e) => {
           searchQuery = e.target.value;
-          if (clearSearch) {
-            clearSearch.classList.toggle("hidden", searchQuery === "");
-          }
+          if (clearSearch) clearSearch.classList.toggle("hidden", searchQuery === "");
           renderProducts();
         });
       }
@@ -839,9 +943,7 @@
 
       if (btnModalAddToCart) {
         btnModalAddToCart.addEventListener("click", () => {
-          if (activeModalProject) {
-            addToCart(activeModalProject.id);
-          }
+          if (activeModalProject) addToCart(activeModalProject.id);
         });
       }
 
@@ -858,12 +960,15 @@
         projectForm.addEventListener("submit", (e) => {
           e.preventDefault();
           const id = editProjectId ? editProjectId.value : "";
-          const isLimited = activeAdminTab === "LIMITED";
+          const type = activeAdminTab; // MAIN, LIMITED, PLUGINS, SAMPLE
           const title = inputTitle ? inputTitle.value.trim() : "";
-          const category = isLimited ? "LIMITED" : (inputCategory ? inputCategory.value : "FL STUDIO");
-          const size = isLimited ? "" : (inputSize ? inputSize.value.trim() : "");
+          const category = type === "MAIN" ? (inputCategory ? inputCategory.value : "FL STUDIO") : type;
+          const size = (type === "PLUGINS" || type === "LIMITED" || type === "SAMPLE") ? "" : (inputSize ? inputSize.value.trim() : "");
           const downloadUrl = inputUrl ? inputUrl.value.trim() : "";
-          const coverArt = inputCoverUrl ? inputCoverUrl.value.trim() : "";
+          const audioUrl = type === "SAMPLE" ? (inputAudioUrl ? inputAudioUrl.value.trim() : "") : "";
+          
+          // Jika sample pasaran, gunakan default wave audio icon otomatis sebagai sampul
+          const coverArt = type === "SAMPLE" ? defaultWaveAudioSvg : (inputCoverUrl ? inputCoverUrl.value.trim() : "");
 
           if (id) {
             const index = projectsData.findIndex((p) => p.id === id);
@@ -874,7 +979,10 @@
                 category,
                 size,
                 downloadUrl,
-                isLimited,
+                audioUrl,
+                isLimited: type === "LIMITED",
+                isPlugin: type === "PLUGINS",
+                isSample: type === "SAMPLE",
                 coverArt: coverArt || projectsData[index].coverArt,
               };
             }
@@ -885,7 +993,10 @@
               category,
               size,
               downloadUrl,
-              isLimited,
+              audioUrl,
+              isLimited: type === "LIMITED",
+              isPlugin: type === "PLUGINS",
+              isSample: type === "SAMPLE",
               coverArt,
             };
             projectsData.unshift(newProj);
@@ -899,9 +1010,7 @@
         });
       }
 
-      if (btnCancelEdit) {
-        btnCancelEdit.addEventListener("click", resetForm);
-      }
+      if (btnCancelEdit) btnCancelEdit.addEventListener("click", resetForm);
 
       if (btnSaveGhConfig) {
         btnSaveGhConfig.addEventListener("click", () => {
@@ -916,9 +1025,7 @@
         });
       }
 
-      if (btnPushToGithub) {
-        btnPushToGithub.addEventListener("click", pushDataToGitHub);
-      }
+      if (btnPushToGithub) btnPushToGithub.addEventListener("click", pushDataToGitHub);
 
       const adminSearchInput = document.getElementById("adminSearchInput");
       if (adminSearchInput) {
@@ -932,20 +1039,29 @@
       adminFilterBtns.forEach((btn) => {
         btn.addEventListener("click", () => {
           adminFilterBtns.forEach((b) => {
-            b.classList.remove("bg-white", "text-black", "bg-amber-400");
+            b.classList.remove("bg-white", "text-black", "bg-amber-400", "bg-purple-400", "bg-emerald-400");
             b.classList.add("bg-zinc-900", "text-zinc-400", "border", "border-zinc-800");
           });
           btn.classList.remove("bg-zinc-900", "text-zinc-400", "border", "border-zinc-800");
-          if (btn.getAttribute("data-cat") === "TOOLS") {
-            btn.classList.add("bg-amber-400", "text-black");
-          } else {
-            btn.classList.add("bg-white", "text-black");
-          }
+          
+          const cat = btn.getAttribute("data-cat");
+          if (cat === "TOOLS") btn.classList.add("bg-amber-400", "text-black");
+          else if (cat === "PLUGINS") btn.classList.add("bg-purple-400", "text-black");
+          else if (cat === "SAMPLE") btn.classList.add("bg-emerald-400", "text-black");
+          else btn.classList.add("bg-white", "text-black");
 
-          adminCurrentCat = btn.getAttribute("data-cat");
+          adminCurrentCat = cat;
           renderAdminTable();
         });
       });
+    }
+
+    function updateTabButtonsUI(activeTab) {
+      [tabMainProduct, tabLimitedEdition, tabPlugins, tabSamplePasaran].forEach(tab => {
+        if (!tab) return;
+        tab.className = "px-4 py-2 rounded-xl text-xs font-mono font-bold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white transition";
+      });
+      activeTab.className = "px-4 py-2 rounded-xl text-xs font-mono font-bold bg-white text-black transition";
     }
 
     function calculateTotalCartSize() {
@@ -975,7 +1091,7 @@
 
     function addToCart(id) {
       const project = projectsData.find((p) => p.id === id);
-      if (!project || project.isLimited) return;
+      if (!project) return;
 
       if (!cartData.some((item) => item.id === id)) {
         cartData.push(project);
@@ -1045,10 +1161,7 @@
 
         const putRes = await fetch(url, {
           method: "PUT",
-          headers: {
-            ...headers,
-            "Content-Type": "application/json",
-          },
+          headers: { ...headers, "Content-Type": "application/json" },
           body: JSON.stringify(bodyData),
         });
 
@@ -1116,9 +1229,7 @@
       updateCartUI();
       checkUrlQueryParam();
 
-      if (isAdminUnlocked) {
-        renderAdminTable();
-      }
+      if (isAdminUnlocked) renderAdminTable();
     }
 
     function loadFromLocalStorage() {
@@ -1152,8 +1263,8 @@
 
       cartItemsList.innerHTML = "";
       cartData.forEach((item) => {
-        const imageSrc = item.coverArt ? item.coverArt : fallbackImageSvg;
-        const displayCategory = item.category === "FL STUDIO" ? "FLP" : item.category === "FL MOBILE" ? "FLM" : item.category;
+        const imageSrc = item.coverArt ? item.coverArt : (item.isSample ? defaultWaveAudioSvg : fallbackImageSvg);
+        const displayCategory = item.isLimited ? "Tools" : item.isPlugin ? "Plugins" : item.isSample ? "Sample" : (item.category === "FL STUDIO" ? "FLP" : item.category === "FL MOBILE" ? "FLM" : item.category);
 
         const cartItemEl = document.createElement("div");
         cartItemEl.className = "flex items-center justify-between p-3 bg-zinc-900/90 border border-zinc-800/80 rounded-2xl gap-3";
@@ -1162,7 +1273,7 @@
             <img src="${imageSrc}" class="w-12 h-12 rounded-xl object-cover bg-zinc-800 border border-zinc-800 flex-shrink-0" onerror="this.src='${fallbackImageSvg}'">
             <div class="truncate">
               <h4 class="text-xs font-bold text-white truncate">${item.title}</h4>
-              <p class="text-[10px] text-zinc-400 font-mono">${displayCategory} • ${item.size}</p>
+              <p class="text-[10px] text-zinc-400 font-mono">${displayCategory} ${item.size ? '• ' + item.size : ''}</p>
             </div>
           </div>
           <div class="flex items-center gap-2 flex-shrink-0">
@@ -1181,8 +1292,10 @@
     }
 
     function updateCounts() {
-      const mainProducts = projectsData.filter((p) => !p.isLimited);
+      const mainProducts = projectsData.filter((p) => !p.isLimited && !p.isPlugin && !p.isSample);
       const limitedProducts = projectsData.filter((p) => p.isLimited);
+      const pluginProducts = projectsData.filter((p) => p.isPlugin);
+      const sampleProducts = projectsData.filter((p) => p.isSample);
 
       const flpCount = mainProducts.filter((p) => p.category === "FLP" || p.category === "FL STUDIO").length;
       const flmCount = mainProducts.filter((p) => p.category === "FLM" || p.category === "FL MOBILE").length;
@@ -1194,8 +1307,10 @@
       if (countAllEl) countAllEl.textContent = mainProducts.length;
       if (countFLPEl) countFLPEl.textContent = flpCount;
       if (countFLMEl) countFLMEl.textContent = flmCount;
-      if (totalCountDisplay) totalCountDisplay.textContent = `${mainProducts.length} Produk`;
+      if (totalCountDisplay) totalCountDisplay.textContent = `${projectsData.length} Produk`;
       if (limitedCountDisplay) limitedCountDisplay.textContent = `${limitedProducts.length} Item`;
+      if (pluginsCountDisplay) pluginsCountDisplay.textContent = `${pluginProducts.length} Item`;
+      if (sampleCountDisplay) sampleCountDisplay.textContent = `${sampleProducts.length} Item`;
       if (adminTableCount) adminTableCount.textContent = projectsData.length;
     }
 
@@ -1206,54 +1321,39 @@
     }
 
     function renderProducts() {
-      if (!productGrid || !emptyState || !limitedGrid || !limitedEmptyState) return;
+      if (!productGrid || !emptyState || !limitedGrid || !limitedEmptyState || !pluginsGrid || !pluginsEmptyState || !sampleGrid || !sampleEmptyState) return;
 
+      // 1. RENDER TOOLS
       const limitedItems = projectsData.filter((p) => p.isLimited);
       limitedGrid.innerHTML = "";
-
       if (limitedItems.length === 0) {
         limitedEmptyState.classList.remove("hidden");
       } else {
         limitedEmptyState.classList.add("hidden");
         limitedItems.forEach((project) => {
           const imageSrc = project.coverArt ? project.coverArt : fallbackImageRectSvg;
-
           const cardHtml = `
             <div class="product-card animate-light-sweep bg-zinc-950/90 border border-amber-500/20 hover:border-amber-500/50 rounded-2xl overflow-hidden flex flex-col justify-between p-3.5 group flex-shrink-0 w-[260px] sm:w-[280px] snap-start">
               <div>
                 <div class="relative w-full aspect-video rounded-xl overflow-hidden mb-3 bg-zinc-900 border border-zinc-800">
-                  <img 
-                    src="${imageSrc}" 
-                    alt="${project.title}" 
-                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
-                    onerror="this.src='${fallbackImageRectSvg}'"
-                  >
+                  <img src="${imageSrc}" alt="${project.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" onerror="this.src='${fallbackImageRectSvg}'">
                   <div class="absolute top-2 left-2">
-                    <span class="px-2 py-0.5 bg-amber-500/90 backdrop-blur-md text-[9px] font-mono font-extrabold tracking-wider text-black rounded-full shadow-lg">
-                      Tools
-                    </span>
+                    <span class="px-2 py-0.5 bg-amber-500/90 backdrop-blur-md text-[9px] font-mono font-extrabold tracking-wider text-black rounded-full shadow-lg">Tools</span>
                   </div>
                 </div>
-
                 <div class="px-0.5 mb-3">
-                  <h3 class="font-extrabold text-xs sm:text-sm text-white group-hover:text-amber-300 transition-colors duration-200 line-clamp-1 mb-0.5">
-                    ${project.title}
-                  </h3>
+                  <h3 class="font-extrabold text-xs sm:text-sm text-white group-hover:text-amber-300 transition-colors duration-200 line-clamp-1 mb-0.5">${project.title}</h3>
                   <p class="text-[11px] text-zinc-500 font-mono">Tools</p>
                 </div>
               </div>
-
-              <div>
-                <a 
-                  href="${project.downloadUrl}" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  class="w-full py-2 px-3 bg-amber-400 hover:bg-amber-300 text-black font-extrabold text-[11px] font-mono tracking-wider rounded-xl transition duration-200 flex items-center justify-center gap-1.5 shadow-md shadow-amber-500/10 active:scale-95"
-                >
+              <div class="flex gap-1.5">
+                <a href="${project.downloadUrl}" target="_blank" rel="noopener noreferrer" class="flex-1 py-2 px-3 bg-amber-400 hover:bg-amber-300 text-black font-extrabold text-[11px] font-mono tracking-wider rounded-xl transition duration-200 flex items-center justify-center gap-1.5 shadow-md active:scale-95">
                   <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
                   <span>LINK</span>
                 </a>
+                <button onclick="addToCart('${project.id}')" class="p-2 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-zinc-300 rounded-xl cursor-pointer">
+                  <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
+                </button>
               </div>
             </div>
           `;
@@ -1261,19 +1361,107 @@
         });
       }
 
-      const mainProducts = projectsData.filter((p) => !p.isLimited);
+      // 2. RENDER PLUGINS
+      const pluginItems = projectsData.filter((p) => p.isPlugin);
+      pluginsGrid.innerHTML = "";
+      if (pluginItems.length === 0) {
+        pluginsEmptyState.classList.remove("hidden");
+      } else {
+        pluginsEmptyState.classList.add("hidden");
+        pluginItems.forEach((project) => {
+          const imageSrc = project.coverArt ? project.coverArt : fallbackImageRectSvg;
+          const cardHtml = `
+            <div class="product-card animate-light-sweep bg-zinc-950/90 border border-purple-500/20 hover:border-purple-500/50 rounded-2xl overflow-hidden flex flex-col justify-between p-3.5 group flex-shrink-0 w-[260px] sm:w-[280px] snap-start">
+              <div>
+                <div class="relative w-full aspect-video rounded-xl overflow-hidden mb-3 bg-zinc-900 border border-zinc-800">
+                  <img src="${imageSrc}" alt="${project.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" onerror="this.src='${fallbackImageRectSvg}'">
+                  <div class="absolute top-2 left-2">
+                    <span class="px-2 py-0.5 bg-purple-500/90 backdrop-blur-md text-[9px] font-mono font-extrabold tracking-wider text-white rounded-full shadow-lg">Plugin</span>
+                  </div>
+                </div>
+                <div class="px-0.5 mb-3">
+                  <h3 class="font-extrabold text-xs sm:text-sm text-white group-hover:text-purple-300 transition-colors duration-200 line-clamp-1 mb-0.5">${project.title}</h3>
+                  <p class="text-[11px] text-zinc-500 font-mono">Direct Link Only</p>
+                </div>
+              </div>
+              <div class="flex gap-1.5">
+                <a href="${project.downloadUrl}" target="_blank" rel="noopener noreferrer" class="flex-1 py-2 px-3 bg-purple-500 hover:bg-purple-400 text-white font-extrabold text-[11px] font-mono tracking-wider rounded-xl transition duration-200 flex items-center justify-center gap-1.5 shadow-md active:scale-95">
+                  <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                  <span>LINK</span>
+                </a>
+                <button onclick="addToCart('${project.id}')" class="p-2 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-zinc-300 rounded-xl cursor-pointer">
+                  <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            </div>
+          `;
+          pluginsGrid.insertAdjacentHTML("beforeend", cardHtml);
+        });
+      }
 
+      // 3. RENDER SAMPLE PASAR-AN (DENGAN AUDIO PLAYER, DOWNLOAD, BAGIKAN, CART, DAN DEFAULT WAVE AUDIO ICON)
+      const sampleItems = projectsData.filter((p) => p.isSample);
+      sampleGrid.innerHTML = "";
+      if (sampleItems.length === 0) {
+        sampleEmptyState.classList.remove("hidden");
+      } else {
+        sampleEmptyState.classList.add("hidden");
+        sampleItems.forEach((project) => {
+          const imageSrc = defaultWaveAudioSvg;
+          const cardHtml = `
+            <div class="product-card bg-zinc-950/90 border border-emerald-500/20 hover:border-emerald-500/50 rounded-2xl overflow-hidden p-4 flex flex-col justify-between gap-3">
+              <div class="flex gap-3 items-center">
+                <img src="${imageSrc}" class="w-16 h-16 rounded-xl object-cover bg-zinc-900 border border-emerald-500/30">
+                <div class="overflow-hidden">
+                  <span class="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[9px] font-mono font-bold rounded-full">Sample Pasar-an</span>
+                  <h3 class="font-extrabold text-sm text-white truncate mt-1">${project.title}</h3>
+                  <p class="text-[11px] font-mono text-zinc-400">Audio Sample</p>
+                </div>
+              </div>
+
+              ${project.audioUrl ? `
+                <div class="bg-zinc-900/90 p-2.5 rounded-xl border border-zinc-800">
+                  <audio controls class="w-full h-8 rounded outline-none">
+                    <source src="${project.audioUrl}" type="audio/mpeg">
+                    Browser Anda tidak mendukung pemutar audio.
+                  </audio>
+                </div>
+              ` : `
+                <div class="bg-zinc-900/40 p-2 text-center rounded-xl border border-zinc-800">
+                  <p class="text-[10px] font-mono text-zinc-500">Audio URL belum disetel</p>
+                </div>
+              `}
+
+              <div class="grid grid-cols-3 gap-2 pt-1">
+                <a href="${project.downloadUrl}" target="_blank" class="py-2 bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-[10px] font-mono rounded-xl transition flex items-center justify-center gap-1 shadow-md">
+                  <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                  <span>UNDUH</span>
+                </a>
+                <button onclick="addToCart('${project.id}')" class="py-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-white font-bold text-[10px] rounded-xl flex items-center justify-center gap-1 cursor-pointer">
+                  <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
+                  <span>CART</span>
+                </button>
+                <button onclick="copyFallback('${window.location.origin}${window.location.pathname}?id=${project.id}')" class="py-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 font-bold text-[10px] rounded-xl flex items-center justify-center gap-1 cursor-pointer">
+                  <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
+                  <span>SHARE</span>
+                </button>
+              </div>
+            </div>
+          `;
+          sampleGrid.insertAdjacentHTML("beforeend", cardHtml);
+        });
+      }
+
+      // 4. RENDER PRODUK UTAMA
+      const mainProducts = projectsData.filter((p) => !p.isLimited && !p.isPlugin && !p.isSample);
       const filtered = mainProducts.filter((item) => {
         const itemCat = item.category === "FL STUDIO" ? "FLP" : item.category === "FL MOBILE" ? "FLM" : item.category;
         const matchesCategory = currentCategory === "ALL" || itemCat === currentCategory;
-        const matchesSearch =
-          item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          (item.categoryLabel && item.categoryLabel.toLowerCase().includes(searchQuery.toLowerCase()));
+        const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase());
         return matchesCategory && matchesSearch;
       });
 
       productGrid.innerHTML = "";
-
       if (filtered.length === 0) {
         emptyState.classList.remove("hidden");
       } else {
@@ -1289,46 +1477,24 @@
             >
               <div>
                 <div class="relative w-full aspect-square rounded-2xl overflow-hidden mb-4 bg-zinc-900 border border-zinc-800/60">
-                  <img 
-                    src="${imageSrc}" 
-                    alt="${project.title}" 
-                    class="w-full h-full object-cover grayscale transition-transform duration-500 group-hover:scale-105 group-hover:grayscale-0"
-                    loading="lazy"
-                    onerror="this.src='${fallbackImageSvg}'"
-                  >
-                  
+                  <img src="${imageSrc}" alt="${project.title}" class="w-full h-full object-cover grayscale transition-transform duration-500 group-hover:scale-105 group-hover:grayscale-0" loading="lazy" onerror="this.src='${fallbackImageSvg}'">
                   <div class="absolute top-3 left-3 flex flex-wrap gap-1.5">
-                    <span class="px-2.5 py-1 bg-black/80 backdrop-blur-md text-[10px] font-mono font-bold tracking-wider text-white rounded-full border border-white/20">
-                      ${displayCategory}
-                    </span>
+                    <span class="px-2.5 py-1 bg-black/80 backdrop-blur-md text-[10px] font-mono font-bold tracking-wider text-white rounded-full border border-white/20">${displayCategory}</span>
                   </div>
-
                   <div class="absolute bottom-3 right-3 flex items-center gap-1.5">
-                    <span class="px-2.5 py-1 bg-black/80 backdrop-blur-md text-[10px] font-mono font-bold text-zinc-300 rounded-full border border-zinc-800">
-                      ${project.size}
-                    </span>
+                    <span class="px-2.5 py-1 bg-black/80 backdrop-blur-md text-[10px] font-mono font-bold text-zinc-300 rounded-full border border-zinc-800">${project.size}</span>
                   </div>
                 </div>
-
                 <div class="px-1 mb-4">
-                  <h3 class="font-extrabold text-xs sm:text-sm text-white group-hover:text-white transition-colors duration-200 line-clamp-2 leading-snug mb-1">
-                    ${project.title}
-                  </h3>
-                  <p class="text-xs text-zinc-400 font-mono">
-                    <span>${displayCategory}</span>
-                  </p>
+                  <h3 class="font-extrabold text-xs sm:text-sm text-white group-hover:text-white transition-colors duration-200 line-clamp-2 leading-snug mb-1">${project.title}</h3>
+                  <p class="text-xs text-zinc-400 font-mono"><span>${displayCategory}</span></p>
                 </div>
               </div>
-
               <div class="flex gap-2">
-                <button 
-                  onclick="event.stopPropagation(); addToCart('${project.id}')"
-                  class="flex-1 py-1 px-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-white font-bold text-[10px] tracking-wider rounded-xl transition duration-200 flex items-center justify-center gap-1.5 active:scale-95"
-                >
+                <button onclick="event.stopPropagation(); addToCart('${project.id}')" class="flex-1 py-1 px-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-white font-bold text-[10px] tracking-wider rounded-xl transition duration-200 flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer">
                   <i data-lucide="shopping-cart" class="w-3 h-3"></i>
                   <span>Keranjang</span>
                 </button>
-
                 <div class="py-1 px-2 bg-white hover:bg-zinc-200 text-black font-extrabold text-[10px] tracking-wider rounded-xl transition duration-200 flex items-center justify-center gap-1 group/btn shadow-md shadow-white/5">
                   <span>LIHAT</span>
                   <i data-lucide="arrow-right" class="w-3 h-3 transition-transform group-hover/btn:translate-x-0.5"></i>
@@ -1340,27 +1506,34 @@
         });
       }
 
-      if (isAdminUnlocked) {
-        renderAdminTable();
-      }
-
+      if (isAdminUnlocked) renderAdminTable();
       refreshIcons();
     }
 
     function openModal(id) {
       const project = projectsData.find((p) => p.id === id);
-      if (!project || project.isLimited) return;
+      if (!project) return;
 
       activeModalProject = project;
-      const displayCategory = project.category === "FL STUDIO" ? "FLP" : project.category === "FL MOBILE" ? "FLM" : project.category;
+      const displayCategory = project.isLimited ? "Tools" : project.isPlugin ? "Plugin" : project.isSample ? "Sample Pasar-an" : (project.category === "FL STUDIO" ? "FLP" : project.category === "FL MOBILE" ? "FLM" : project.category);
 
-      if (modalImg) modalImg.src = project.coverArt ? project.coverArt : fallbackImageSvg;
+      if (modalImg) modalImg.src = project.isSample ? defaultWaveAudioSvg : (project.coverArt ? project.coverArt : fallbackImageSvg);
       if (modalCategory) modalCategory.textContent = displayCategory;
-      if (modalSize) modalSize.textContent = project.size;
+      if (modalSize) modalSize.textContent = project.size || (project.isSample ? "Audio" : "-");
       if (modalTitle) modalTitle.textContent = project.title;
       if (modalCategoryLabel) modalCategoryLabel.textContent = displayCategory;
       if (modalType) modalType.textContent = project.type || "arisplrfifteen";
       if (modalDownloadLink) modalDownloadLink.href = project.downloadUrl;
+
+      if (modalAudioSection && modalAudioPlayer) {
+        if (project.isSample && project.audioUrl) {
+          modalAudioPlayer.src = project.audioUrl;
+          modalAudioSection.classList.remove("hidden");
+        } else {
+          modalAudioPlayer.src = "";
+          modalAudioSection.classList.add("hidden");
+        }
+      }
 
       if (productModal) productModal.classList.remove("hidden");
       document.body.classList.add("overflow-hidden");
@@ -1376,6 +1549,7 @@
     function closeModal() {
       if (productModal) productModal.classList.add("hidden");
       document.body.classList.remove("overflow-hidden");
+      if (modalAudioPlayer) modalAudioPlayer.pause();
       activeModalProject = null;
 
       try {
@@ -1387,9 +1561,7 @@
       const urlParams = new URLSearchParams(window.location.search);
       const projectId = urlParams.get("id");
       if (projectId) {
-        setTimeout(() => {
-          openModal(projectId);
-        }, 300);
+        setTimeout(() => openModal(projectId), 300);
       }
     }
 
@@ -1403,7 +1575,7 @@
       textarea.select();
       try {
         document.execCommand("copy");
-        showToast("Link produk berhasil disalin!");
+        showToast("Link berhasil disalin!");
       } catch (err) {
         showToast("Gagal menyalin link.");
       }
@@ -1415,9 +1587,7 @@
       toastMsg.textContent = message;
       toast.classList.remove("hidden");
       refreshIcons();
-      setTimeout(() => {
-        toast.classList.add("hidden");
-      }, 3000);
+      setTimeout(() => toast.classList.add("hidden"), 3000);
     }
 
     function renderAdminTable() {
@@ -1427,6 +1597,10 @@
       const filteredAdminData = projectsData.filter((item) => {
         const itemCat = item.isLimited 
           ? "TOOLS" 
+          : item.isPlugin 
+          ? "PLUGINS" 
+          : item.isSample 
+          ? "SAMPLE" 
           : (item.category === "FL STUDIO" ? "FLP" : item.category === "FL MOBILE" ? "FLM" : item.category);
 
         const matchesCat = adminCurrentCat === "ALL" || itemCat === adminCurrentCat;
@@ -1436,9 +1610,13 @@
       });
 
       filteredAdminData.forEach((item) => {
-        const imgThumb = item.coverArt ? item.coverArt : (item.isLimited ? fallbackImageRectSvg : fallbackImageSvg);
+        const imgThumb = item.isSample ? defaultWaveAudioSvg : (item.coverArt ? item.coverArt : ((item.isLimited || item.isPlugin) ? fallbackImageRectSvg : fallbackImageSvg));
         const displayCategory = item.isLimited 
           ? "Tools" 
+          : item.isPlugin 
+          ? "Plugins" 
+          : item.isSample 
+          ? "Sample Pasar-an" 
           : (item.category === "FL STUDIO" ? "FLP" : item.category === "FL MOBILE" ? "FLM" : item.category);
 
         const tr = document.createElement("tr");
@@ -1447,18 +1625,14 @@
           <td class="p-2.5 pl-4 align-middle">
             <img src="${imgThumb}" class="w-9 h-7 rounded object-cover bg-zinc-800 border border-zinc-800" onerror="this.src='${fallbackImageSvg}'">
           </td>
-          <td class="p-2.5 font-bold text-white max-w-[120px] truncate align-middle" title="${item.title}">
-            ${item.title}
-          </td>
+          <td class="p-2.5 font-bold text-white max-w-[120px] truncate align-middle" title="${item.title}">${item.title}</td>
           <td class="p-2.5 align-middle">
-            <span class="px-2 py-0.5 rounded text-[10px] ${item.isLimited ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-zinc-800 text-zinc-300'}">
-              ${displayCategory}
-            </span>
+            <span class="px-2 py-0.5 rounded text-[10px] ${item.isLimited ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : item.isPlugin ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' : item.isSample ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-zinc-800 text-zinc-300'}">${displayCategory}</span>
           </td>
           <td class="p-2.5 text-right pr-4 whitespace-nowrap align-middle">
             <div class="flex items-center justify-end gap-2">
-              <button onclick="editProject('${item.id}')" class="text-blue-400 hover:text-blue-300 font-bold text-[11px] transition">Edit</button>
-              <button onclick="deleteProject('${item.id}')" class="text-red-400 hover:text-red-300 font-bold text-[11px] transition">Hapus</button>
+              <button onclick="editProject('${item.id}')" class="text-blue-400 hover:text-blue-300 font-bold text-[11px] transition cursor-pointer">Edit</button>
+              <button onclick="deleteProject('${item.id}')" class="text-red-400 hover:text-red-300 font-bold text-[11px] transition cursor-pointer">Hapus</button>
             </div>
           </td>
         `;
@@ -1474,18 +1648,23 @@
 
       if (item.isLimited) {
         if (tabLimitedEdition) tabLimitedEdition.click();
+      } else if (item.isPlugin) {
+        if (tabPlugins) tabPlugins.click();
+      } else if (item.isSample) {
+        if (tabSamplePasaran) tabSamplePasaran.click();
       } else {
         if (tabMainProduct) tabMainProduct.click();
       }
 
       if (editProjectId) editProjectId.value = item.id;
       if (inputTitle) inputTitle.value = item.title;
-      if (inputCategory && !item.isLimited) inputCategory.value = item.category;
-      if (inputSize && !item.isLimited) inputSize.value = item.size || "";
+      if (inputCategory && !item.isLimited && !item.isPlugin && !item.isSample) inputCategory.value = item.category;
+      if (inputSize) inputSize.value = item.size || "";
       if (inputUrl) inputUrl.value = item.downloadUrl;
+      if (inputAudioUrl) inputAudioUrl.value = item.audioUrl || "";
       if (inputCoverUrl) inputCoverUrl.value = item.coverArt || "";
 
-      if (formTitle) formTitle.textContent = item.isLimited ? "✏️ Edit Tools" : "✏️ Edit Produk Utama";
+      if (formTitle) formTitle.textContent = item.isLimited ? "✏️ Edit Tools" : item.isPlugin ? "✏️ Edit Plugin" : item.isSample ? "✏️ Edit Sample Pasar-an" : "✏️ Edit Produk Utama";
       if (btnCancelEdit) btnCancelEdit.classList.remove("hidden");
       if (projectForm) projectForm.scrollIntoView({ behavior: "smooth" });
     }
@@ -1503,7 +1682,9 @@
       if (editProjectId) editProjectId.value = "";
       if (projectForm) projectForm.reset();
       if (inputCoverUrl) inputCoverUrl.value = "https://lh3.googleusercontent.com/d/";
-      if (formTitle) formTitle.textContent = activeAdminTab === "LIMITED" ? "➕ Tambah Tools" : "➕ Tambah Produk Utama";
+      if (formTitle) {
+        formTitle.textContent = activeAdminTab === "LIMITED" ? "➕ Tambah Tools" : activeAdminTab === "PLUGINS" ? "➕ Tambah Plugins" : activeAdminTab === "SAMPLE" ? "➕ Tambah Sample Pasar-an" : "➕ Tambah Produk Utama";
+      }
       if (btnCancelEdit) btnCancelEdit.classList.add("hidden");
     }
 
