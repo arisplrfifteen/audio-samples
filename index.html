@@ -1129,7 +1129,15 @@
 
       try {
         const rawUrl = `https://raw.githubusercontent.com/${fetchRepo}/${fetchBranch}/${fetchPath}?t=${Date.now()}`;
-        const res = await fetch(rawUrl);
+        const res = await fetch(rawUrl, {
+          cache: "no-store",
+          headers: {
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+          }
+        });
+        
         if (res.ok) {
           projectsData = await res.json();
           saveToLocalStorage();
