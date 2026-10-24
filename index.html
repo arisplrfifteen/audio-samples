@@ -742,18 +742,18 @@ async function initVisitorCounter() {
   }
 }
 
-    // 1. UPDATE FUNGSI trackAndOpenModal (Bebas Delay & Instant Response)
+    // FUNGSI MENCATAT UNDUHAN & BUKA MODAL TANPA DELAY
 function trackAndOpenModal(id) {
   const project = projectsData.find((p) => p.id === id);
   if (project) {
-    // Tambah hitungan lokal agar UI langsung naik tanpa menunggu server
+    // 1. Tambah hitungan lokal agar UI langsung naik
     project.clicks = (project.clicks || 0) + 1;
     saveToLocalStorage();
     
-    // Buka modal SEKARANG JUGA (tanpa delay/tunggu network)
+    // 2. Buka modal SEKARANG JUGA (instan tanpa tunggu network)
     openModal(project);
 
-    // Kirim update ke Firebase di background (tidak bikin macet UI)
+    // 3. Kirim update ke Firebase di background secara realtime
     if (typeof database !== "undefined") {
       const clickRef = database.ref("downloads/" + id);
       clickRef.transaction((currentValue) => {
@@ -794,26 +794,26 @@ async function initData() {
     loadFromLocalStorage();
   }
 
-  // AMBIL DATA TOTAL UNDUHAN PERMANEN DARI FIREBASE REALTIME DATABASE
-  if (typeof database !== "undefined") {
-    database.ref("downloads").once("value", (snapshot) => {
-      const downloadsData = snapshot.val();
-      if (downloadsData) {
-        projectsData.forEach((project) => {
-          if (downloadsData[project.id] !== undefined) {
-            project.clicks = downloadsData[project.id];
+        // AMBIL DATA TOTAL UNDUHAN PERMANEN DARI FIREBASE REALTIME DATABASE
+      if (typeof database !== "undefined") {
+        database.ref("downloads").once("value", (snapshot) => {
+          const downloadsData = snapshot.val();
+          if (downloadsData) {
+            projectsData.forEach((project) => {
+              if (downloadsData[project.id] !== undefined) {
+                project.clicks = downloadsData[project.id];
+              }
+            });
           }
+          updateCounts();
+          renderProducts();
         });
+      } else {
+        updateCounts();
+        renderProducts();
       }
-      updateCounts();
-      renderProducts();
-    });
-  } else {
-    updateCounts();
-    renderProducts();
-  }
 
-  updateCartUI();
+      updateCartUI();
   checkUrlQueryParam();
 
   if (isAdminUnlocked) renderAdminTable();
