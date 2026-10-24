@@ -11,15 +11,29 @@
 
   <title>arisplrfifteen | Official Store</title>
 
-  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-  <script>
-    window.OneSignalDeferred = window.OneSignalDeferred || [];
-    OneSignalDeferred.push(async function(OneSignal) {
-      await OneSignal.init({
-        appId: "3f6a38b4-31ac-480c-a9d2-9f04d3508e89",
-      });
+  <!-- OneSignal Web Push Notification SDK -->
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "3f6a38b4-31ac-480c-a9d2-9f04d3508e89",
+      slidedown: {
+        prompts: [
+          {
+            type: "push",
+            autoPrompt: true, // Memaksa pop-up izin muncul saat web dibuka
+            text: {
+              actionMessage: "Dapatkan notifikasi saat ada produk baru!",
+              acceptButton: "Izinkan",
+              cancelButton: "Nanti Saja"
+            }
+          }
+        ]
+      }
     });
-  </script>
+  });
+</script>
 
   <!-- LOGO -->
   <link rel="icon" type="image/png" href="icon.png">
