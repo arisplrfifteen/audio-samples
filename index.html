@@ -143,7 +143,7 @@
         
         <!-- TEXT VIEW ICON ORANG / PENGUNJUNG WEBSITE -->
         <div class="flex items-center gap-2 bg-zinc-900 border border-zinc-800 px-3 py-1.5 rounded-xl">
-          <i data-lucide="users" class="w-4 h-4 text-emerald-400"></i>
+          <i data-lucide="users" class="w-4 h-4 text-blue-400"></i>
           <div class="text-left sm:text-right">
             <p class="text-[10px] text-zinc-500 font-mono leading-none">Pengunjung</p>
             <p class="text-xs font-bold text-white font-mono leading-none mt-0.5" id="visitorCountDisplay">0</p>
@@ -428,7 +428,7 @@
       <div class="flex items-center justify-between mb-4 border-b border-zinc-800/80 pb-3">
         <div class="flex items-center gap-2.5">
           <span class="px-2.5 py-1 bg-purple-500/10 text-purple-400 border border-purple-500/30 text-[10px] font-mono font-extrabold rounded-full tracking-wider uppercase">Plugins</span>
-          <h2 class="text-base sm:text-lg font-extrabold text-white tracking-tight">VST & FX Plugins</h2>
+          <h2 class="text-base sm:text-lg font-extrabold text-white tracking-tight">VST Plugins</h2>
         </div>
         <span class="text-xs font-mono text-zinc-500" id="pluginsCountDisplay">0 Item</span>
       </div>
@@ -443,7 +443,7 @@
     <section id="samplePasaranSection" class="mb-14">
       <div class="flex items-center justify-between mb-4 border-b border-zinc-800/80 pb-3">
         <div class="flex items-center gap-2.5">
-          <span class="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[10px] font-mono font-extrabold rounded-full tracking-wider uppercase">Audio Sample</span>
+          <span class="px-2.5 py-1 bg-red-500/10 text-red-400 border border-red-500/30 text-[10px] font-mono font-extrabold rounded-full tracking-wider uppercase">WAV</span>
           <h2 class="text-base sm:text-lg font-extrabold text-white tracking-tight">SAMPLE PASAR-AN</h2>
         </div>
         <span class="text-xs font-mono text-zinc-500" id="sampleCountDisplay">0 Item</span>
@@ -723,7 +723,7 @@
 
     // SIMULASI / LOGIKA PENGHITUNG PENGUNJUNG WEBSITE
     function initVisitorCounter() {
-      let visits = parseInt(localStorage.getItem("site_visitor_count") || "1024", 10);
+      let visits = parseInt(localStorage.getItem("site_visitor_count") || "369", 10);
       if (!sessionStorage.getItem("visited_session")) {
         visits += 1;
         localStorage.setItem("site_visitor_count", visits);
