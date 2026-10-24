@@ -735,13 +735,53 @@
       }
     }
 
-    // FUNGSI MENCATAT UNDUHAN / KLIK LINK
-    function trackAndOpenModal(id) {
+    // FUNGSI MENCATAT UNDUHAN / KLIK LINK LANGSUNG KE projects.json
+    async function trackAndOpenModal(id) {
       const project = projectsData.find((p) => p.id === id);
       if (project) {
+        // 1. Tambah jumlah klik di memori lokal & perbarui tampilan
         project.clicks = (project.clicks || 0) + 1;
         saveToLocalStorage();
         renderProducts();
+
+        // 2. Kirim update jumlah klik LANGSUNG ke file projects.json di GitHub
+        const savedGhConfig = localStorage.getItem("gh_config");
+        if (savedGhConfig) {
+          try {
+            const config = JSON.parse(savedGhConfig);
+            if (config.token && config.repo) {
+              const filePath = config.path || "projects.json";
+              const url = `https://api.github.com/repos/${config.repo}/contents/${filePath}`;
+              const headers = {
+                "Authorization": `Bearer ${config.token}`,
+                "Accept": "application/vnd.github.v3+json"
+              };
+
+              // Ambil SHA file projects.json terbaru terlebih dahulu
+              const getRes = await fetch(url, { headers });
+              if (getRes.ok) {
+                const getData = await getRes.json();
+                
+                // Ubah data projectsData menjadi bentuk text JSON
+                const content = btoa(unescape(encodeURIComponent(JSON.stringify(projectsData, null, 2))));
+                
+                // Simpan/overwrite kembali file projects.json di GitHub
+                await fetch(url, {
+                  method: "PUT",
+                  headers: { ...headers, "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    message: `Update unduhan untuk ${project.title}`,
+                    content: content,
+                    sha: getData.sha,
+                    branch: config.branch || "main"
+                  })
+                });
+              }
+            }
+          } catch (e) {
+            console.log("Gagal menyimpan klik ke projects.json:", e);
+          }
+        }
       }
       openModal(id);
     }
